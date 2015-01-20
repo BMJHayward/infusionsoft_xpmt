@@ -46,3 +46,11 @@ from past import autotranslate
 autotranslate('infusionsoft')
 import infusionsoft
 from infusionsoft.library import Infuionsoft
+
+# Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
+table = 'Contact'
+returnFields = ['DateCreated', 'Leadsource']
+query = {'ContactType' : '%'}
+limit = 10
+page = 0
+print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
