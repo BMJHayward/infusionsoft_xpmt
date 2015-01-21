@@ -62,3 +62,4 @@ class infusionQuery(self):
     limit = 10
     page = 0
     print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
+    x = infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
