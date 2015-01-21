@@ -1,36 +1,38 @@
 from infusionsoft.library import  Infusionsoft
-infusionsoft = Infusionsoft( soundtherapy , insert_api_key )
+infusionsoft = Infusionsoft( 'insert account name' , 'insert_api_key' )
 
 # these 4 digit numbers correspond to tag id for answer to each assessment question in Infusionsoft form
 # python probably doesn't like doing arrays like this, we'll find out, or use arrary library or numpy.ndarray
 # current approach using dicts looks like it has potential
 
-tinnitus_yes = [ 1796, 1826, 1856, 1886 ]
-tinnitus_no = [ 1800, 1830, 1860, 1890 ]
-tinnitus_sometimes = [ 1798, 1828, 1858, 1888 ]
-tinnitus = { 'yes' : tinnitus_yes, 'no' : tinnitus_no, 'sometimes' : tinnitus_sometimes }
+answers = { # get max of 'yes' answers from this list as result
+    'tinnitus_yes ': [ 1796, 1826, 1856, 1886 ],
+    'tinnitus_no ': [ 1800, 1830, 1860, 1890 ],
+    'tinnitus_sometimes ': [ 1798, 1828, 1858, 1888 ],
 
-hearing_yes = [ 1808, 1838, 1868, 1898  ]
-hearing_no = [ 1812, 1842, 1872, 1902 ]
-hearing_sometimes = [ 1810, 1840, 1870, 1900 ]
-hearing = { 'yes' : hearing_yes, 'no' : hearing_no, 'sometimes' : hearing_sometimes }
+    'hearing_yes ': [ 1808, 1838, 1868, 1898  ],
+    'hearing_no ': [ 1812, 1842, 1872, 1902 ],
+    'hearing_sometimes ': [ 1810, 1840, 1870, 1900 ],
 
-hyperacusis_yes = [ 1802, 1832, 1862, 1892 ]
-hyperacusis_no = [ 1806, 1836, 1866, 1896 ]
-hyperacusis_sometimes = [ 1804, 1834, 1864, 1894 ]
-hyperacusis = { 'yes' : hyperacusis_yes, 'no' : hyperacusis_no, 'sometimes' : hyperacusis_sometimes }
+    'hyperacusis_yes ': [ 1802, 1832, 1862, 1892 ],
+    'hyperacusis_no ': [ 1806, 1836, 1866, 1896 ],
+    'hyperacusis_sometimes ': [ 1804, 1834, 1864, 1894 ],
 
-dizziness_yes = [ 1814, 1844, 1874, 1904 ]
-dizziness_no = [ 1818, 1848, 1878, 1908 ]
-dizziness_sometimes = [ 1816, 1846, 1876, 1906 ]
-dizziness = { 'yes' : dizziness_yes, 'no' : dizziness_no, 'sometimes' : dizziness_sometimes }
+    'dizziness_yes ': [ 1814, 1844, 1874, 1904 ],
+    'dizziness_no ': [ 1818, 1848, 1878, 1908 ],
+    'dizziness_sometimes ': [ 1816, 1846, 1876, 1906 ],
 
-blockear_yes = [ 1820, 1850, 1880, 1910  ]
-blockear_no = [ 1824, 1854, 1884, 1914 ]
-blockear_sometimes = [ 1822, 1852, 1882, 1912 ]
-blockear    = { 'yes' : blockear_yes, 'no' : blockear_no, 'sometimes' : blockear_sometimes }
+    'blockear_yes ': [ 1820, 1850, 1880, 1910  ],
+    'blockear_no ': [ 1824, 1854, 1884, 1914 ],
+    'blockear_sometimes ': [ 1822, 1852, 1882, 1912 ],
+    }
 
-questionnaire = { 'tinnitus' : tinnitus, 'hearing' : hearing, 'hyperacusis' : hyperacusis, 'dizziness' : dizziness, 'blockear' : blockear }
+def iterate():
+    for item in answers.values():
+        for tag in item:
+            print(tag)
+
+# questionnaire = { 'tinnitus' : tinnitus, 'hearing' : hearing, 'hyperacusis' : hyperacusis, 'dizziness' : dizziness, 'blockear' : blockear }
 
 tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
 
@@ -53,7 +55,7 @@ def get_results ( tag_id ):
                 if tags == tag_id: pass
 
 
-if (infusionsoft.cfgCon("soundtherapy"))
+if (infusionsoft.cfgCon("insert account name"))
 
     #this does all the sorting, i think
     mcontact_tags = infusionsoft.ContactService( load, contact_id, ContactGroup )
@@ -72,7 +74,7 @@ print ('<br>Tag Final Result ' . tag_result[ final_result ])
 print ('<br><br>Raw reference data : <br><pre>')
 print( results )
 
-data = (('assessment_type' , 'Natural Hearing Improvement Assessment'),
+data = (('assessment_type' , 'insert assessment type name'),
                 ('assessmentt_option0' , ucfirst( final_result ), #'ucfirrst is a PHP function, TODO: find its equivalent
                 ('assessment_score' , highest_score ),
                 ('assessment_score_condition1' , results[ tinnitus ][ scores ]),

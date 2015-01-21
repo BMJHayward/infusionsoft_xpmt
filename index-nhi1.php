@@ -1,9 +1,15 @@
 `f<?php
+	/*
+		infusionsoft api works
+		contact i@reysmendoza.me, reysmendoza@gmail.com
+		http://reysmendoza.me corrected HW 15-6-2014
+	*/
 
 	require_once("_ifapi/src/isdk.php");
 
 	extract($_GET);
 	if (empty( $contact_id )==true)  extract($_POST);
+
 
 	$app = new iSDK;
 
@@ -78,7 +84,7 @@
 		}
 	}
 
-	if ($app->cfgCon("youraccountname")) {
+	if ($app->cfgCon("soundtherapy")) {
 
 		$contact_tags = query_tags($contact_id);
 
@@ -117,7 +123,7 @@
 	echo '<br><br>Raw Referrence Data : <br> <pre>';
 	print_r( $results );
 
-	$data = array(	'_AssessmentType'  => "nameofyourassessment",
+	$data = array(	'_AssessmentType'  => "Natural Hearing Improvement Assessment",
 			'_AssessmentOption0' => ucfirst($final_result),
 			'_AssessmentScore' => $highest_score,
 			'_AssessmentScoreCondition1'=> $results[ tinnutis ][ scores ],
