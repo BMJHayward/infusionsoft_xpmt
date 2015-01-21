@@ -37,7 +37,7 @@ answers = { # get max of 'yes' answers from this list as result
 tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
 
 
-def iterate():
+def iterate(): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
     for item in answers.values():
         for tag in item:
             print(tag)
@@ -53,12 +53,12 @@ autotranslate('infusionsoft')
 # import infusionsoft
 from api.infusionsoft.library import Infusionsoft
 infusionsoft = Infusionsoft('account name', 'API key')
-
-# Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
-table = 'Contact'
-returnFields = ['DateCreated', 'Leadsource']
-query = {'ContactType' : '%'}
-limit = 10
-page = 0
-print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
 """
+class infusionQuery(self):
+#TODO: Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
+    table = 'Contact'
+    returnFields = ['DateCreated', 'Leadsource']
+    query = {'ContactType' : '%'}
+    limit = 10
+    page = 0
+    print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
