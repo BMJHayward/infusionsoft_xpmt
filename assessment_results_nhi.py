@@ -41,6 +41,7 @@ def query_tags ( contact_id ):
     returnFields = [ "GroupId" ]
     query = { "ContactID": contact_id }
     tags = infusionsoft.DataService( "ContactGroupAssign", 100, 0, query, returnFields )
+    return tags
 
     for tag in tags:
         return_tags = tags[ tag ]

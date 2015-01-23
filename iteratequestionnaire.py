@@ -40,8 +40,9 @@ tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizz
 def iterate(): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
     for item in answers.values():
         for tag in item:
-            print(tag)
+            return tag
 
+answers_list = [tag for values in answers.values() for tag in values]
 # eval('questionnaire')
 # eval('questionnaire['tinnitus']')
 """
@@ -49,13 +50,14 @@ from past import autotranslate
 autotranslate('infusionsoft')
 """
 
-"""
+
 # import infusionsoft
-from api.infusionsoft.library import Infusionsoft
-infusionsoft = Infusionsoft('account name', 'API key')
-"""
-class infusionQuery(self):
+class infusionQuery( accountName, keyAPI ):
 #TODO: Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
+    def __init__():
+        from infusionsoft.library import Infusionsoft
+        infusionsoft = Infusionsoft( account name, keyAPI )
+
     table = 'Contact'
     returnFields = ['DateCreated', 'Leadsource']
     query = {'ContactType' : '%'}
@@ -63,3 +65,6 @@ class infusionQuery(self):
     page = 0
     print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
     x = infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
+    print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource']))
+    print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
+
