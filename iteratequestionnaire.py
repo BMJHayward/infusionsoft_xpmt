@@ -36,11 +36,16 @@ answers = { # get max of 'yes' answers from this list as result
 
 tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
 
+def iterate(list): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
+    for value in answers.values():
+        for tag in value:
+            list.append(tag)
 
-def iterate(): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
-    for item in answers.values():
-        for tag in item:
-            return tag
+"""
+for tag in contact_tags: # pseudo: go through answers list and update score in results array
+    if tag.exists_in(answers.values()):
+        score['key(answers.value('tag'')] += 5
+"""
 
 answers_list = [tag for values in answers.values() for tag in values]
 # eval('questionnaire')
@@ -52,19 +57,20 @@ autotranslate('infusionsoft')
 
 
 # import infusionsoft
-class infusionQuery( accountName, keyAPI ):
+class infusionQuery( ):
 #TODO: Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
-    def __init__():
+    pass
+    def __init__(self, accountName, keyAPI):
         from infusionsoft.library import Infusionsoft
-        infusionsoft = Infusionsoft( account name, keyAPI )
+        self.infusionsoft = Infusionsoft(accountName, keyAPI )
 
-    table = 'Contact'
-    returnFields = ['DateCreated', 'Leadsource']
-    query = {'ContactType' : '%'}
-    limit = 10
-    page = 0
-    print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
-    x = infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
-    print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource']))
-    print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
+        table = 'Contact'
+        returnFields = ['DateCreated', 'Leadsource']
+        query = {'ContactType' : '%'}
+        limit = 10
+        page = 0
+        print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
+        x = infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
+        print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource']))
+        print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
 
