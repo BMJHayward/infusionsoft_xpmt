@@ -63,7 +63,7 @@ answers = { # increment score when cutomer has tags in 'yes' and 'sometimes' arr
 # array = []
 # array[tinnitus_yes]=answers.get('tinnitus_yes')
 
-score_update = { # increment score when cutomer has tags in 'yes' and 'sometimes' arrays, take maximum score as result
+score_array = { # increment score when cutomer has tags in 'yes' and 'sometimes' arrays, take maximum score as result
     'tinnitus_yes': 0,
     'tinnitus_no': 0,
     'tinnitus_sometimes': 0,
@@ -118,13 +118,13 @@ def iterateandAppend(list): # this will be used to compare answers with people's
 class infusionQuery( ):
     """ this class will get app name and api key from text file, create connection, and run a query for you """
 #TODO: Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
-    pass
+    pass # placer, remove when queries all work properly
     def __init__():
         from infusionsoft.library import Infusionsoft
-        keyFile = open('APIKEY.txt')
-        key = [line for line in file]
+        self.keyFile = open('APIKEY.txt')
+        self.key = [line for line in file]
         file.close()
-        appFile = open('APPNAME.txt')
+        self.appFile = open('APPNAME.txt')
 
     def connect(): # probably want this as part of __init__()
         self.infusionsoft = Infusionsoft(accountName, keyAPI )
@@ -141,14 +141,20 @@ class infusionQuery( ):
         print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
         print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
 
-def queryandwritetofile():
-    # attempting to get contact data, write it to file
-     dateandSource = infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
-     x=open('dateandSource.txt','a')
-    for line in dateandSource:
-         x.write(line)
+    def querytags():
+        """ use this to do contactTags=querytags(contact_id) """
+        self.contactTags = infusionsoft.DataService('query','ContactGroupAssign',999,0,{'ContactId':'154084 '},['GroupId']) # returns array of tag ids for contact
+        self.singletag = contagTags[0].get('GroupId')
 
-    for line in dateandSource[]:
-        for key,value in line:
-            x.write(key,value)
-    x.close()
+    def queryandwritetofile():
+        # attempting to get contact data, write it to file
+         self.dateandSource = infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
+         self.x = open('dateandSource.txt','a')
+        for line in dateandSource:
+             x.write(line)
+
+        for line in dateandSource[]:
+            for key,value in line:
+                x.write(key,value)
+        x.close()
+
