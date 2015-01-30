@@ -138,7 +138,7 @@ class infusionQuery( ):
         self.query = {'ContactType' : '%'}
         self.limit = 10
         self.page = 0
-        self.x = self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
+        self.datesource = self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
 
         print( self.infusionsoft.DataService( 'query', self.table, self.limit, self.page, self.query, self.returnFields ))
         print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
@@ -154,9 +154,11 @@ class infusionQuery( ):
         """ extract from query, transform for dict/array and write to file """
         # attempting to get contact data, write it to file
         self.dateandSource = self.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
-        self.x = open('dateandSource.txt','a+')
+        self.tempfile = open('dateandSource.txt','a+')
         for line in self.dateandSource:
+            self.tempfile.write(str(line))
             print( line ) # this returns a dict for each line, datetime is its own object. WTF infusionsoft!?!
+        self.tempfile.close()
 
         # for line in dateandSource[]:
         #     for key,value in line:
@@ -164,7 +166,8 @@ class infusionQuery( ):
         # x.close()
 
 """
-for entry in iqcxn.dateandSource:
-    for item in entry.items():
-        print(iter.item))
+# TODO: write this output to csv or text file
+for iter in itertools.tee(iqcxn.dateandSource):
+    for it in iter:
+        print(it) # gives dict of datecreated and leadsource for each contact in dateandSource object.
 """
