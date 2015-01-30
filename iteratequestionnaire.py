@@ -6,6 +6,8 @@ TODO:
 4: sorting class to call infusionsoft class to get customer tags
 """
 
+from infusionsoft.library import Infusionsoft
+
 """
 tinnitus = [ tinnitus_yes,  tinnitus_no,  tinnitus_sometimes ]
 hearing = [ hearing_yes,  hearing_no,  hearing_sometimes ]
@@ -87,24 +89,25 @@ score_array = { # increment score when cutomer has tags in 'yes' and 'sometimes'
 
 tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
 
-def score_update(target):
-    if key.contains('yes'):
-        score_array[target] += 5
-    elif key.contains('some'):
-        score_array[target] += 3
+def score_update( target ):
+    if key.contains( 'yes' ):
+        score_array[ target ] += 5
+    elif key.contains( 'some' ):
+        score_array[ target ] += 3
     else:
         return
 
-def check_tag(cust_tag, target_tag):
+def check_tag( cust_tag, target_tag ):
     if cust_tag == target_tag:
-        score_update(answers.get(key))
+        score_update( answers.get(key) )
     else:
         return
 
 def iterate():
+    cust_tag = infusionQuery.querytags()
     for answer in answers.values():
         for ans in answer:
-            check_tag(cust_tag, ans)
+            check_tag( cust_tag, ans )
 
 
 def iterateandAppend(list): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
@@ -112,49 +115,52 @@ def iterateandAppend(list): # this will be used to compare answers with people's
     for value in answers.values():
         for tag in value:
             list.append(tag)
-    answers_list = [tag for values in answers.values() for tag in values]
+    answers_list = [ tag for values in answers.values() for tag in values ]
 
 # import infusionsoft
 class infusionQuery( ):
     """ this class will get app name and api key from text file, create connection, and run a query for you """
 #TODO: Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
-    pass # placer, remove when queries all work properly
-    def __init__():
-        from infusionsoft.library import Infusionsoft
+    # pass # placer, remove when queries all work properly
+    def __init__(self):
+
         self.keyFile = open('APIKEY.txt')
-        self.key = [line for line in file]
-        file.close()
+        self.key = [line for line in self.keyFile]
+        self.key = str( self.key )
+        self.keyFile.close()
         self.appFile = open('APPNAME.txt')
+        self.appName = [line for line in self.appFile]
+        self.appName = str( self.appName )
+        self.appFile.close()
 
-    def connect(): # probably want this as part of __init__()
-        self.infusionsoft = Infusionsoft(accountName, keyAPI )
+    def connect(self): # probably want this as part of __init__()
+        self.infusionsoft = Infusionsoft( self.appName, self.key )
 
-    def sampleQuery():
+    def sampleQuery(self):
         self.table = 'Contact'
         self.returnFields = ['DateCreated', 'Leadsource']
         self.query = {'ContactType' : '%'}
         self.limit = 10
         self.page = 0
-        self.x = infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
+        self.x = self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
 
-        print(infusionsoft.DataService('query', table, limit, page, query, returnFields))
-        print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
-        print(infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
+        print(self.infusionsoft.DataService('query', self.table, self.limit, self.page, self.query, self.returnFields))
+        print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
+        print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
 
-    def querytags():
+    def querytags(self):
         """ use this to do contactTags=querytags(contact_id) """
         self.contactTags = infusionsoft.DataService('query','ContactGroupAssign',999,0,{'ContactId':'154084 '},['GroupId']) # returns array of tag ids for contact
         self.singletag = contagTags[0].get('GroupId')
 
-    def queryandwritetofile():
+    def queryandwritetofile(self):
         # attempting to get contact data, write it to file
-         self.dateandSource = infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
-         self.x = open('dateandSource.txt','a')
+        self.dateandSource = infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
+        self.x = open('dateandSource.txt','a')
         for line in dateandSource:
-             x.write(line)
+            x.write(line)
 
-        for line in dateandSource[]:
-            for key,value in line:
-                x.write(key,value)
-        x.close()
-
+        # for line in dateandSource[]:
+        #     for key,value in line:
+        #         x.write(key,value)
+        # x.close()
