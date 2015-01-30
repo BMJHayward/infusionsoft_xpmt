@@ -110,33 +110,29 @@ def iterate():
             check_tag( cust_tag, ans )
 
 
-def iterateandAppend(list): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
+def iterateandAppend( list ): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
     # can maybe use a comprehension like at end of this function, not sure yet
     for value in answers.values():
         for tag in value:
-            list.append(tag)
+            list.append( tag )
     answers_list = [ tag for values in answers.values() for tag in values ]
 
 # import infusionsoft
 class infusionQuery( ):
-    """ this class will get app name and api key from text file, create connection, and run a query for you """
+    """ creates a connection, runs basic queries.
+        using 'iqcxn' to name the infusionQuery object in shell
+     """
 #TODO: Query contact with dataservice, use this to graph lead source trends over time. Send this data to pandas
     # pass # placer, remove when queries all work properly
-    def __init__(self):
+    def __init__( self ):
+        """ this class will get app name and api key from text file, create connection, and run a query for you """
 
-        self.keyFile = open('APIKEY.txt')
-        self.key = [line for line in self.keyFile]
-        self.key = str( self.key )
-        self.keyFile.close()
-        self.appFile = open('APPNAME.txt')
-        self.appName = [line for line in self.appFile]
-        self.appName = str( self.appName )
-        self.appFile.close()
-
-    def connect(self): # probably want this as part of __init__()
+        self.key = [line for line in open('APIKEY.txt') ][ 0 ]
+        self.appName = [line for line in open('APPNAME.txt') ][ 0 ]
         self.infusionsoft = Infusionsoft( self.appName, self.key )
 
-    def sampleQuery(self):
+    def sampleQuery( self ):
+        """ makes 4 queries returning date created, leadsource and tags (groups) """
         self.table = 'Contact'
         self.returnFields = ['DateCreated', 'Leadsource']
         self.query = {'ContactType' : '%'}
@@ -144,23 +140,31 @@ class infusionQuery( ):
         self.page = 0
         self.x = self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
 
-        print(self.infusionsoft.DataService('query', self.table, self.limit, self.page, self.query, self.returnFields))
+        print( self.infusionsoft.DataService( 'query', self.table, self.limit, self.page, self.query, self.returnFields ))
         print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
         print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
 
-    def querytags(self):
+    def querytags( self ):
         """ use this to do contactTags=querytags(contact_id) """
-        self.contactTags = infusionsoft.DataService('query','ContactGroupAssign',999,0,{'ContactId':'154084 '},['GroupId']) # returns array of tag ids for contact
-        self.singletag = contagTags[0].get('GroupId')
+        self.contactTags = self.infusionsoft.DataService('query','ContactGroupAssign',999,0,{'ContactId':'154084 '},['GroupId']) # returns array of tag ids for contact
+        self.singletag = self.contactTags[ 0 ].get('GroupId')
+        print( "Success. Tag: ", self.singletag )
 
-    def queryandwritetofile(self):
+    def queryandwritetofile( self ):
+        """ extract from query, transform for dict/array and write to file """
         # attempting to get contact data, write it to file
-        self.dateandSource = infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
-        self.x = open('dateandSource.txt','a')
-        for line in dateandSource:
-            x.write(line)
+        self.dateandSource = self.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
+        self.x = open('dateandSource.txt','a+')
+        for line in self.dateandSource:
+            print( line ) # this returns a dict for each line, datetime is its own object. WTF infusionsoft!?!
 
         # for line in dateandSource[]:
         #     for key,value in line:
         #         x.write(key,value)
         # x.close()
+
+"""
+for entry in iqcxn.dateandSource:
+    for item in entry.items():
+        print(iter.item))
+"""
