@@ -131,19 +131,6 @@ class infusionQuery( ):
         self.appName = [line for line in open('APPNAME.txt') ][ 0 ]
         self.infusionsoft = Infusionsoft( self.appName, self.key )
 
-    def sampleQuery( self ):
-        """ makes 4 queries returning date created, leadsource and tags (groups) """
-        self.table = 'Contact'
-        self.returnFields = ['DateCreated', 'Leadsource']
-        self.query = {'ContactType' : '%'}
-        self.limit = 10
-        self.page = 0
-        self.datesource = self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
-
-        print( self.infusionsoft.DataService( 'query', self.table, self.limit, self.page, self.query, self.returnFields ))
-        print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
-        print(self.infusionsoft.DataService('query', 'Contact', 10, 0, {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
-
     def querytags( self ):
         """ use this to do contactTags=querytags(contact_id) """
         self.contactTags = self.infusionsoft.DataService('query','ContactGroupAssign',999,0,{'ContactId':'154084 '},['GroupId']) # returns array of tag ids for contact
