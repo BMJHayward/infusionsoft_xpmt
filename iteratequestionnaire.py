@@ -4,17 +4,12 @@ TODO:
 2:include all assessment tags as arrays, centralise all assessment sorting into one file, using main class
 3: possible reporting function
 4: sorting class to call infusionsoft class to get customer tags
+5: use pandas or matplotlib for dataviz
+6: order statistics?
 """
 
 from infusionsoft.library import Infusionsoft
 
-"""
-tinnitus = [ tinnitus_yes,  tinnitus_no,  tinnitus_sometimes ]
-hearing = [ hearing_yes,  hearing_no,  hearing_sometimes ]
-hyperacusis = [ hyperacusis_yes,  hyperacusis_no,  hyperacusis_sometimes ]
-dizziness = [ dizziness_yes,  dizziness_no,  dizziness_sometimes ]
-blockear    = [ blockear_yes,  blockear_no,  blockear_sometimes ]
-"""
 answers = { # increment score when cutomer has tags in 'yes' and 'sometimes' arrays, take maximum score as result
     'tinnitus_yes': [ 1796, 1826, 1856, 1886 ],
     'tinnitus_no': [ 1800, 1830, 1860, 1890 ],
@@ -36,34 +31,6 @@ answers = { # increment score when cutomer has tags in 'yes' and 'sometimes' arr
     'blockear_no': [ 1824, 1854, 1884, 1914 ],
     'blockear_sometimes': [ 1822, 1852, 1882, 1912 ],
     }
-
-# questionnaire = [ tinnitus,  hearing,  hyperacusis,  dizziness,  blockear ]
-# questionnaire = numpy.array(questionnaire)
-
-# questionnaire = { "tinnitus" : tinnitus, "hearing" : hearing, "hyperacusis" : hyperacusis, "dizziness" : dizziness, "blockedear" : blockear }
-
-# tinnitus_yes = 0
-# tinnitus_no = 1
-# tinnitus_sometimes = 2
-
-# hearing_yes = 3
-# hearing_no = 4
-# hearing_sometimes = 5
-
-# hyperacusis_yes = 6
-# hyperacusis_no = 7
-# hyperacusis_sometimes = 8
-
-# dizziness_yes = 9
-# dizziness_no = 10
-# dizziness_sometimes = 11
-
-# blockear_yes = 12
-# blockear_no = 13
-# blockear_sometimes = 14
-
-# array = []
-# array[tinnitus_yes]=answers.get('tinnitus_yes')
 
 score_array = { # increment score when cutomer has tags in 'yes' and 'sometimes' arrays, take maximum score as result
     'tinnitus_yes': 0,
@@ -138,7 +105,7 @@ class infusionQuery( ):
         print( "Success. Tag: ", self.singletag )
 
     def queryandwritetofile( self ):
-        """ extract from query, transform for dict/array and write to file """
+        """ need write to file to send to excel """
         # attempting to get contact data, write it to file
         self.dateandSource = self.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated','Leadsource'])
         self.tempfile = open('dateandSource.txt','a+')
