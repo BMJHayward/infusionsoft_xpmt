@@ -25,15 +25,13 @@ def fullStringQuery_b():
 
 def main():
 
-    tests = {'sample' : sampleQuery(), 'query_a' : fullStringQuery_a(), 'query_b' : fullStringQuery_b()}
+    tests = {'sample' : sampleQuery, 'query_a' : fullStringQuery_a, 'query_b' : fullStringQuery_b}
 
     for test in tests.keys():
         try:
             tests[test]()
         except Exception as detail:
             print("query failed: " + test + ", ", detail)
-        else:
-            print("query success: " + test)
 
 if __name__ == '__main__':
     main()
