@@ -5,7 +5,7 @@ TODO:
 3: possible reporting function
 4: sorting class to call infusionsoft class to get customer tags
 5: use pandas or matplotlib for dataviz
-6: order statistics?
+6: statistics?
 """
 
 from infusionsoft.library import Infusionsoft
@@ -125,3 +125,11 @@ for iter in itertools.tee(iqcxn.dateandSource):
     for it in iter:
         print(it) # gives dict of datecreated and leadsource for each contact in dateandSource object.
 """
+
+def getDates():
+    """pull out individual dates so arrays of leadsource with dates can be analysed """
+    iqcxn = infusionQuery()
+    dateandSource = iqcxn.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated'])
+    dates = [item.values() for item in dateandSource]
+    for item in dates: print(item) # gives list of dict_values with datetime
+    for item in dates[0]: print(item) # gives date_time string, type(item) says <class 'xmlrpc.client.DateTime'>
