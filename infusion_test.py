@@ -1,3 +1,10 @@
+"""
+TODO: use
+import cgi
+cgi.test()
+to test script with HTTP headers and HTML. See docs.python.org/3/library/cgi.html
+"""
+
 """ create connection to API, test data service and query function """
 import iteratequestionnaire as iq
 iqcxn = iq.infusionQuery()
