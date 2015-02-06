@@ -1,5 +1,14 @@
 from infusionsoft.library import  Infusionsoft
-infusionsoft = Infusionsoft( 'insert account name' , 'insert_api_key' )
+infusionsoft = Infusionsoft( 'insert account name' , 'insert_api_key' ) # I want to create ti infusionsoft object before anything else
+
+import cgi
+form = cgi.FieldStorage() # request data lives here. Chose CGI because simpler, and not using any particular framework, comes in standard library
+
+import cgitb
+cgitb.enable( display=0, logdir='log' ) # log script output and header data to local log folder while developing
+
+contact_id = form.getvalue("contact_id")
+print( "The contact being handled is %s " % contact_id )
 
 # these 4 digit numbers correspond to tag id for answer to each assessment question in Infusionsoft form
 # python probably doesn't like doing arrays like this, we'll find out, or use arrary library or numpy.ndarray
@@ -59,7 +68,7 @@ def get_results ( tag_id ):
 if (infusionsoft.cfgCon("insert account name"))
 
     #this does all the sorting, i think
-    mcontact_tags = infusionsoft.ContactService( load, contact_id, ContactGroup )
+    contact_tags = infusionsoft.ContactService( load, contact_id, ContactGroup )
 
     for tags in contact_tags:
         get_results( tags )
