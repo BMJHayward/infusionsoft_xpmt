@@ -130,6 +130,9 @@ def getDates():
     """pull out individual dates so arrays of leadsource with dates can be analysed """
     iqcxn = infusionQuery()
     dateandSource = iqcxn.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated'])
-    dates = [item.values() for item in dateandSource]
+    dates = [ list(item.values()) for item in dateandSource ]
     for item in dates: print(item) # gives list of dict_values with datetime
-    for item in dates[0]: print(item) # gives date_time string, type(item) says <class 'xmlrpc.client.DateTime'>
+    for item in dates[ 0 : len(dates) ]: print(type(item)) # gives date_time string, type(item) says <class 'xmlrpc.client.DateTime'>
+    strdate=str(dates[1][0]).split('T')[0]
+    print( strdate )
+
