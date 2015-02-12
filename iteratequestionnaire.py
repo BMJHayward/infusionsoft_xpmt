@@ -131,8 +131,12 @@ def getDates():
     iqcxn = infusionQuery()
     dateandSource = iqcxn.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated'])
     dates = [ list(item.values()) for item in dateandSource ]
-    for item in dates: print(item) # gives list of dict_values with datetime
+    for item in dates: print(item,type(item)) # gives list of dict_values with datetime
     for item in dates[ 0 : len(dates) ]: print(type(item)) # gives date_time string, type(item) says <class 'xmlrpc.client.DateTime'>
     strdate=str(dates[1][0]).split('T')[0]
-    print( strdate )
+    print( strdate ) # just to make sure data exists
 
+    yymmdd=[]
+    for item in range(0, len(dates)):
+        yymmdd.append(str(dates[item][0]).split('T')[0])
+    return yymmdd
