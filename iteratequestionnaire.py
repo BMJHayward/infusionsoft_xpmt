@@ -127,16 +127,26 @@ for iter in itertools.tee(iqcxn.dateandSource):
 """
 
 def getDates():
-    """pull out individual dates so arrays of leadsource with dates can be analysed """
+    """
+    Pull out individual dates so arrays of leadsource with dates can be analysed.
+    NOTE: some contacts don't have a date created, so yymmdd will return an array shorter than 
+    the value of total_contacts.
+    """
     iqcxn = infusionQuery()
-    dateandSource = iqcxn.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated'])
+    total_contacts = iqcxn.infusionsoft.DataService('count','Contact',{'Id':'%'})
+    pages = (total_contacts // 1000) + 2
+    # dateandSource = iqcxn.infusionsoft.DataService('query','Contact',10,0,{'ContactType':'%'},['DateCreated'])
+    dateandSource = []
+    for i in range(0,pages):
+        dateandSource.extend(
+            iqcxn.infusionsoft.DataService('query','Contact',1000,i,{'ContactType':'%'},['DateCreated'])
+            )
+        print("currently at page: ", i+1, " of ", pages, " pages.")
+    
     dates = [ list(item.values()) for item in dateandSource ]
-    for item in dates: print(item,type(item)) # gives list of dict_values with datetime
-    for item in dates[ 0 : len(dates) ]: print(type(item)) # gives date_time string, type(item) says <class 'xmlrpc.client.DateTime'>
-    strdate=str(dates[1][0]).split('T')[0]
-    print( strdate ) # just to make sure data exists
 
     yymmdd=[]
     for item in range(0, len(dates)):
         yymmdd.append(str(dates[item][0]).split('T')[0])
+        yymmdd[item]=int(yymmdd[item])
     return yymmdd
