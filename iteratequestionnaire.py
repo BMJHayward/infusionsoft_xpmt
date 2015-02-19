@@ -150,3 +150,9 @@ def getDates():
         yymmdd.append(str(dates[item][0]).split('T')[0])
         yymmdd[item]=int(yymmdd[item])
     return yymmdd
+
+def histogram():
+    dates = eval(open('dates.txt','r+').read())
+    from collections import Counter
+    datescount = Counter(dates)
+    
