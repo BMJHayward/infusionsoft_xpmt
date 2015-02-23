@@ -7,7 +7,7 @@ to test script with HTTP headers and HTML. See docs.python.org/3/library/cgi.htm
 
 """ create connection to API, test data service and query function """
 import iteratequestionnaire as iq
-iqcxn = iq.infusionQuery()
+iqcxn = iq.InfusionQuery()
 
 def sampleQuery( ):
         """ makes 4 queries returning date created, leadsource and tags (groups) """
