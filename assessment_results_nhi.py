@@ -1,5 +1,7 @@
 from infusionsoft.library import  Infusionsoft
-infusionsoft = Infusionsoft( 'insert account name' , 'insert_api_key' ) # I want to create ti infusionsoft object before anything else
+key = [line for line in open('APIKEY.txt') ][ 0 ]
+appName = [line for line in open('APPNAME.txt') ][ 0 ]
+infusionsoft = Infusionsoft( appName, key )
 
 import cgi
 form = cgi.FieldStorage() # request data lives here. Chose CGI because simpler, and not using any particular framework, comes in standard library
@@ -36,10 +38,6 @@ answers = { # get max of 'yes' answers from this list as result
     'blockear_sometimes ': [ 1822, 1852, 1882, 1912 ],
     }
 
-def iterate():
-    for item in answers.values():
-        for tag in item:
-            print(tag)
 
 # questionnaire = { 'tinnitus' : tinnitus, 'hearing' : hearing, 'hyperacusis' : hyperacusis, 'dizziness' : dizziness, 'blockear' : blockear }
 
