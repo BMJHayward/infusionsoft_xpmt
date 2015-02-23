@@ -122,6 +122,9 @@ class InfusionQuery( ):
         print( str(self.dateandSource[0]['DateCreated']).split('T')[0] ) # to get date yymmdd as string
         print( self.dateandSource[0]['Leadsource'] ) # returns leadsource name as string
 
+        return self.dateandSource
+
+        """
         self.x, self.y = [],[]
         self.knob = 0
         for self.knob in self.dateandSource[self.knob]:
@@ -129,6 +132,7 @@ class InfusionQuery( ):
             self.str_date = str(self.knob['DateCreated']).split('T')[0]
             self.x.extend( int( str_date ) )
         return self.x, self.y
+        """
 
 
 def getDates():
@@ -198,3 +202,12 @@ def histogram():
     dates = eval(open('dates.txt','r+').read())
     from collections import Counter
     datescount = Counter(dates)
+
+def testlist():
+    testlist = InfusionQuery().getDateandsource()
+    for item in testlist:
+        for element in item.keys():
+            if element == 'DateCreated':
+                print(str(item[element]).split('T')[0])
+            elif element == 'Leadsource':
+                print(element)
