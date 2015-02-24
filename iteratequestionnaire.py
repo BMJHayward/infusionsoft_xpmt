@@ -204,6 +204,7 @@ def histogram():
     datescount = Counter(dates)
 
 def testlist():
+    x = [ ]
     testlist = InfusionQuery().getDateandsource()
     for item in testlist:
         for element in item.keys():
@@ -211,3 +212,7 @@ def testlist():
                 print(str(item[element]).split('T')[0])
             elif element == 'Leadsource':
                 print(element)
+
+    for item in testlist:
+        x.append(list(testlist[0].values()))
+    return x
