@@ -215,4 +215,8 @@ def testlist():
 
     for item in testlist:
         x.append(list(testlist[0].values()))
+    with open('dates.txt','r+') as tempfile:
+        for item in x:
+            tempfile.write(str(item) + '\n'))
+
     return x
