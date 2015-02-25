@@ -10,73 +10,6 @@ TODO:
 
 from infusionsoft.library import Infusionsoft
 
-answers = { # increment score when cutomer has tags in 'yes' and 'sometimes' arrays, take maximum score as result
-    'tinnitus_yes': [ 1796, 1826, 1856, 1886 ],
-    'tinnitus_no': [ 1800, 1830, 1860, 1890 ],
-    'tinnitus_sometimes': [ 1798, 1828, 1858, 1888 ],
-
-    'hearing_yes': [ 1808, 1838, 1868, 1898  ],
-    'hearing_no': [ 1812, 1842, 1872, 1902 ],
-    'hearing_sometimes': [ 1810, 1840, 1870, 1900 ],
-
-    'hyperacusis_yes': [ 1802, 1832, 1862, 1892 ],
-    'hyperacusis_no': [ 1806, 1836, 1866, 1896 ],
-    'hyperacusis_sometimes': [ 1804, 1834, 1864, 1894 ],
-
-    'dizziness_yes': [ 1814, 1844, 1874, 1904 ],
-    'dizziness_no': [ 1818, 1848, 1878, 1908 ],
-    'dizziness_sometimes': [ 1816, 1846, 1876, 1906 ],
-
-    'blockear_yes': [ 1820, 1850, 1880, 1910  ],
-    'blockear_no': [ 1824, 1854, 1884, 1914 ],
-    'blockear_sometimes': [ 1822, 1852, 1882, 1912 ],
-    }
-
-score_array = { # increment score when cutomer has tags in 'yes' and 'sometimes' arrays, take maximum score as result
-    'tinnitus_yes': 0,
-    'tinnitus_no': 0,
-    'tinnitus_sometimes': 0,
-
-    'hearing_yes': 0,
-    'hearing_no': 0,
-    'hearing_sometimes': 0,
-
-    'hyperacusis_yes': 0,
-    'hyperacusis_no': 0,
-    'hyperacusis_sometimes': 0,
-
-    'dizziness_yes': 0,
-    'dizziness_no': 0,
-    'dizziness_sometimes': 0,
-
-    'blockear_yes': 0,
-    'blockear_no': 0,
-    'blockear_sometimes': 0,
-    }
-
-tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
-
-def score_update( target ):
-    if key.contains( 'yes' ):
-        score_array[ target ] += 5
-    elif key.contains( 'some' ):
-        score_array[ target ] += 3
-    else:
-        return
-
-def check_tag( cust_tag, target_tag ):
-    if cust_tag == target_tag:
-        score_update( answers.get(key) )
-    else:
-        return
-
-def iterate():
-    cust_tag = InfusionQuery.querytags()
-    for answer in answers.values():
-        for ans in answer:
-            check_tag( cust_tag, ans )
-
-
 def iterateandAppend( list ): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
     # can maybe use a comprehension like at end of this function, not sure yet
     for value in answers.values():
@@ -133,7 +66,6 @@ class InfusionQuery( ):
             self.x.extend( int( str_date ) )
         return self.x, self.y
         """
-
 
 def getDates():
     """

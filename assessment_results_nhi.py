@@ -3,6 +3,7 @@ key = [line for line in open('APIKEY.txt') ][ 0 ]
 appName = [line for line in open('APPNAME.txt') ][ 0 ]
 infusionsoft = Infusionsoft( appName, key )
 
+from iteratequestionnaire import InfusionQuery
 import cgi
 form = cgi.FieldStorage() # request data lives here. Chose CGI because simpler, and not using any particular framework, comes in standard library
 
@@ -62,6 +63,25 @@ def get_results ( tag_id ):
             for tags in answers:
                 if tags == tag_id: pass
 
+def score_update( target ):
+    if key.contains( 'yes' ):
+        score_array[ target ] += 5
+    elif key.contains( 'some' ):
+        score_array[ target ] += 3
+    else:
+        return
+
+def check_tag( cust_tag, target_tag ):
+    if cust_tag == target_tag:
+        score_update( answers.get(key) )
+    else:
+        return
+
+def iterate():
+    cust_tag = InfusionQuery.querytags()
+    for answer in answers.values():
+        for ans in answer:
+            check_tag( cust_tag, ans )
 
 if (infusionsoft.cfgCon("insert account name"))
 
