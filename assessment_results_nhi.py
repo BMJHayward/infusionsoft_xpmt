@@ -13,9 +13,11 @@ cgitb.enable( display=0, logdir='log' ) # log script output and header data to l
 contact_id = form.getvalue("contact_id")
 print( "The contact being handled is %s " % contact_id )
 
-# these 4 digit numbers correspond to tag id for answer to each assessment question in Infusionsoft form
-# python probably doesn't like doing arrays like this, we'll find out, or use arrary library or numpy.ndarray
-# current approach using dicts looks like it has potential
+'''
+these 4 digit numbers correspond to tag id for answer to each assessment question in Infusionsoft form
+python probably doesn't like doing arrays like this, we'll find out, or use arrary library or numpy.ndarray
+current approach using dicts looks like it has potential
+'''
 
 answers = { # get max of 'yes' answers from this list as result
     'tinnitus_yes ': [ 1796, 1826, 1856, 1886 ],
@@ -40,9 +42,16 @@ answers = { # get max of 'yes' answers from this list as result
     }
 
 
-# questionnaire = { 'tinnitus' : tinnitus, 'hearing' : hearing, 'hyperacusis' : hyperacusis, 'dizziness' : dizziness, 'blockear' : blockear }
 
 tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
+
+def iterateandAppend( list ): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
+    # can maybe use a comprehension like at end of this function, not sure yet
+    for value in answers.values():
+        for tag in value:
+            list.append( tag )
+    answers_list = [ tag for values in answers.values() for tag in values ]
+
 
 def query_tags ( contact_id ):
 

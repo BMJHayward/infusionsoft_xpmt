@@ -10,13 +10,6 @@ TODO:
 
 from infusionsoft.library import Infusionsoft
 
-def iterateandAppend( list ): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
-    # can maybe use a comprehension like at end of this function, not sure yet
-    for value in answers.values():
-        for tag in value:
-            list.append( tag )
-    answers_list = [ tag for values in answers.values() for tag in values ]
-
 # import infusionsoft
 class InfusionQuery( ):
     """ creates a connection, runs basic queries.
@@ -138,17 +131,25 @@ def histogram():
 def testlist():
     x = [ ]
     testlist = InfusionQuery().getDateandsource()
+    '''
     for item in testlist:
         for element in item.keys():
             if element == 'DateCreated':
                 print(str(item[element]).split('T')[0])
             elif element == 'Leadsource':
                 print(element)
+    '''
 
     for item in testlist:
         x.append(list(testlist[0].values()))
     with open('dates.txt','r+') as tempfile:
         for item in x:
-            tempfile.write(str(item) + '\n'))
+            tempfile.write(str(item) + '\n')
+    tempfile.close()
+
+    with open('dateandsource.csv','r+') as file:
+        for item in testlist:
+            file.write(str(item) + '\n')
+        file.close()
 
     return x

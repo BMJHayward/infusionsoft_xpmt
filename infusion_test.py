@@ -1,5 +1,6 @@
 """
 TODO: use
+import unittest, unittest.mock
 import cgi
 cgi.test()
 to test script with HTTP headers and HTML. See docs.python.org/3/library/cgi.html
