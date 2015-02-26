@@ -128,17 +128,22 @@ def histogram():
     from collections import Counter
     datescount = Counter(dates)
 
+def makecsvlist(dict):
+    ''' call this function like this:
+    for item in testlist:
+        makecsvlist(item)
+    '''
+    for item in iter(dict):
+        if item == 'DateCreated':
+            print(str(dict[item]).split('T')[0])
+        elif item == 'Leadsource':
+            print(dict[item])
+
+    # return list # give 2D list back to caller to write to desired output
+
 def testlist():
     x = [ ]
     testlist = InfusionQuery().getDateandsource()
-    '''
-    for item in testlist:
-        for element in item.keys():
-            if element == 'DateCreated':
-                print(str(item[element]).split('T')[0])
-            elif element == 'Leadsource':
-                print(element)
-    '''
 
     for item in testlist:
         x.append(list(testlist[0].values()))
