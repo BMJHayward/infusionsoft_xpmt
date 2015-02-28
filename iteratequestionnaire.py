@@ -42,16 +42,21 @@ class InfusionQuery:
 
         return self.leadsource
 
+class Process:
+    ''' raw query data processed here to send to output, possibly to database '''
+    def makelist(self, data):
+        raise NotImplementedError
+
+
 class OutputData:
 
     def writetofile(self, queryfunc, filename):
         ''' primarily to send to spreadsheet '''
         self.data = queryfunc #queryfunc doesn't have to be a query
-        self.tempfile = open(filename,'a+')
-        for line in self.data:
-            self.tempfile.write(str(line))
-            print( line ) # this returns a dict for each line, datetime is its own object. WTF infusionsoft!?!
-        self.tempfile.close()
+        with open(filename,'a+') as self.tempfile:
+            for line in self.data:
+                self.tempfile.write(str(line))
+                print( line )
 
     def writetohtml(self, queryfunc, filename):
         raise NotImplementedError
@@ -61,11 +66,6 @@ class OutputData:
 
     def writeto3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
-        raise NotImplementedError
-
-class Process:
-    ''' raw query data processed here to send to output, possibly to database '''
-    def makelist(self, data):
         raise NotImplementedError
 
 def makecsvlist(dict):
@@ -80,6 +80,7 @@ def makecsvlist(dict):
           #  list.append(dict[item])
 
     return list # give 2D (future: n-D) list back to caller to write to desired output
+
 def histogram():
     '''
     using bokeh to visualise:
