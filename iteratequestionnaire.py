@@ -43,8 +43,36 @@ class InfusionQuery:
         return self.leadsource
 
 class Process:
-    ''' raw query data processed here to send to output, possibly to database '''
-    def makelist(self, data):
+    ''' raw query data processed here for target output'''
+
+    def __init__(self, list):
+
+        self.list = list
+
+    def iter_list(self, list):
+
+        for dictionary in list:
+            self.query_process(dictionary)
+
+    def query_process(dictionary):
+
+        if 'GroupId' in dictionary.keys():
+
+            return dictionary['GroupId']
+
+        elif 'DateCreated' in dictionary.keys():
+            date = str(dictionary['DateCreated']) 
+            date = date.split('T')[0]
+            date = int(date)
+
+            return date
+
+        elif 'Leadsource' in dictionary.keys():
+
+            return dictionary['Leadsource']
+
+    def make_list(self, data):
+
         raise NotImplementedError
 
 
