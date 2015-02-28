@@ -11,7 +11,7 @@ TODO:
 from infusionsoft.library import Infusionsoft
 
 # import infusionsoft
-class InfusionQuery( ):
+class InfusionQuery:
     ''' creates a connection, runs basic queries. '''
 
     def __init__( self ):
@@ -42,7 +42,7 @@ class InfusionQuery( ):
 
         return self.leadsource
 
-class OutputData(self, data):
+class OutputData:
 
     def writetofile(self, queryfunc, filename):
         ''' primarily to send to spreadsheet '''
@@ -63,7 +63,7 @@ class OutputData(self, data):
         '''' to send to pandas, matplotlib, etc etc '''
         raise NotImplementedError
 
-class Process(self):
+class Process:
     ''' raw query data processed here to send to output, possibly to database '''
     def makelist(self, data):
         raise NotImplementedError

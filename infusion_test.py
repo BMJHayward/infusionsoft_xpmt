@@ -21,8 +21,6 @@ class TestInfusionQuery(unittest.TestCase):
         query = {'ContactType' : '%'}
         limit = 10
         page = 0
-        datesource = iqcxn.infusionsoft.DataService('query', 'Contact',
-                    10, 0, {'ContactType' : '%'}, ['DateCreated','Leadsource'])
 
         print(iqcxn.infusionsoft.DataService( 'query', table, limit,
                 page, query, returnFields))
