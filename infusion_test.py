@@ -39,10 +39,12 @@ class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 
     def test_iter_list(self):
-
+        pass
     def test_query_process(self):
+        pass
 
-    def test_make_list(self, data):
+    def test_make_list(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
