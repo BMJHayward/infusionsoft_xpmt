@@ -3,7 +3,7 @@ key = [line for line in open('APIKEY.txt') ][ 0 ]
 appName = [line for line in open('APPNAME.txt') ][ 0 ]
 infusionsoft = Infusionsoft( appName, key )
 
-from iteratequestionnaire import InfusionQuery
+from dataserv import InfusionQuery
 import cgi
 form = cgi.FieldStorage() # request data lives here. Chose CGI because simpler, and not using any particular framework, comes in standard library
 

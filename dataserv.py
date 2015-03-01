@@ -45,20 +45,24 @@ class InfusionQuery:
 class Process:
     ''' raw query data processed here for target output'''
 
-    def __init__(self, list):
+    def __init__(self, array):
 
-        self.list = list
+        self.array = array
 
-    def iter_list(self, list):
+    def iter_array(self):
 
-        for dictionary in list:
-            self.query_process(dictionary)
+        data = []
+        for dictionary in self.array:
+            data.append(self.query_process(dictionary))
 
-    def query_process(dictionary):
+        return data
+
+    def query_process(self, dictionary):
 
         if 'GroupId' in dictionary.keys():
 
-            return dictionary['GroupId']
+            tag = dictionary['GroupId']
+            return tag
 
         elif 'DateCreated' in dictionary.keys():
             date = str(dictionary['DateCreated']) 
@@ -69,7 +73,8 @@ class Process:
 
         elif 'Leadsource' in dictionary.keys():
 
-            return dictionary['Leadsource']
+            lead = dictionary['Leadsource']
+            return lead
 
     def make_list(self, data):
 
@@ -98,16 +103,16 @@ class OutputData:
 
 def makecsvlist(dict):
 
-    list = [ ]
+    csvlist = [ ]
     for item in iter(dict):
         if item == 'DateCreated':
-            list.append(str(dict[item]).split('T')[0])
+            csvlist.append(str(dict[item]).split('T')[0])
         elif item == 'Leadsource':
-            list.append(dict[item])
+            csvlist.append(dict[item])
         #elif item == 'Address'
-          #  list.append(dict[item])
+          #  csvlist.append(dict[item])
 
-    return list # give 2D (future: n-D) list back to caller to write to desired output
+    return csvlist # give 2D (future: n-D) list back to caller to write to desired output
 
 def histogram():
     '''
@@ -137,7 +142,7 @@ def writetofile(sourcelist):
          file.write(str(item)+'\n')
     file.close()
 
-def sourcelistlist():
+def sourcelist():
 
     testlist = InfusionQuery().getDateandsource()
 

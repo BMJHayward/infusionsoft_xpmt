@@ -8,7 +8,7 @@ to test script with HTTP headers and HTML. See docs.python.org/3/library/cgi.htm
 import unittest 
 
 """ create connection to API, test data service and query function """
-import iteratequestionnaire as iq
+import dataserv as iq
 iqcxn = iq.InfusionQuery()
 
 class TestInfusionQuery(unittest.TestCase):
@@ -35,6 +35,14 @@ class TestInfusionQuery(unittest.TestCase):
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
                 {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
     
+class TestProcess(unittest.TestCase):
+    ''' test query data is processed correctly '''
+
+    def test_iter_list(self):
+
+    def test_query_process(self):
+
+    def test_make_list(self, data):
 
 if __name__ == '__main__':
     unittest.main()
