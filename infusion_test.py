@@ -5,11 +5,12 @@ import cgi
 cgi.test()
 to test script with HTTP headers and HTML. See docs.python.org/3/library/cgi.html
 """
-import unittest 
+import unittest
 
 """ create connection to API, test data service and query function """
 import dataserv as iq
 iqcxn = iq.InfusionQuery()
+
 
 class TestInfusionQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test class for each component class '''
@@ -24,22 +25,27 @@ class TestInfusionQuery(unittest.TestCase):
 
         print(iqcxn.infusionsoft.DataService( 'query', table, limit,
                 page, query, returnFields))
-    
+
     def test_fullStringQuery_a(self):
-    
+
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
                 {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
-    
+
     def test_fullStringQuery_b(self):
-    
+
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
                 {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
-    
+
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 
-    def test_iter_list(self):
-        pass
+    def test_iter_array(self):
+
+        sample_list = iqcxn.queryleadsource()
+        lead_list = iq.Process(sample_list)
+        final_list = lead_list.iter_array()
+        self.assertIs(type(final_list), list)
+
     def test_query_process(self):
         pass
 
