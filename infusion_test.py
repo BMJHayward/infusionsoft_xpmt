@@ -1,40 +1,41 @@
-"""
+'''
 TODO: use
 unittest.mock
 import cgi
-cgi.test()
-to test script with HTTP headers and HTML. See docs.python.org/3/library/cgi.html
-"""
+cgi.test() to test script with HTTP headers and HTML.
+    See docs.python.org/3/library/cgi.html
+'''
 import unittest
-
-""" create connection to API, test data service and query function """
 import dataserv as iq
+
 iqcxn = iq.InfusionQuery()
 
 
 class TestInfusionQuery(unittest.TestCase):
-    ''' this class may be just to test InfusionQuery() class, with new test class for each component class '''
+    ''' this class may be just to test InfusionQuery() class, with new test
+        class for each component class
+    '''
 
     def test_sampleQuery(self):
-        """ makes 4 queries returning date created, leadsource and tags (groups) """
+        ''' make 4 queries returning date created, leadsource and tags '''
         table = 'Contact'
         returnFields = ['DateCreated', 'Leadsource']
-        query = {'ContactType' : '%'}
+        query = {'ContactType': '%'}
         limit = 10
         page = 0
 
-        print(iqcxn.infusionsoft.DataService( 'query', table, limit,
-                page, query, returnFields))
+        print(iqcxn.infusionsoft.DataService('query', table, limit,
+              page, query, returnFields))
 
     def test_fullStringQuery_a(self):
 
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
-                {'ContactType' : '%'}, ['DateCreated','Leadsource'])) # returns an array of dicts
+              {'ContactType': '%'}, ['DateCreated', 'Leadsource']))
 
     def test_fullStringQuery_b(self):
 
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
-                {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
+              {'ContactType': '%'}, ['Groups']))
 
     def test_querytags(self):
 
@@ -51,6 +52,7 @@ class TestInfusionQuery(unittest.TestCase):
         data = iqcxn.queryleadsource()
         print(data)
 
+
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 
@@ -66,6 +68,7 @@ class TestProcess(unittest.TestCase):
 
     def test_make_list(self):
         pass
+
 
 if __name__ == '__main__':
     unittest.main()
