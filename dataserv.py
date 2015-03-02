@@ -65,7 +65,7 @@ class Process:
             return tag
 
         elif 'DateCreated' in dictionary.keys():
-            date = str(dictionary['DateCreated']) 
+            date = str(dictionary['DateCreated'])
             date = date.split('T')[0]
             date = int(date)
 
@@ -82,14 +82,26 @@ class Process:
 
 
 class OutputData:
+    ''' expects target_list to be of type list '''
 
-    def writetofile(self, queryfunc, filename):
-        ''' primarily to send to spreadsheet '''
-        self.data = queryfunc #queryfunc doesn't have to be a query
+    def __init__(self, target_list):
+        self.target_list = target_list
+        print("target list is: ", len(target_list), " elements long.")
+
+    def writetofile(self, target_list = None, queryfunc=None, filename='dataserv.csv'):
+        ''' primarily to send to spreadsheet. TODO: probably replace this with csv module '''
+
+        if target_list != None:
+            self.data = target_list
+        elif queryfunc != None:
+            self.data = queryfunc
+
         with open(filename,'a+') as self.tempfile:
             for line in self.data:
-                self.tempfile.write(str(line))
-                print( line )
+                self.tempfile.write(line)
+                self.tempfile.write(",")
+                self.tempfile.write("\n")
+                print(line)
 
     def writetohtml(self, queryfunc, filename):
         raise NotImplementedError
