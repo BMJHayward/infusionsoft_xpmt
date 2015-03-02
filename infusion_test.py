@@ -36,6 +36,21 @@ class TestInfusionQuery(unittest.TestCase):
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
                 {'ContactType' : '%'}, ['Groups'])) # get tags with 'Groups' field from 'Contact' table
 
+    def test_querytags(self):
+
+        data = iqcxn.querytags()
+        print(data)
+
+    def test_querydate(self):
+
+        data = iqcxn.querydate()
+        print(data)
+
+    def test_queryleadsource(self):
+
+        data = iqcxn.queryleadsource()
+        print(data)
+
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 

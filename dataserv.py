@@ -84,10 +84,6 @@ class Process:
 class OutputData:
     ''' expects target_list to be of type list '''
 
-    def __init__(self, target_list):
-        self.target_list = target_list
-        print("target list is: ", len(target_list), " elements long.")
-
     def writetofile(self, target_list = None, queryfunc=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: probably replace this with csv module '''
 
