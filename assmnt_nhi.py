@@ -1,76 +1,80 @@
 from infusionsoft.library import  Infusionsoft
-key = [line for line in open('APIKEY.txt') ][ 0 ]
-appName = [line for line in open('APPNAME.txt') ][ 0 ]
-infusionsoft = Infusionsoft( appName, key )
+key = [line for line in open('APIKEY.txt')][0]
+appName = [line for line in open('APPNAME.txt')][0]
+infusionsoft = Infusionsoft(appName, key)
 
 from dataserv import InfusionQuery
 import cgi
-form = cgi.FieldStorage() # request data lives here. Chose CGI because simpler, and not using any particular framework, comes in standard library
+form = cgi.FieldStorage()  # request data in here. Chose CGI because simple
 
 import cgitb
-cgitb.enable( display=0, logdir='log' ) # log script output and header data to local log folder while developing
+cgitb.enable(display=0, logdir='log')
 
 contact_id = form.getvalue("contact_id")
 print( "The contact being handled is %s " % contact_id )
 
 '''
-these 4 digit numbers correspond to tag id for answer to each assessment question in Infusionsoft form
-python probably doesn't like doing arrays like this, we'll find out, or use arrary library or numpy.ndarray
+these 4 digit numbers correspond to tag id for answer to each assessment 
+question in Infusionsoft form python probably doesn't like doing arrays 
+like this, we'll find out, or use arrary library or numpy.ndarray
 current approach using dicts looks like it has potential
 '''
 
-answers = { # get max of 'yes' answers from this list as result
-    'tinnitus_yes ': [ 1796, 1826, 1856, 1886 ],
-    'tinnitus_no ': [ 1800, 1830, 1860, 1890 ],
-    'tinnitus_sometimes ': [ 1798, 1828, 1858, 1888 ],
+answers = {  # get max of 'yes' answers from this list as result
+    'tinnitus_yes ': [1796, 1826, 1856, 1886],
+    'tinnitus_no ': [1800, 1830, 1860, 1890],
+    'tinnitus_sometimes ': [1798, 1828, 1858, 1888],
 
-    'hearing_yes ': [ 1808, 1838, 1868, 1898  ],
-    'hearing_no ': [ 1812, 1842, 1872, 1902 ],
-    'hearing_sometimes ': [ 1810, 1840, 1870, 1900 ],
+    'hearing_yes ': [1808, 1838, 1868, 1898 ],
+    'hearing_no ': [1812, 1842, 1872, 1902],
+    'hearing_sometimes ': [1810, 1840, 1870, 1900],
 
-    'hyperacusis_yes ': [ 1802, 1832, 1862, 1892 ],
-    'hyperacusis_no ': [ 1806, 1836, 1866, 1896 ],
-    'hyperacusis_sometimes ': [ 1804, 1834, 1864, 1894 ],
+    'hyperacusis_yes ': [1802, 1832, 1862, 1892],
+    'hyperacusis_no ': [1806, 1836, 1866, 1896],
+    'hyperacusis_sometimes ': [1804, 1834, 1864, 1894],
 
-    'dizziness_yes ': [ 1814, 1844, 1874, 1904 ],
-    'dizziness_no ': [ 1818, 1848, 1878, 1908 ],
-    'dizziness_sometimes ': [ 1816, 1846, 1876, 1906 ],
+    'dizziness_yes ': [1814, 1844, 1874, 1904],
+    'dizziness_no ': [1818, 1848, 1878, 1908],
+    'dizziness_sometimes ': [1816, 1846, 1876, 1906],
 
-    'blockear_yes ': [ 1820, 1850, 1880, 1910  ],
-    'blockear_no ': [ 1824, 1854, 1884, 1914 ],
-    'blockear_sometimes ': [ 1822, 1852, 1882, 1912 ],
+    'blockear_yes ': [1820, 1850, 1880, 1910 ],
+    'blockear_no ': [1824, 1854, 1884, 1914],
+    'blockear_sometimes ': [1822, 1852, 1882, 1912],
     }
 
 
+tag_result = {"tinnitus": 2278, "hyperacusis": 2280, "hearing": 2282,
+             "dizziness": 2284, "blockear": 2286}
 
-tag_result = { "tinnitus" : 2278, "hyperacusis" : 2280, "hearing" : 2282,  "dizziness" : 2284, "blockear" : 2286 }
 
-def iterateandAppend( list ): # this will be used to compare answers with people's answers. print(tag) will change later to something useful
-    # can maybe use a comprehension like at end of this function, not sure yet
+def iterateandAppend( list ):  # used to compare result with client answers
+
     for value in answers.values():
         for tag in value:
-            list.append( tag )
-    answers_list = [ tag for values in answers.values() for tag in values ]
+            list.append(tag)
+    answers_list = [tag for values in answers.values() for tag in values]
 
 
-def query_tags ( contact_id ):
+def query_tags (contact_id):
 
-    returnFields = [ "GroupId" ]
-    query = { "ContactID": contact_id }
-    tags = infusionsoft.DataService( "ContactGroupAssign", 100, 0, query, returnFields )
+    returnFields = ["GroupId"]
+    query = {"ContactID": contact_id}
+    tags = infusionsoft.DataService("ContactGroupAssign", 100, 0, query, returnFields)
     return tags
 
     for tag in tags:
-        return_tags = tags[ tag ]
+        return_tags = tags[tag]
 
-    return return_tags # could we just return tags from 3 lines ago? DataService.query returns as an array anyway
+    return return_tags
+
 
 def get_results ( tag_id ):
-    # put function code here
+
     for results in questionnaire:
         for answers in results:
             for tags in answers:
                 if tags == tag_id: pass
+
 
 def score_update( target ):
     if key.contains( 'yes' ):
@@ -80,17 +84,20 @@ def score_update( target ):
     else:
         return
 
+
 def check_tag( cust_tag, target_tag ):
     if cust_tag == target_tag:
         score_update( answers.get(key) )
     else:
         return
 
+
 def iterate():
     cust_tag = InfusionQuery.querytags()
     for answer in answers.values():
         for ans in answer:
             check_tag( cust_tag, ans )
+
 
 if (infusionsoft.cfgCon("insert account name"))
 
@@ -100,16 +107,20 @@ if (infusionsoft.cfgCon("insert account name"))
     for tags in contact_tags:
         get_results( tags )
 
+
 print ( 'highest score: ' , highest_score )
+
 
 for results in comparison[ results]:
     if (results == highest_score && if  final_result == NULL):
         final_result[ results ] = results
 
+
 print ('<br> Final Result: ' . final_result )
 print ('<br>Tag Final Result ' . tag_result[ final_result ])
 print ('<br><br>Raw reference data : <br><pre>')
 print( results )
+
 
 data = (('assessment_type' , 'insert assessment type name'),
                 ('assessmentt_option0' , ucfirst( final_result ), #'ucfirrst is a PHP function, TODO: find its equivalent
