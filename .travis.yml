@@ -1,16 +1,14 @@
 language: python
-
 python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
-
+- '3.2'
+- '3.3'
+- '3.4'
 before_install:
-  - openssl aes-256-cbc -K $encrypted_5880cf525281_key -iv $encrypted_5880cf525281_iv -in api_auth.tar.enc -out api_auth.tar -d
-  - tar xvf api_auth.tar
-
+- openssl aes-256-cbc -K $encrypted_97862ae1aa3b_key -iv $encrypted_97862ae1aa3b_iv
+  -in APPNAME.txt.enc -out APPNAME.txt -d
+- openssl aes-256-cbc -K $encrypted_97862ae1aa3b_key -iv $encrypted_97862ae1aa3b_iv
+  -in APIKEY.txt.enc -out APIKEY.txt -d
 install:
-  - pip install git+https://github.com/BMJHayward/Official-API-Python-Library.git
-#  for tests
+- pip install git+https://github.com/BMJHayward/Official-API-Python-Library.git
 script:
-  - python infusion_test.py
+- python infusion_test.py
