@@ -2,6 +2,8 @@ language: python
 python:
   - "3.4"
 
+install:
+  - pip install git+https://github.com/BMJHayward/Official-API-Python-Library.git
 #  for tests
 script:
   - python infusion_test.py
