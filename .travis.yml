@@ -1,6 +1,13 @@
 language: python
+
 python:
+  - "3.2"
+  - "3.3"
   - "3.4"
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_5880cf525281_key -iv $encrypted_5880cf525281_iv -in api_auth.tar.enc -out api_auth.tar -d
+  - tar xvf api_auth.tar
 
 install:
   - pip install git+https://github.com/BMJHayward/Official-API-Python-Library.git
