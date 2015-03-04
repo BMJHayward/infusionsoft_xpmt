@@ -120,20 +120,6 @@ class OutputData:
         raise NotImplementedError
 
 
-def makecsvlist(dict):
-
-    csvlist = []
-    for item in iter(dict):
-        if item == 'DateCreated':
-            csvlist.append(str(dict[item]).split('T')[0])
-        elif item == 'Leadsource':
-            csvlist.append(dict[item])
-        # elif item == 'Address'
-            # csvlist.append(dict[item])
-
-    return csvlist  # return 2D (future: n-D) list to caller -> write to output
-
-
 def histogram():
     '''
     using bokeh to visualise:
@@ -148,18 +134,6 @@ def histogram():
     dates = eval(open('dates.txt', 'r+').read())
     from collections import Counter
     datescount = Counter(dates)
-
-
-def writetofile(sourcelist):
-
-    for item in sourcelist:
-        makecsvlist(item)
-    x = [makecsvlist(item) for item in sourcelist]
-
-    file = open('dateandsource.csv', 'w+')
-    for item in x:
-        file.write(str(item) + '\n')
-    file.close()
 
 
 def sourcelist():
