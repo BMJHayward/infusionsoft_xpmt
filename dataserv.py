@@ -33,7 +33,7 @@ class InfusionQuery:
 
         return self.tags
 
-    def querydate(self, recordcount=10):
+    def querydates(self, recordcount=10):
         ''' returns list of date created for all contact types '''
         self.date = self.infusionsoft.DataService(
             'query', 'Contact', recordcount, 0,
@@ -42,7 +42,7 @@ class InfusionQuery:
 
         return self.date
 
-    def queryleadsource(self, recordcount=10):
+    def queryleadsources(self, recordcount=10):
         self.leadsource = self.infusionsoft.DataService(
             'query', 'Contact', recordcount, 0,
             {'ContactType': '%'}, ['Leadsource']

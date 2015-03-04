@@ -64,7 +64,9 @@ class TestProcess(unittest.TestCase):
         self.assertIs(type(final_list), list)
 
     def test_query_process(self):
-        pass
+
+        tags = iq.InfusionQuery().querytags()
+        self.assertIs(type(tags[0].get('GroupId')), int)
 
     def test_make_list(self):
         pass
