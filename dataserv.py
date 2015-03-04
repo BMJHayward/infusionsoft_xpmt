@@ -95,14 +95,13 @@ class Process:
 class Output:
     ''' expects target_list to be of type list '''
 
-    def asfile(self, target_list=None,
-                    queryfunc=None, filename='dataserv.csv'):
+    def asfile(self, target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
 
-        if target_list is not None:
-            self.data = target_list
-        elif queryfunc is not None:
-            self.data = queryfunc
+        if target is not None:
+            self.data = target
+        elif query is not None:
+            self.data = query
 
         with open(filename, 'a+') as self.tempfile:
             for line in self.data:
