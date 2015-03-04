@@ -12,7 +12,7 @@ TODO:
 from infusionsoft.library import Infusionsoft
 
 
-class InfusionQuery:
+class Query:
     ''' creates a connection, runs basic queries. '''
 
     def __init__(self):
@@ -24,16 +24,16 @@ class InfusionQuery:
         self.appName = [line for line in open('APPNAME.txt')][0]
         self.infusionsoft = Infusionsoft(self.appName, self.key)
 
-    def querytags(self, ContactId=154084, recordcount=10):
+    def tags(self, ContactId=154084, recordcount=10):
         ''' returns tags for target contact '''
-        self.tags = self.infusionsoft.DataService(
+        self.tag = self.infusionsoft.DataService(
             'query', 'ContactGroupAssign', recordcount, 0,
             {'ContactId': str(ContactId)}, ['GroupId']
             )
 
-        return self.tags
+        return self.tag
 
-    def querydates(self, recordcount=10):
+    def dates(self, recordcount=10):
         ''' returns list of date created for all contact types '''
         self.date = self.infusionsoft.DataService(
             'query', 'Contact', recordcount, 0,
@@ -42,7 +42,7 @@ class InfusionQuery:
 
         return self.date
 
-    def queryleadsources(self, recordcount=10):
+    def leadsources(self, recordcount=10):
         self.leadsource = self.infusionsoft.DataService(
             'query', 'Contact', recordcount, 0,
             {'ContactType': '%'}, ['Leadsource']
@@ -85,15 +85,17 @@ class Process:
             lead = dictionary['Leadsource']
             return lead
 
-    def make_list(self, data):
+    def combine_list(self, *lists):
 
-        raise NotImplementedError
+        ziplist = zip(*lists)
+        ziplist = list(ziplist)
+        return ziplist
 
 
-class OutputData:
+class Output:
     ''' expects target_list to be of type list '''
 
-    def writetofile(self, target_list=None,
+    def asfile(self, target_list=None,
                     queryfunc=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
 
@@ -104,18 +106,18 @@ class OutputData:
 
         with open(filename, 'a+') as self.tempfile:
             for line in self.data:
-                self.tempfile.write(line)
+                self.tempfile.write(repr(line))
                 self.tempfile.write(",")
                 self.tempfile.write("\n")
                 print(line)
 
-    def writetohtml(self, queryfunc, filename):
+    def ashtml(self, queryfunc, filename):
         raise NotImplementedError
 
-    def writetoimage(self, queryfunc, filename):
+    def asimage(self, queryfunc, filename):
         raise NotImplementedError
 
-    def writeto3rdparty(self, queryfunc, filename):
+    def as3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
         raise NotImplementedError
 
