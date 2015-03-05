@@ -67,6 +67,9 @@ def get_results(tag):
         for i in range(0, len(answers.get(item))):
             print(tag == answers.get(item)[i])
 
+    for key in answers.keys():
+        print(tag in answer[key])
+
 '''
 try something like: filter(get_results(), query_tags()) to get single
 result 'True' and answers[key] name to update score
@@ -74,7 +77,7 @@ result 'True' and answers[key] name to update score
 def array_answers():  # used to compare result with client answers
 
     answers_list = [tag for values in answers.values() for tag in values]
-      #  answer_list = iter(list(answers.values()))
+      #  answer_list = iter(list(answers.values())); for a,b,c,d in answer_list: print(a,b,c,d)
     return answers_list
 
 def score_update(target):
