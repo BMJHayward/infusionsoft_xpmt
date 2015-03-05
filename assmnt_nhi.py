@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-from dataserv import InfusionQuery
 import cgi
 import cgitb
 
@@ -18,9 +17,9 @@ print("The contact being handled is %s " % contact_id)
 
 '''
 these 4 digit numbers correspond to tag id for answer to each assessment
-question in Infusionsoft form python probably doesn't like doing arrays
-like this, we'll find out, or use arrary library or numpy.ndarray
-current approach using dicts looks like it has potential
+question in Infusionsoft form.
+separate dicts for answers and results written explicitly to keep code
+explicit. Not using numpy because only have standard lib in production.
 '''
 
 answers = {  # get max of 'yes' answers from this list as result
@@ -45,7 +44,29 @@ answers = {  # get max of 'yes' answers from this list as result
     'blockear_sometimes': [1822, 1852, 1882, 1912],
     }
 
-tag_result = {"tinnitus": 2278, "hyperacusis": 2280, "hearing": 2282,
+result = {  # score_update() will change values of this dict
+    'tinnitus_yes': 0,
+    'tinnitus_no': 0,
+    'tinnitus_sometimes': 0,
+
+    'hearing_yes': 0,
+    'hearing_no': 0,
+    'hearing_sometimes': 0,
+
+    'hyperacusis_yes': 0,
+    'hyperacusis_no': 0,
+    'hyperacusis_sometimes': 0,
+
+    'dizziness_yes': 0,
+    'dizziness_no': 0,
+    'dizziness_sometimes': 0,
+
+    'blockear_yes': 0,
+    'blockear_no': 0,
+    'blockear_sometimes': 0,
+    }
+
+condition_tag = {"tinnitus": 2278, "hyperacusis": 2280, "hearing": 2282,
               "dizziness": 2284, "blockear": 2286}
 
 
@@ -63,12 +84,11 @@ def query_tags(contact_id):
 
 def get_results(tag):
 
-    for item in answers.keys():
-        for i in range(0, len(answers.get(item))):
-            print(tag == answers.get(item)[i])
-
     for key in answers.keys():
-        print(tag in answer[key])
+        for i in range(0, len(answers.get(key))):
+            if tag == answers.get(key)[i]):
+                score_update(tag)
+
 
 '''
 try something like: filter(get_results(), query_tags()) to get single
@@ -80,27 +100,32 @@ def array_answers():  # used to compare result with client answers
       #  answer_list = iter(list(answers.values())); for a,b,c,d in answer_list: print(a,b,c,d)
     return answers_list
 
-def score_update(target):
-    if key.contains('yes'):
-        score_array[target] += 5
-    elif key.contains('some'):
-        score_array[target] += 3
-    else:
-        return
+
+def score_update(tag):
+
+    for key in list(iter(answers.keys())):
+
+        if key.endswith('yes'):
+            result[key] += 5
+        elif key.endswith('some'):
+            result[key] += 3
+        else:
+            return
 
 
 def check_tag(cust_tag, target_tag):
     if cust_tag == target_tag:
-        score_update(answers.get(key))
+        score_update(target_tag)
     else:
         return
 
 
 def iterate():
-    cust_tag = InfusionQuery.querytags()
-    for answer in answers.values():
-        for ans in answer:
-            check_tag(cust_tag, ans)
+    cust_tag = query_tags()
+    for tag in cust_tag:
+        for answer in answers.values():
+            for ans in answer:
+                check_tag(tag, ans)
 
 
 if (infusionsoft.cfgCon("insert account name")):
@@ -118,9 +143,10 @@ for results in comparison[results]:
     if (results == highest_score and final_result is None):
         final_result[results] = results
 
+max(iter(results.values()))
 
 print ('<br> Final Result: ', final_result)
-print ('<br>Tag Final Result ', tag_result[final_result])
+print ('<br>Tag Final Result ', condition_tag[final_result])
 print ('<br><br>Raw reference data : <br><pre>')
 print(results)
 
@@ -136,6 +162,6 @@ data = (('assessment_type' , 'insert assessment type name'),
               )
 
   # infusionsoft.updateCon(contact_id, data)
-  # infusionsoft.grpAssign(contact_id, tag_result[final_result])
+  # infusionsoft.grpAssign(contact_id, condition_tag[final_result])
   # print(contact_id)
-  # print(tag_result[final_result])
+  # print(condition_tag[final_result])
