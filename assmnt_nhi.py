@@ -45,8 +45,6 @@ answers = {  # get max of 'yes' answers from this list as result
     'blockear_sometimes': [1822, 1852, 1882, 1912],
     }
 
-answer_list = list(iter(answers.values()))
-
 tag_result = {"tinnitus": 2278, "hyperacusis": 2280, "hearing": 2282,
               "dizziness": 2284, "blockear": 2286}
 
@@ -65,18 +63,19 @@ def query_tags(contact_id):
 
 def get_results(tag):
 
-    for item in answer_list:
-        for i in item:
-            print(tag == i)
+    for item in answers.keys():
+        for i in range(0, len(answers.get(item))):
+            print(tag == answers.get(item)[i])
 
+'''
+try something like: filter(get_results(), query_tags()) to get single
+result 'True' and answers[key] name to update score
+'''
+def array_answers():  # used to compare result with client answers
 
-def iterateandAppend(list):  # used to compare result with client answers
-
-    for value in answers.values():
-        for tag in value:
-            list.append(tag)
     answers_list = [tag for values in answers.values() for tag in values]
-
+      #  answer_list = iter(list(answers.values()))
+    return answers_list
 
 def score_update(target):
     if key.contains('yes'):
