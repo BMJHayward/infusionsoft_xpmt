@@ -16,8 +16,8 @@ contact_id = form.getvalue("contact_id")
 print("The contact being handled is %s " % contact_id)
 
 '''
-these 4 digit numbers correspond to tag id for answer to each assessment
-question in Infusionsoft form.
+4 digit numbers correspond to tag id for each assessment question from
+Infusionsoft form.
 separate dicts for answers and results written explicitly to keep code
 explicit. Not using numpy because only have standard lib in production.
 '''
@@ -69,7 +69,6 @@ result = {  # score_update() will change values of this dict
 condition_tag = {"tinnitus": 2278, "hyperacusis": 2280, "hearing": 2282,
               "dizziness": 2284, "blockear": 2286}
 
-
 def query_tags(contact_id):
 
     returnFields = ["GroupId"]
@@ -80,25 +79,6 @@ def query_tags(contact_id):
     return_tags = [item[tag] for item in tags for tag in item]
 
     return return_tags
-
-
-def get_results(tag):
-
-    for key in answers.keys():
-        for i in range(0, len(answers.get(key))):
-            if tag == answers.get(key)[i]):
-                score_update(tag)
-
-
-'''
-try something like: filter(get_results(), query_tags()) to get single
-result 'True' and answers[key] name to update score
-'''
-def array_answers():  # used to compare result with client answers
-
-    answers_list = [tag for values in answers.values() for tag in values]
-      #  answer_list = iter(list(answers.values())); for a,b,c,d in answer_list: print(a,b,c,d)
-    return answers_list
 
 
 def score_update(tag):
@@ -128,40 +108,16 @@ def iterate():
                 check_tag(tag, ans)
 
 
-if (infusionsoft.cfgCon("insert account name")):
+def highscore():
 
-    contact_tags = infusionsoft.ContactService(load, contact_id, ContactGroup)
+    score = max(result.values())
+    for key in result:
+        if result[key] == score:
+            scorekey = key
+    scorekey = scorekey.split('_')[0]
 
-    for tags in contact_tags:
-        get_results(tags)
-
-
-print ('highest score: ', highest_score)
-
-
-for results in comparison[results]:
-    if (results == highest_score and final_result is None):
-        final_result[results] = results
-
-max(iter(results.values()))
-
-print ('<br> Final Result: ', final_result)
-print ('<br>Tag Final Result ', condition_tag[final_result])
-print ('<br><br>Raw reference data : <br><pre>')
-print(results)
+    return condition_tag[scorekey]
 
 
-data = (('assessment_type' , 'insert assessment type name'),
-                ('assessmentt_option0', ucfirst(final_result),
-                ('assessment_score', highest_score),
-                ('assessment_score_condition1', results[tinnitus][scores]),
-                ('assessment_score_condition2', results[hearing][scores]),
-                ('assessment_score_condition3', results[dizziness][scores]),
-                ('assessment_score_condition4', results[hyperacusis][scores]),
-                ('assessment_score_condition5', results[blockedear][scores])
-              )
-
-  # infusionsoft.updateCon(contact_id, data)
-  # infusionsoft.grpAssign(contact_id, condition_tag[final_result])
-  # print(contact_id)
-  # print(condition_tag[final_result])
+condition = highscore()
+infusionsoft.ContactService(contact_id,condition)  # adds primary condition
