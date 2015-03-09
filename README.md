@@ -1,13 +1,20 @@
+########################
+Infusionsoft Experiment
+########################
+
 Using the command pattern to abstract over the data service portion of the Infusionsoft API (Infusionsoft a.ka. 'IS' from here on).
+
+DESCRIPTION
+############
 
 Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, numpy etc.
 This project will keep to the stdlib where ever possible to minimise dependencies, and simplify deployment in several environments.
 
-NAME
-    dataserv
 
-DESCRIPTION
-    TODO:
+dataserv.py is the main file of interest for the moment. this may be broken up in future as more classes are added.
+
+TODO:
+#####
     1:put array variables, sort functions into a class
     2:include all assessment tags as arrays, centralise all assessment sorting into
         one file, using main class
@@ -17,6 +24,7 @@ DESCRIPTION
     6: statistics?
 
 CLASSES
+########
     builtins.object
         Output
         Process
@@ -95,6 +103,8 @@ CLASSES
      |      list of weak references to the object (if defined)
 
 FUNCTIONS
+##########
+
     histogram()
         using bokeh to visualise:
         from bokeh.plotting import figure, output_file, show
