@@ -24,6 +24,14 @@ class Query:
         self.appName = [line for line in open('APPNAME.txt')][0]
         self.infusionsoft = Infusionsoft(self.appName, self.key)
 
+    def basequery(self, table='Contact', limit=10, page=0, queryData='{ContactType': '%'}, returnData=['City','State','Country']):
+        ''' allows query to be written in one place '''
+        data = self.infusionsoft.DataService(
+            'query', table, limit, page, queryData, returnData
+            )
+
+        return data
+
     def tags(self, ContactId=154084, recordcount=10):
         ''' returns tags for target contact '''
         self.tag = self.infusionsoft.DataService(
