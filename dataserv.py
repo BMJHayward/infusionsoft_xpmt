@@ -24,13 +24,29 @@ class Query:
         self.appName = [line for line in open('APPNAME.txt')][0]
         self.infusionsoft = Infusionsoft(self.appName, self.key)
 
-    def basequery(self, table='Contact', limit=10, page=0, queryData='{ContactType': '%'}, returnData=['City','State','Country']):
-        ''' allows query to be written in one place '''
-        data = self.infusionsoft.DataService(
-            'query', table, limit, page, queryData, returnData
+    def _basequery(self, **kwargs):
+        ''' allows query to be written in one place
+           kwargs allows override of args
+        '''
+        default = dict(
+            table='Contact',
+            limit=10,
+            page=0,
+            queryData='{ContactType': '%'},
+            returnData=['City','State','Country']
             )
 
-        return data
+        if kwargs is not None:
+
+            for kwarg in kwargs.keys():
+                self.default[kwarg] = kwargs[kwarg]
+
+        self.data = self.infusionsoft.DataService(
+            'query', default['table'], default['limit'], default['page'],
+            default['queryData'], default['returnData']
+            )
+
+        return self.data
 
     def tags(self, ContactId=154084, recordcount=10):
         ''' returns tags for target contact '''
