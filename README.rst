@@ -15,11 +15,12 @@ dataserv.py is the main file of interest for the moment. this may be broken up i
 
 TODO:
 #####
-    1: include recordcount() to return all data when using 'all' argument
-    2: refactor Query() methods to use basequery() method
-    4: experiment with and write tests for Query.basequery() method
-    5: use pandas or matplotlib for dataviz
-    6: statistics
+
++ include recordcount() to return all data when using 'all' argument
++ refactor Query() methods to use basequery() method
++ experiment with and write tests for Query.basequery() method
++ use pandas or matplotlib for dataviz
++ statistics
 
 CLASSES
 ########
