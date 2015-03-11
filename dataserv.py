@@ -28,7 +28,7 @@ class Query:
         ''' allows query to be written in one place
         kwargs allows override of args
         '''
-        default = dict(
+        self.default = dict(
             table='Contact',
             limit=10,
             page=0,
@@ -36,15 +36,18 @@ class Query:
             returnData=['City','State','Country']
             )
         if kwargs is not None:
-            for kwarg in kwargs.keys():
-                self.default[kwarg] = kwargs[kwarg]
+            self.default.update(kwargs)
+
         try:
             self.data = self.infusionsoft.DataService(
-                'query', default['table'], default['limit'], default['page'],
-                default['queryData'], default['returnData']
+                'query', self.default['table'], self.default['limit'], self.default['page'],
+                self.default['queryData'], self.default['returnData']
                 )
+
             return self.data
+
         except Exception as exc:
+
             print('Error running query: ', exc)
 
 
