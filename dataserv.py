@@ -26,7 +26,7 @@ class Query:
 
     def _basequery(self, **kwargs):
         ''' allows query to be written in one place
-           kwargs allows override of args
+        kwargs allows override of args
         '''
         default = dict(
             table='Contact',
@@ -35,19 +35,15 @@ class Query:
             queryData={'ContactType': '%'},
             returnData=['City','State','Country']
             )
-
         if kwargs is not None:
             for kwarg in kwargs.keys():
                 self.default[kwarg] = kwargs[kwarg]
-
         try:
             self.data = self.infusionsoft.DataService(
                 'query', default['table'], default['limit'], default['page'],
                 default['queryData'], default['returnData']
                 )
-
             return self.data
-
         except Exception as exc:
             print('Error running query: ', exc)
 
