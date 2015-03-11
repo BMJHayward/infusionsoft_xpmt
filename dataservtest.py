@@ -8,7 +8,7 @@ cgi.test() to test script with HTTP headers and HTML.
 import unittest
 import dataserv as iq
 
-iqcxn = iq.InfusionQuery()
+iqcxn = iq.Query()
 
 
 class TestInfusionQuery(unittest.TestCase):
@@ -39,17 +39,17 @@ class TestInfusionQuery(unittest.TestCase):
 
     def test_querytags(self):
 
-        data = iqcxn.querytags()
+        data = iqcxn.tags()
         print(data)
 
     def test_querydate(self):
 
-        data = iqcxn.querydate()
+        data = iqcxn.date()
         print(data)
 
     def test_queryleadsource(self):
 
-        data = iqcxn.queryleadsource()
+        data = iqcxn.leadsources()
         print(data)
 
 
@@ -58,14 +58,14 @@ class TestProcess(unittest.TestCase):
 
     def test_iter_array(self):
 
-        sample_list = iqcxn.queryleadsource()
+        sample_list = iqcxn.leadsources()
         lead_list = iq.Process(sample_list)
         final_list = lead_list.iter_array()
         self.assertIs(type(final_list), list)
 
     def test_query_process(self):
 
-        tags = iq.InfusionQuery().querytags()
+        tags = iq.Query().tags()
         self.assertIs(type(tags[0].get('GroupId')), int)
 
     def test_make_list(self):
