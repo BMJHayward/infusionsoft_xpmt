@@ -44,7 +44,7 @@ class TestInfusionQuery(unittest.TestCase):
 
     def test_querydate(self):
 
-        data = iqcxn.date()
+        data = iqcxn.dates()
         print(data)
 
     def test_queryleadsource(self):

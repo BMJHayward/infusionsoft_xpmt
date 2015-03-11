@@ -51,29 +51,47 @@ class Query:
             print('Error running query: ', exc)
 
 
-    def tags(self, ContactId=154084, recordcount=10):
+    def tags(self):
         ''' returns tags for target contact '''
-        self.tag = self.infusionsoft.DataService(
-            'query', 'ContactGroupAssign', recordcount, 0,
-            {'ContactId': str(ContactId)}, ['GroupId']
+
+        self.tagargs = dict(
+            table='ContactGroupAssign',
+            limit=10,
+            page=0,
+            queryData={'ContactId': '154084'},
+            returnData=['GroupId']
             )
+
+        self.tag = self._basequery(**self.tagargs)
 
         return self.tag
 
-    def dates(self, recordcount=10):
+    def dates(self):
         ''' returns list of date created for all contact types '''
-        self.date = self.infusionsoft.DataService(
-            'query', 'Contact', recordcount, 0,
-            {'ContactType': '%'}, ['DateCreated']
+
+        self.dateargs = dict(
+            table='Contact',
+            limit=10,
+            page=0,
+            queryData={'ContactType': '%'},
+            returnData=['DateCreated']
             )
+
+        self.date = self._basequery(**self.dateargs)
 
         return self.date
 
-    def leadsources(self, recordcount=10):
-        self.leadsource = self.infusionsoft.DataService(
-            'query', 'Contact', recordcount, 0,
-            {'ContactType': '%'}, ['Leadsource']
+    def leadsources(self):
+
+        self.sourceargs = dict(
+            table='Contact',
+            limit=10,
+            page=0,
+            queryData={'ContactType': '%'},
+            returnData=['Leadsource']
             )
+
+        self.leadsource = self._basequery(**self.sourceargs)
 
         return self.leadsource
 
