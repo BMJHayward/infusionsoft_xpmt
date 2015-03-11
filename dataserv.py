@@ -1,8 +1,8 @@
 '''
 TODO:
-1:put array variables, sort functions into a class
-2:include all assessment tags as arrays, centralise all assessment sorting into
-    one file, using main class
+1: put array variables, sort functions into a class
+2: include all assessment tags as arrays, centralise all assessment sorting
+   into one file, using main class
 3: possible reporting function
 4: sorting class to call infusionsoft class to get customer tags
 5: use pandas or matplotlib for dataviz
@@ -40,7 +40,8 @@ class Query:
 
         try:
             self.data = self.infusionsoft.DataService(
-                'query', self.default['table'], self.default['limit'], self.default['page'],
+                'query', self.default['table'],
+                self.default['limit'], self.default['page'],
                 self.default['queryData'], self.default['returnData']
                 )
 
@@ -184,6 +185,6 @@ def histogram():
 
 def sourcelist():
 
-    testlist = InfusionQuery().getDateandsource()
+    testlist = [Query().dates(), Query().tags(), Query().leadsources()]
 
     return testlist
