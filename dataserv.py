@@ -26,7 +26,7 @@ class Query:
 
     def _basequery(self, **kwargs):
         ''' allows query to be written in one place
-        kwargs allows override of args
+            kwargs allows override of args
         '''
         self.default = dict(
             table='Contact',
@@ -50,6 +50,16 @@ class Query:
         except Exception as exc:
 
             print('Error running query: ', exc)
+
+
+    def _count(self, table, queryData):
+        ''' returns number of entries in table to retrieve all data
+            returns int, use as limit to iterate queries, append to list results
+        '''
+
+        self.count = self.infusionsoft.DataService('count', table, {queryData: '%'})
+
+        return self.count
 
 
     def tags(self):
