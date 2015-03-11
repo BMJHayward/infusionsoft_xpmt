@@ -32,21 +32,25 @@ class Query:
             table='Contact',
             limit=10,
             page=0,
-            queryData='{ContactType': '%'},
+            queryData={'ContactType': '%'},
             returnData=['City','State','Country']
             )
 
         if kwargs is not None:
-
             for kwarg in kwargs.keys():
                 self.default[kwarg] = kwargs[kwarg]
 
-        self.data = self.infusionsoft.DataService(
-            'query', default['table'], default['limit'], default['page'],
-            default['queryData'], default['returnData']
-            )
+        try:
+            self.data = self.infusionsoft.DataService(
+                'query', default['table'], default['limit'], default['page'],
+                default['queryData'], default['returnData']
+                )
 
-        return self.data
+            return self.data
+
+        except Exception as exc:
+            print('Error running query: ', exc)
+
 
     def tags(self, ContactId=154084, recordcount=10):
         ''' returns tags for target contact '''
