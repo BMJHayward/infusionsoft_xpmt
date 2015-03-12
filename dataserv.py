@@ -24,6 +24,7 @@ class Query:
         self.appName = [line for line in open('APPNAME.txt')][0]
         self.infusionsoft = Infusionsoft(self.appName, self.key)
 
+
     def _basequery(self, **kwargs):
         ''' allows query to be written in one place
             kwargs allows override of args
@@ -77,6 +78,7 @@ class Query:
 
         return self.tag
 
+
     def dates(self):
         ''' returns list of date created for all contact types '''
 
@@ -91,6 +93,7 @@ class Query:
         self.date = self._basequery(**self.dateargs)
 
         return self.date
+
 
     def leadsources(self):
 
@@ -114,6 +117,7 @@ class Process:
 
         self.array = array
 
+
     def iter_array(self):
 
         data = []
@@ -121,6 +125,7 @@ class Process:
             data.append(self.query_process(dictionary))
 
         return data
+
 
     def query_process(self, dictionary):
 
@@ -140,6 +145,7 @@ class Process:
 
             lead = dictionary['Leadsource']
             return lead
+
 
     def combine_list(self, *lists):
 
@@ -166,11 +172,14 @@ class Output:
                 self.tempfile.write("\n")
                 print(line)
 
+
     def ashtml(self, queryfunc, filename):
         raise NotImplementedError
 
+
     def asimage(self, queryfunc, filename):
         raise NotImplementedError
+
 
     def as3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
