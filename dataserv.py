@@ -36,6 +36,7 @@ class Query:
             queryData={'ContactType': '%'},
             returnData=['City','State','Country']
             )
+
         if kwargs is not None:
             self.default.update(kwargs)
 
@@ -180,6 +181,15 @@ class Output:
                 self.tempfile.write("\n")
                 print(line)
 
+    def asscv(self, queryfunc, filename):
+
+        # import csv
+        # with open(filename, newline="") as source;
+            # rdr= DictReader(source)
+            # data = list(rdr)
+            # return data
+
+        raise NotImplementedError
 
     def ashtml(self, queryfunc, filename):
         raise NotImplementedError
