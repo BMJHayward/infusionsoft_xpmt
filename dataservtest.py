@@ -27,43 +27,37 @@ class TestQuery(unittest.TestCase):
         print(iqcxn.infusionsoft.DataService('query', table, limit,
               page, query, returnFields))
 
-
     def test_fullStringQuery_a(self):
 
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
               {'ContactType': '%'}, ['DateCreated', 'Leadsource']))
-
 
     def test_fullStringQuery_b(self):
 
         print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
               {'ContactType': '%'}, ['Groups']))
 
-
     def test_querytags(self):
 
         data = iqcxn.tags()
         print(data)
-
 
     def test_querydate(self):
 
         data = iqcxn.dates()
         print(data)
 
-
     def test_queryleadsource(self):
 
         data = iqcxn.leadsources()
         print(data)
 
-
     def test_basequery(self):
 
         defaultData = iqcxn._basequery()
+        print(defaultData)
         self.assertIsNotNone(defaultData)
         self.assertIs(type(defaultData), list)
-
 
     def test_basequerywithdata(self):
 
@@ -73,16 +67,24 @@ class TestQuery(unittest.TestCase):
             queryData={'ContactType': '%'},
             returnData=['DateCreated'])
         altdata = iqcxn._basequery(**altargs)
+        print(altdata)
         self.assertIsNotNone(altdata)
         self.assertIs(type(altdata), list)
-
 
     def test_count(self):
 
         countdata = iqcxn._count('ContactGroup', 'Id')
+        print(countdata)
         self.assertIsNotNone(countdata)
         self.assertIs(type(countdata), int)
 
+    def test_getpages(self):
+
+        table = 'Contact'
+        query = 'ContactType'
+        pagecount = iqcxn._getpages(table, query)
+        print(pagecount)
+        self.assertIs(type(pagecount), int)
 
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
@@ -93,19 +95,21 @@ class TestProcess(unittest.TestCase):
         sample_list = iqcxn.leadsources()
         lead_list = iq.Process(sample_list)
         final_list = lead_list.iter_array()
+        print(final_list)
         self.assertIsNotNone(final_list)
         self.assertIs(type(final_list), list)
-
 
     def test_query_process(self):
 
         tags = iq.Query().tags()
         self.assertIsNotNone(tags)
+        print(tags)
         self.assertIs(type(tags[0].get('GroupId')), int)
 
-
     def test_testlist(self):
+
         testlist = iq.sourcelist()
+        print(testlist)
         self.assertIsNotNone(testlist)
         self.assertIs(type(testlist), list)
 

@@ -53,15 +53,22 @@ class Query:
             print('Error running query: ', exc)
 
 
-    def _count(self, table, queryData):
+    def _count(self, table, query):
         ''' returns number of entries in table to retrieve all data
             returns int, use as limit to iterate queries, append to list results
         '''
 
-        self.count = self.infusionsoft.DataService('count', table, {queryData: '%'})
+        self.count = self.infusionsoft.DataService('count', table, {query: '%'})
 
         return self.count
 
+    def _getpages(self, table, query):
+        ''' returns total pages to search through when using dataservice '''
+
+        self.totalrecords = self._count(table, query)
+        self.pages = (self.totalrecords//999 + 1)
+
+        return self.pages
 
     def tags(self):
         ''' returns tags for target contact '''
@@ -160,6 +167,7 @@ class Output:
     def asfile(self, target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
 
+        self.data = None
         if target is not None:
             self.data = target
         elif query is not None:
