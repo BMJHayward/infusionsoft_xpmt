@@ -127,6 +127,28 @@ class Query:
         return self.leadsource
 
 
+class Extract(Query):
+    ''' pull mass data for analysis using Query() as base '''
+
+    self.thirtydays = None
+    self.month = None
+    self.quarter = None
+    self.year = None
+    self.all = None
+
+    def cost_sale_leadsource(self):
+
+        raise NotImplementedError
+
+    def average_transaction_value(self):
+
+        raise NotImplementedError
+
+    def customer_lifetime_value(self):
+
+        raise NotImplementedError
+
+
 class Process:
     ''' raw query data processed here for target output'''
 
@@ -193,23 +215,26 @@ class Output:
     def asscv(self, queryfunc, filename):
 
         # import csv
-        # with open(filename, newline="") as source;
-            # rdr= DictReader(source)
+        # with open(filename, newline="") as source:
+            # rdr = DictReader(source)
             # data = list(rdr)
             # return data
 
         raise NotImplementedError
 
     def ashtml(self, queryfunc, filename):
+
         raise NotImplementedError
 
 
     def asimage(self, queryfunc, filename):
+
         raise NotImplementedError
 
 
     def as3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
+
         raise NotImplementedError
 
 
@@ -224,9 +249,12 @@ def histogram():
     p.line(x,y)
     show(p)
     '''
+
     dates = eval(open('dates.txt', 'r+').read())
     from collections import Counter
     datescount = Counter(dates)
+
+    return datescount
 
 
 def sourcelist():
