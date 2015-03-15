@@ -71,7 +71,7 @@ class Query:
 
         return self.pages
 
-    def tags(self):
+    def tags(self, **kwargs):
         ''' returns tags for target contact '''
 
         self.tagargs = dict(
@@ -82,12 +82,15 @@ class Query:
             returnData=['GroupId']
             )
 
+        if kwargs is not None:
+                    self.tagargs.update(kwargs)
+
         self.tag = self._basequery(**self.tagargs)
 
         return self.tag
 
 
-    def dates(self):
+    def dates(self, **kwargs):
         ''' returns list of date created for all contact types '''
 
         self.dateargs = dict(
@@ -98,12 +101,15 @@ class Query:
             returnData=['DateCreated']
             )
 
+        if kwargs is not None:
+                    self.dateargs.update(kwargs)
+
         self.date = self._basequery(**self.dateargs)
 
         return self.date
 
 
-    def leadsources(self):
+    def leadsources(self, **kwargs):
 
         self.sourceargs = dict(
             table='Contact',
@@ -112,6 +118,9 @@ class Query:
             queryData={'ContactType': '%'},
             returnData=['Leadsource']
             )
+
+        if kwargs is not None:
+                    self.sourceargs.update(kwargs)
 
         self.leadsource = self._basequery(**self.sourceargs)
 
