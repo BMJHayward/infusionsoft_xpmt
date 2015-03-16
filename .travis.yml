@@ -1,14 +1,13 @@
 language: python
+
 python:
 - '3.2'
 - '3.3'
 - '3.4'
+
 install:
 - pip install git+https://github.com/BMJHayward/Official-API-Python-Library.git
+
 script:
-- python infusion_test.py
-before_install:
-- openssl aes-256-cbc -K $encrypted_e187b3ea0298_key -iv $encrypted_e187b3ea0298_iv
-  -in APPNAME.txt.enc -out APPNAME.txt -d
-- openssl aes-256-cbc -K $encrypted_e187b3ea0298_key -iv $encrypted_e187b3ea0298_iv
-  -in APIKEY.txt.enc -out APIKEY.txt -d
+- python dataservtest.py
+
