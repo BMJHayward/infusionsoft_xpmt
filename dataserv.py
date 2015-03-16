@@ -59,14 +59,14 @@ class Query:
             returns int, use as limit to iterate queries, append to list results
         '''
 
-        self.count = self.infusionsoft.DataService('count', table, {query: '%'})
+        self.count = self.infusionsoft.DataService('count', table, {field: '%'})
 
         return self.count
 
-    def _getpages(self, table, query):
-        ''' returns total pages to search through when using dataservice '''
+    def _getpages(self, table, field):
+        ''' returns total pages to search through using dataservice '''
 
-        self.totalrecords = self._count(table, query)
+        self.totalrecords = self._count(table, field)
         self.pages = (self.totalrecords//999 + 1)
 
         return self.pages
@@ -145,6 +145,10 @@ class Extract(Query):
         raise NotImplementedError
 
     def customer_lifetime_value(self):
+
+        raise NotImplementedError
+
+    def leadtime_to_sale(self):
 
         raise NotImplementedError
 
