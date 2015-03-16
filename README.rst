@@ -2,6 +2,9 @@
 Infusionsoft Experiment
 ########################
 
+.. image:: https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master
+    :target: https://travis-ci.org/BMJHayward/infusionsoft_xpmt
+
 Using the command pattern to abstract over the data service portion of the Infusionsoft API (Infusionsoft a.ka. 'IS' from here on).
 
 DESCRIPTION
