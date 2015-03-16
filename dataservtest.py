@@ -9,6 +9,7 @@ import unittest
 import dataserv as iq
 
 iqcxn = iq.Query()
+iqout = iq.Output()
 
 
 class TestQuery(unittest.TestCase):
@@ -105,9 +106,10 @@ class TestProcess(unittest.TestCase):
 
 class TestOutput(unittest.TestCase):
 
+    
     def test_asfile(self):
 
-        test_msg = iq.asfile()
+        test_msg = iqout.asfile()
         self.assertIs(type(test_msg), str)
 
 if __name__ == '__main__':

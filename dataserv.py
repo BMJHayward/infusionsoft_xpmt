@@ -54,7 +54,7 @@ class Query:
             print('Error running query: ', exc)
 
 
-    def _count(self, table, query):
+    def _count(self, table, field):
         ''' returns number of entries in table to retrieve all data
             returns int, use as limit to iterate queries, append to list results
         '''
