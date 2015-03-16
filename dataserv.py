@@ -9,6 +9,7 @@ TODO:
 6: statistics?
 '''
 
+import os
 from infusionsoft.library import Infusionsoft
 
 
@@ -20,10 +21,9 @@ class Query:
             account app from local textfile credentials
         '''
 
-        self.key = [line for line in open('APIKEY.txt')][0]
-        self.appName = [line for line in open('APPNAME.txt')][0]
-        self.infusionsoft = Infusionsoft(self.appName, self.key)
-
+        self.key = os.environ['INFUSION_APIKEY']
+        self.app_name = os.environ['INFUSION_APPNAME']
+        self.infusionsoft = Infusionsoft(self.app_name, self.key)
 
     def _basequery(self, **kwargs):
         ''' allows query to be written in one place
