@@ -27,30 +27,20 @@ class TestQuery(unittest.TestCase):
         print(iqcxn.infusionsoft.DataService('query', table, limit,
               page, query, returnFields))
 
-    def test_fullStringQuery_a(self):
-
-        print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
-              {'ContactType': '%'}, ['DateCreated', 'Leadsource']))
-
-    def test_fullStringQuery_b(self):
-
-        print(iqcxn.infusionsoft.DataService('query', 'Contact', 10, 0,
-              {'ContactType': '%'}, ['Groups']))
-
     def test_querytags(self):
 
         data = iqcxn.tags()
-        print(data)
+        self.assertIs(type(data), list)
 
     def test_querydate(self):
 
         data = iqcxn.dates()
-        print(data)
+        self.assertIs(type(data), list)
 
     def test_queryleadsource(self):
 
         data = iqcxn.leadsources()
-        print(data)
+        self.assertIs(type(data), list)
 
     def test_basequery(self):
 
@@ -113,6 +103,12 @@ class TestProcess(unittest.TestCase):
         self.assertIsNotNone(testlist)
         self.assertIs(type(testlist), list)
 
+class TestOutput(unittest.TestCase):
+
+    def test_asfile(self):
+
+        test_msg = iq.asfile()
+        self.assertIs(type(test_msg), str)
 
 if __name__ == '__main__':
     unittest.main()

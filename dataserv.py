@@ -130,11 +130,11 @@ class Query:
 class Extract(Query):
     ''' pull mass data for analysis using Query() as base '''
 
-    self.thirtydays = None
-    self.month = None
-    self.quarter = None
-    self.year = None
-    self.all = None
+    thirtydays = None
+    month = None
+    quarter = None
+    year = None
+    alltime = None
 
     def cost_sale_leadsource(self):
 
@@ -204,6 +204,9 @@ class Output:
             self.data = target
         elif query is not None:
             self.data = query
+        else:
+            msg = "No data to output"
+            return msg
 
         with open(filename, 'a+') as self.tempfile:
             for line in self.data:
