@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
+import os
 import cgi
 import cgitb
 
 from infusionsoft.library import Infusionsoft
-key = [line for line in open('APIKEY.txt')][0]
-appName = [line for line in open('APPNAME.txt')][0]
+key = os.environ['INFUSION_APIKEY']
+appName = os.environ['INFUSION_APPNAME']
 infusionsoft = Infusionsoft(appName, key)
 
 form = cgi.FieldStorage()  # request data in here. Chose CGI because simple
