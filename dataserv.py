@@ -264,6 +264,25 @@ def histogram():
     return datescount
 
 
+dscxn = Query()
+pls_explain = {'limit': 999, 'returnData': ['Id','DateCreated']}
+contacts_with_dates = dscxn.dates(**pls_explain)
+
+def invoice():
+
+    inv_args = dict(
+        table='Invoice',
+        limit=999,
+        page=0,
+        queryData={'ContactId': '123679'},
+        returnData=['DateCreated']
+        )
+
+    inv_dates = dscxn._basequery(**inv_args)
+
+    return inv_dates
+
+
 def sourcelist():
 
     testlist = [Query().dates(), Query().tags(), Query().leadsources()]
