@@ -152,6 +152,52 @@ class Extract(Query):
 
         raise NotImplementedError
 
+    def contact_idanddate(self):
+        ''' returns Id AND DateCreated at once for cross-reference later '''
+
+        self.id_and_date = dict(
+            limit=999,
+            returnData=['Id','DateCreated']
+            )
+        self.contacts_with_dates = self.dates(**self.id_and_date)
+
+        return self.contacts_with_dates
+
+    def invoices(self, target_id=None):
+        ''' iterate over list from contact_idanddatecreated() to get target_id '''
+
+        if type(target_id) is str:
+            pass
+        elif (target_id is not None and type(target_id) is int):
+            target_id = str(target_id)
+        else:
+            print("Input on invoices() failed, check target_id")
+
+        self.inv_args = dict(
+            table='Invoice',
+            limit=999,
+            page=0,
+            queryData={'ContactId': target_id},
+            returnData=['DateCreated']
+            )
+
+        self.inv_dates = self._basequery(**self.inv_args)
+
+        return self.inv_dates
+
+    def contact_invoices(self):
+        ''' combine date from contact_idanddate() and invoices() '''
+
+        self.iddate_list = self.contact_idanddate()
+        self.idinv_list = [i['Id'] for i in self.iddate_list]
+
+        self.contact_invlist = []
+        for idx in self.idinv_list:
+            self.yaq = self.invoices(target_id=idx)
+            self.contact_invlist.extend([idx, self.yaq])
+
+        return self.contact_invlist
+
 
 class Process:
     ''' raw query data processed here for target output'''
@@ -264,23 +310,6 @@ def histogram():
     return datescount
 
 
-dscxn = Query()
-pls_explain = {'limit': 999, 'returnData': ['Id','DateCreated']}
-contacts_with_dates = dscxn.dates(**pls_explain)
-
-def invoice():
-
-    inv_args = dict(
-        table='Invoice',
-        limit=999,
-        page=0,
-        queryData={'ContactId': '123679'},
-        returnData=['DateCreated']
-        )
-
-    inv_dates = dscxn._basequery(**inv_args)
-
-    return inv_dates
 
 
 def sourcelist():
