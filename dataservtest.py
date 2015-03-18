@@ -104,13 +104,15 @@ class TestExtract(unittest.TestCase):
 
     def test_invoices(self):
 
+        targ_id = 1000
         inv_arg = dict(limit=99)
-        inv_list = iqext.invoices(**inv_arg)
+        inv_list = iqext.invoices(targ_id, **inv_arg)
         self.assertIs(type(inv_list), list)
 
     def test_contact_invoices(self):
 
-        test_id_list, test_inv_list = {'limit': 99}
+        test_id_list = dict(limit=99)
+        test_inv_list = dict(limit=99)
         cntct_invlist = iqext.contact_invoices(test_id_list, test_inv_list)
         self.assertIs(type(cntct_invlist), list)
 
