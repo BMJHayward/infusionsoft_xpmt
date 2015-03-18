@@ -10,7 +10,7 @@ import dataserv as iq
 
 iqcxn = iq.Query()
 iqout = iq.Output()
-
+iqext = iq.Extract()
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
@@ -77,9 +77,46 @@ class TestQuery(unittest.TestCase):
         print(pagecount)
         self.assertIs(type(pagecount), int)
 
+
+class TestExtract(unittest.TestCase):
+
+    def test_cost_sale_leadsource(self):
+        # raise NotImplementedError
+        pass
+
+    def test_average_transaction_value(self):
+        # raise NotImplementedError
+        pass
+
+    def test_customer_lifetime_value(self):
+        # raise NotImplementedError
+        pass
+
+    def test_leadtime_to_sale(self):
+        # raise NotImplementedError
+        pass
+
+    def test_contact_idanddate(self):
+
+        id_date = dict(limit=99)
+        contact_with_date_list = iqext.contact_idanddate(**id_date)
+        self.assertIs(type(contact_with_date_list), list)
+
+    def test_invoices(self):
+
+        inv_arg = dict(limit=99)
+        inv_list = iqext.invoices(**inv_arg)
+        self.assertIs(type(inv_list), list)
+
+    def test_contact_invoices(self):
+
+        test_id_list, test_inv_list = {'limit': 99}
+        cntct_invlist = iqext.contact_invoices(test_id_list, test_inv_list)
+        self.assertIs(type(cntct_invlist), list)
+
+
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
-
 
     def test_iter_array(self):
 
@@ -106,11 +143,11 @@ class TestProcess(unittest.TestCase):
 
 class TestOutput(unittest.TestCase):
 
-    
     def test_asfile(self):
 
         test_msg = iqout.asfile()
         self.assertIs(type(test_msg), str)
+
 
 if __name__ == '__main__':
     unittest.main()

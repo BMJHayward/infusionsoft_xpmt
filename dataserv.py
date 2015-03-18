@@ -152,18 +152,22 @@ class Extract(Query):
 
         raise NotImplementedError
 
-    def contact_idanddate(self):
+    def contact_idanddate(self, **kwargs):
         ''' returns Id AND DateCreated at once for cross-reference later '''
 
         self.id_and_date = dict(
             limit=999,
             returnData=['Id','DateCreated']
             )
+
+        if kwargs is not None:
+                    self.id_and_date.update(kwargs)
+
         self.contacts_with_dates = self.dates(**self.id_and_date)
 
         return self.contacts_with_dates
 
-    def invoices(self, target_id=None):
+    def invoices(self, target_id=None, **kwargs):
         ''' iterate over list from contact_idanddatecreated() to get target_id '''
 
         if type(target_id) is str:
@@ -173,6 +177,7 @@ class Extract(Query):
         else:
             print("Input on invoices() failed, check target_id")
 
+
         self.inv_args = dict(
             table='Invoice',
             limit=999,
@@ -181,19 +186,30 @@ class Extract(Query):
             returnData=['DateCreated']
             )
 
+        if kwargs is not None:
+                    self.inv_args.update(kwargs)
+
         self.inv_dates = self._basequery(**self.inv_args)
 
         return self.inv_dates
 
-    def contact_invoices(self):
+    def contact_invoices(self, id_list=None, inv_list=None):
         ''' combine date from contact_idanddate() and invoices() '''
 
-        self.iddate_list = self.contact_idanddate()
+        if id_list is not None:
+            self.iddate_list = self.contact_idanddate(**id_list)
+        else:
+            self.iddate_list = self.contact_idanddate(**id_list)
+
         self.idinv_list = [i['Id'] for i in self.iddate_list]
 
         self.contact_invlist = []
         for idx in self.idinv_list:
-            self.yaq = self.invoices(target_id=idx)
+            if inv_list is not None:
+                self.yaq = self.invoices(target_id=idx, **inv_list)
+            else:
+                self.yaq = self.invoices(target_id=idx)
+
             self.contact_invlist.extend([idx, self.yaq])
 
         return self.contact_invlist
