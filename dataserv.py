@@ -199,7 +199,7 @@ class Extract(Query):
         if id_list is not None:
             self.iddate_list = self.contact_idanddate(**id_list)
         else:
-            self.iddate_list = self.contact_idanddate(**id_list)
+            self.iddate_list = self.contact_idanddate()
 
         self.idinv_list = [i['Id'] for i in self.iddate_list]
 
@@ -210,7 +210,8 @@ class Extract(Query):
             else:
                 self.yaq = self.invoices(target_id=idx)
 
-            self.contact_invlist.extend([idx, self.yaq])
+            self.contact_invlist.append([idx, self.yaq])
+                # append() keeps Id with invoice date, don't use extend()
 
         return self.contact_invlist
 
