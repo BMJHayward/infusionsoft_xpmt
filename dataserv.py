@@ -156,7 +156,7 @@ class Extract(Query):
         ''' returns Id AND DateCreated at once for cross-reference later '''
 
         self.id_and_date = dict(
-            limit=999,
+            limit=9,
             returnData=['Id','DateCreated']
             )
 
@@ -180,7 +180,7 @@ class Extract(Query):
 
         self.inv_args = dict(
             table='Invoice',
-            limit=999,
+            limit=9,
             page=0,
             queryData={'ContactId': target_id},
             returnData=['DateCreated']
