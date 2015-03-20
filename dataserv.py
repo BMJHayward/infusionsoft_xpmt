@@ -130,28 +130,40 @@ class Query:
 class Extract(Query):
     ''' pull mass data for analysis using Query() as base '''
 
-    thirtydays = None
-    month = None
-    quarter = None
-    year = None
-    alltime = None
+    def __init__(self):
+        super(Extract, self).__init__()
+        self.thirtydays = None
+        self.month = None
+        self.quarter = None
+        self.year = None
+        self.alltime = None
 
+
+class CostSaleLeadsource(Extract):
     def cost_sale_leadsource(self):
 
         raise NotImplementedError
 
+
+class AvgerageTransactionValue(Extract):
     def average_transaction_value(self):
 
         raise NotImplementedError
 
+
+class CustomerLifetimeValue(Extract):
     def customer_lifetime_value(self):
 
         raise NotImplementedError
 
+
+class LeadtimeToSale(Extract):
     def leadtime_to_sale(self):
 
         raise NotImplementedError
 
+
+class ContactIdAndDate(Extract):
     def contact_idanddate(self, **kwargs):
         ''' returns Id AND DateCreated at once for cross-reference later '''
 

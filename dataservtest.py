@@ -11,6 +11,7 @@ import dataserv as iq
 iqcxn = iq.Query()
 iqout = iq.Output()
 iqext = iq.Extract()
+iqcid = iq.ContactIdAndDate()
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
@@ -96,24 +97,27 @@ class TestExtract(unittest.TestCase):
         # raise NotImplementedError
         pass
 
+
+class TestContactIdAndDate(unittest.TestCase):
+
     def test_contact_idanddate(self):
 
         id_date = dict(limit=99)
-        contact_with_date_list = iqext.contact_idanddate(**id_date)
+        contact_with_date_list = iqcid.contact_idanddate(**id_date)
         self.assertIs(type(contact_with_date_list), list)
 
     def test_invoices(self):
 
         targ_id = 1000
         inv_arg = dict(limit=99)
-        inv_list = iqext.invoices(targ_id, **inv_arg)
+        inv_list = iqcid.invoices(targ_id, **inv_arg)
         self.assertIs(type(inv_list), list)
 
     def test_contact_invoices(self):
 
         test_id_list = dict(limit=99)
         test_inv_list = dict(limit=99)
-        cntct_invlist = iqext.contact_invoices(test_id_list, test_inv_list)
+        cntct_invlist = iqcid.contact_invoices(test_id_list, test_inv_list)
         self.assertIs(type(cntct_invlist), list)
 
 
