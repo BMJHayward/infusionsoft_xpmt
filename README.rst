@@ -5,7 +5,9 @@ Infusionsoft Experiment
 .. image:: https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master
     :target: https://travis-ci.org/BMJHayward/infusionsoft_xpmt
 
-Using the command pattern to abstract over the data service portion of the Infusionsoft API (Infusionsoft a.ka. 'IS' from here on).
+API wrapper for Infusionsoft (Infusionsoft a.ka. 'IS' from here on). Intended use is specific reporting not found in IS.
+
+For target reports see classes inheriting from Query and Extract in dataserv.py.
 
 DESCRIPTION
 ############
@@ -31,76 +33,76 @@ CLASSES
         Output
         Process
         Query
-    
+
     class Output(builtins.object)
      |  expects target_list to be of type list
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  as3rdparty(self, queryfunc, filename)
      |      ' to send to pandas, matplotlib, etc etc
-     |  
+     |
      |  asfile(self, target=None, query=None, filename='dataserv.csv')
      |      primarily to send to spreadsheet. TODO: use csv module
-     |  
+     |
      |  ashtml(self, queryfunc, filename)
-     |  
+     |
      |  asimage(self, queryfunc, filename)
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
-     |  
+     |
      |  __dict__
      |      dictionary for instance variables (if defined)
-     |  
+     |
      |  __weakref__
      |      list of weak references to the object (if defined)
-    
+
     class Process(builtins.object)
      |  raw query data processed here for target output
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __init__(self, array)
-     |  
+     |
      |  combine_list(self, *lists)
-     |  
+     |
      |  iter_array(self)
-     |  
+     |
      |  query_process(self, dictionary)
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
-     |  
+     |
      |  __dict__
      |      dictionary for instance variables (if defined)
-     |  
+     |
      |  __weakref__
      |      list of weak references to the object (if defined)
-    
+
     class Query(builtins.object)
      |  creates a connection, runs basic queries.
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __init__(self)
      |      instantiates Infusionsoft API object, and creates connection to
      |      account app from local textfile credentials
-     |  
+     |
      |  dates(self, recordcount=10)
      |      returns list of date created for all contact types
-     |  
+     |
      |  leadsources(self, recordcount=10)
-     |  
+     |
      |  tags(self, ContactId=154084, recordcount=10)
      |      returns tags for target contact
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
-     |  
+     |
      |  __dict__
      |      dictionary for instance variables (if defined)
-     |  
+     |
      |  __weakref__
      |      list of weak references to the object (if defined)
 
@@ -116,6 +118,6 @@ FUNCTIONS
         y = datescount.values()
         p.line(x,y)
         show(p)
-    
+
     sourcelist()
 
