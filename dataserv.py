@@ -1,12 +1,32 @@
 '''
+########################
+Infusionsoft Experiment
+########################
+
+.. image:: https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master
+    :target: https://travis-ci.org/BMJHayward/infusionsoft_xpmt
+
+API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended use is specific reporting not found in IS.
+
+For target reports see classes inheriting from Query and Extract in dataserv.py.
+
+DESCRIPTION
+############
+
+Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, numpy etc.
+This project will keep to the stdlib where ever possible to minimise dependencies, and simplify deployment in several environments.
+
+
+dataserv.py is the main file of interest for the moment. this may be broken up in future as more classes are added.
+
 TODO:
-1: put array variables, sort functions into a class
-2: include all assessment tags as arrays, centralise all assessment sorting
-   into one file, using main class
-3: possible reporting function
-4: sorting class to call infusionsoft class to get customer tags
-5: use pandas or matplotlib for dataviz
-6: statistics?
+######
+
++ include recordcount() to return all data when using 'all' argument
++ composition basic query objects for use in reporting class
++ possible Report() class for inidividual reports to inherit from
++ use pandas or matplotlib for dataviz
++ statistics?
 '''
 
 import os
@@ -14,11 +34,11 @@ from infusionsoft.library import Infusionsoft
 
 
 class Query:
-    ''' creates a connection, runs basic queries. '''
+    '''Create connection to API and run basic queries.'''
 
     def __init__(self):
-        ''' instantiates Infusionsoft API object, and creates connection to
-            account app from local textfile credentials
+        ''' Instantiate Infusionsoft object and create connection to
+           account app.
         '''
 
         self.key = os.environ['INFUSION_APIKEY']
@@ -26,8 +46,8 @@ class Query:
         self.infusionsoft = Infusionsoft(self.app_name, self.key)
 
     def _basequery(self, **kwargs):
-        ''' allows query to be written in one place
-            kwargs allows override of args
+        '''Query contact table by default. Overwrite search parameters with
+            kwargs. Combine with _getpages() to return whole database.
         '''
         self.default = dict(
             table='Contact',
@@ -55,8 +75,8 @@ class Query:
 
 
     def _count(self, table, field):
-        ''' returns number of entries in table to retrieve all data
-            returns int, use as limit to iterate queries, append to list results
+        '''Return number of entries in table to retrieve all data.
+            Return an int to use as limit in queries, append to list results.
         '''
 
         self.count = self.infusionsoft.DataService('count', table, {field: '%'})
@@ -64,7 +84,7 @@ class Query:
         return self.count
 
     def _getpages(self, table, field):
-        ''' returns total pages to search through using dataservice '''
+        '''Calculate number of pages to search through using dataservice.'''
 
         self.totalrecords = self._count(table, field)
         self.pages = (self.totalrecords//999 + 1)
@@ -72,7 +92,7 @@ class Query:
         return self.pages
 
     def tags(self, **kwargs):
-        ''' returns tags for target contact '''
+        '''Return tags for target contact.'''
 
         self.tagargs = dict(
             table='ContactGroupAssign',
@@ -91,7 +111,7 @@ class Query:
 
 
     def dates(self, **kwargs):
-        ''' returns list of date created for all contact types '''
+        '''Return list of date created for all contact types.'''
 
         self.dateargs = dict(
             table='Contact',
@@ -110,7 +130,7 @@ class Query:
 
 
     def leadsources(self, **kwargs):
-
+        '''Return leadsource for contacts. Number of contacts is limit key.'''
         self.sourceargs = dict(
             table='Contact',
             limit=10,
@@ -128,9 +148,13 @@ class Query:
 
 
 class Extract(Query):
-    ''' pull mass data for analysis using Query() as base '''
+    '''Pull mass data for analysis using Query() as base. Intended as layer
+      between direct queries and each report class.
+    '''
 
     def __init__(self):
+        '''Use super() to create API connection.
+        Timeframes for reported data.'''
         super(Extract, self).__init__()
         self.thirtydays = None
         self.month = None
@@ -140,30 +164,41 @@ class Extract(Query):
 
 
 class CostSaleLeadsource(Extract):
+    '''Return a cost per sale per leadsource object.'''
     def cost_sale_leadsource(self):
 
         raise NotImplementedError
 
 
 class AvgerageTransactionValue(Extract):
+    '''Retrun average amount of transaction across all products.
+    TODO: segment by time period, leadsource, product etc.
+    '''
     def average_transaction_value(self):
 
         raise NotImplementedError
 
 
 class CustomerLifetimeValue(Extract):
+    '''Calculate how much any given customer spends on average long term.'''
     def customer_lifetime_value(self):
 
         raise NotImplementedError
 
 
 class LeadtimeToSale(Extract):
+    ''''Return length of time from gaining a lead to making first sale.
+    TODO: Use histograms and other stats to analyse this.
+    '''
     def leadtime_to_sale(self):
 
         raise NotImplementedError
 
 
 class ContactIdAndDate(Extract):
+    '''Return array of contact ids with date created. Most analysis will need
+    to cross-reference this data.
+    '''
     def contact_idanddate(self, **kwargs):
         ''' returns Id AND DateCreated at once for cross-reference later '''
 
@@ -318,31 +353,3 @@ class Output:
         '''' to send to pandas, matplotlib, etc etc '''
 
         raise NotImplementedError
-
-
-def histogram():
-    '''
-    using bokeh to visualise:
-    from bokeh.plotting import figure, output_file, show
-    output_file('histogram.html')
-    p = figure(title = 'insert title')
-    x = datescount.keys()
-    y = datescount.values()
-    p.line(x,y)
-    show(p)
-    '''
-
-    dates = eval(open('dates.txt', 'r+').read())
-    from collections import Counter
-    datescount = Counter(dates)
-
-    return datescount
-
-
-
-
-def sourcelist():
-
-    testlist = [Query().dates(), Query().tags(), Query().leadsources()]
-
-    return testlist
