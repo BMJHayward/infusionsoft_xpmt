@@ -7,6 +7,7 @@ cgi.test() to test script with HTTP headers and HTML.
 '''
 import unittest
 import dataserv as iq
+import scrap
 
 iqcxn = iq.Query()
 iqout = iq.Output()
@@ -142,7 +143,7 @@ class TestProcess(unittest.TestCase):
 
     def test_testlist(self):
 
-        testlist = iq.sourcelist()
+        testlist = scrap.sourcelist(iqcxn)
         print(testlist)
         self.assertIsNotNone(testlist)
         self.assertIs(type(testlist), list)

@@ -17,4 +17,31 @@ def recurs_iter(target):
 
     if type(target) is list:
         src = recurs_iter(iter(target))
+
     return type(src)
+
+def histogram():
+    '''
+    using bokeh to visualise:
+    from bokeh.plotting import figure, output_file, show
+    output_file('histogram.html')
+    p = figure(title = 'insert title')
+    x = datescount.keys()
+    y = datescount.values()
+    p.line(x,y)
+    show(p)
+    '''
+
+    dates = eval(open('dates.txt', 'r+').read())
+    from collections import Counter
+    datescount = Counter(dates)
+
+    return datescount
+
+
+
+
+def sourcelist(cxn):
+    testlist = [cxn.dates(), cxn.tags(), cxn.leadsources()]
+
+    return testlist
