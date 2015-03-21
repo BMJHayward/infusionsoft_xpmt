@@ -82,6 +82,19 @@ class TestExtract(unittest.TestCase):
         data = iqext.leadsources()
         self.assertIs(type(data), list)
 
+    def test_contact_idanddate(self):
+
+        id_date = dict(limit=99)
+        contact_with_date_list = iqext.contact_idanddate(**id_date)
+        self.assertIs(type(contact_with_date_list), list)
+
+    def test_invoices(self):
+
+        targ_id = 1000
+        inv_arg = dict(limit=99)
+        inv_list = iqext.invoices(targ_id, **inv_arg)
+        self.assertIs(type(inv_list), list)
+
     def test_cost_sale_leadsource(self):
         # raise NotImplementedError
         pass
@@ -100,19 +113,6 @@ class TestExtract(unittest.TestCase):
 
 
 class TestContactIdAndDate(unittest.TestCase):
-
-    def test_contact_idanddate(self):
-
-        id_date = dict(limit=99)
-        contact_with_date_list = iqcid.contact_idanddate(**id_date)
-        self.assertIs(type(contact_with_date_list), list)
-
-    def test_invoices(self):
-
-        targ_id = 1000
-        inv_arg = dict(limit=99)
-        inv_list = iqcid.invoices(targ_id, **inv_arg)
-        self.assertIs(type(inv_list), list)
 
     def test_contact_invoices(self):
 

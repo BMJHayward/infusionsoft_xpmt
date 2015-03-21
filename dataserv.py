@@ -111,8 +111,6 @@ class Extract(Query):
 
         self.tagargs = dict(
             table='ContactGroupAssign',
-            limit=10,
-            page=0,
             queryData={'ContactId': '154084'},
             returnData=['GroupId']
             )
@@ -129,8 +127,6 @@ class Extract(Query):
 
         self.dateargs = dict(
             table='Contact',
-            limit=10,
-            page=0,
             queryData={'ContactType': '%'},
             returnData=['DateCreated']
             )
@@ -146,8 +142,6 @@ class Extract(Query):
         '''Return leadsource for contacts. Number of contacts is limit key.'''
         self.sourceargs = dict(
             table='Contact',
-            limit=10,
-            page=0,
             queryData={'ContactType': '%'},
             returnData=['Leadsource']
             )
@@ -163,7 +157,6 @@ class Extract(Query):
         '''Return Id AND DateCreated at once for cross-reference later.'''
 
         self.id_and_date = dict(
-            limit=9,
             returnData=['Id','DateCreated']
             )
 
@@ -187,8 +180,6 @@ class Extract(Query):
 
         self.inv_args = dict(
             table='Invoice',
-            limit=9,
-            page=0,
             queryData={'ContactId': target_id},
             returnData=['DateCreated']
             )
@@ -199,7 +190,6 @@ class Extract(Query):
         self.inv_dates = self._basequery(**self.inv_args)
 
         return self.inv_dates
-
 
 
 class CostSaleLeadsource(Extract):
