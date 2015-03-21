@@ -39,9 +39,24 @@ def histogram():
     return datescount
 
 
-
-
 def sourcelist(cxn):
     testlist = [cxn.dates(), cxn.tags(), cxn.leadsources()]
 
     return testlist
+
+def parse_datetimeobject(dtobj, dataserv):
+
+    '''
+    try this later:
+    from datetime import datetime
+    date_obj = datetime.strptime(dtobj)
+    '''
+    dtobjframe = dataserv.Process(dtobj)
+    dates = dtobjframe.iter_array()
+    return dates
+
+def compare_date(date1, date2):
+
+    leadtime = abs(date1 - date2)
+
+    return leadtime
