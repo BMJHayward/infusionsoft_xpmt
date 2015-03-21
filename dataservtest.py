@@ -30,21 +30,6 @@ class TestQuery(unittest.TestCase):
         print(iqcxn.infusionsoft.DataService('query', table, limit,
               page, query, returnFields))
 
-    def test_querytags(self):
-
-        data = iqcxn.tags()
-        self.assertIs(type(data), list)
-
-    def test_querydate(self):
-
-        data = iqcxn.dates()
-        self.assertIs(type(data), list)
-
-    def test_queryleadsource(self):
-
-        data = iqcxn.leadsources()
-        self.assertIs(type(data), list)
-
     def test_basequery(self):
 
         defaultData = iqcxn._basequery()
@@ -81,6 +66,21 @@ class TestQuery(unittest.TestCase):
 
 
 class TestExtract(unittest.TestCase):
+
+    def test_querytags(self):
+
+        data = iqext.tags()
+        self.assertIs(type(data), list)
+
+    def test_querydate(self):
+
+        data = iqext.dates()
+        self.assertIs(type(data), list)
+
+    def test_queryleadsource(self):
+
+        data = iqext.leadsources()
+        self.assertIs(type(data), list)
 
     def test_cost_sale_leadsource(self):
         # raise NotImplementedError
@@ -127,7 +127,7 @@ class TestProcess(unittest.TestCase):
 
     def test_iter_array(self):
 
-        sample_list = iqcxn.leadsources()
+        sample_list = iqext.leadsources()
         lead_list = iq.Process(sample_list)
         final_list = lead_list.iter_array()
         print(final_list)
@@ -136,14 +136,14 @@ class TestProcess(unittest.TestCase):
 
     def test_query_process(self):
 
-        tags = iq.Query().tags()
+        tags = iqext.tags()
         self.assertIsNotNone(tags)
         print(tags)
         self.assertIs(type(tags[0].get('GroupId')), int)
 
     def test_testlist(self):
 
-        testlist = scrap.sourcelist(iqcxn)
+        testlist = scrap.sourcelist(iqext)
         print(testlist)
         self.assertIsNotNone(testlist)
         self.assertIs(type(testlist), list)

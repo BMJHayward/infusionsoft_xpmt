@@ -73,7 +73,6 @@ class Query:
 
             print('Error running query: ', exc)
 
-
     def _count(self, table, field):
         '''Return number of entries in table to retrieve all data.
             Return an int to use as limit in queries, append to list results.
@@ -90,6 +89,22 @@ class Query:
         self.pages = (self.totalrecords//999 + 1)
 
         return self.pages
+
+
+class Extract(Query):
+    '''Pull mass data for analysis using Query() as base. Intended as layer
+      between direct queries and each report class.
+    '''
+
+    def __init__(self):
+        '''Use super() to create API connection.
+        Timeframes for reported data.'''
+        super(Extract, self).__init__()
+        self.thirtydays = None
+        self.month = None
+        self.quarter = None
+        self.year = None
+        self.alltime = None
 
     def tags(self, **kwargs):
         '''Return tags for target contact.'''
@@ -109,7 +124,6 @@ class Query:
 
         return self.tag
 
-
     def dates(self, **kwargs):
         '''Return list of date created for all contact types.'''
 
@@ -128,7 +142,6 @@ class Query:
 
         return self.date
 
-
     def leadsources(self, **kwargs):
         '''Return leadsource for contacts. Number of contacts is limit key.'''
         self.sourceargs = dict(
@@ -146,21 +159,47 @@ class Query:
 
         return self.leadsource
 
+    def contact_idanddate(self, **kwargs):
+        '''Return Id AND DateCreated at once for cross-reference later.'''
 
-class Extract(Query):
-    '''Pull mass data for analysis using Query() as base. Intended as layer
-      between direct queries and each report class.
-    '''
+        self.id_and_date = dict(
+            limit=9,
+            returnData=['Id','DateCreated']
+            )
 
-    def __init__(self):
-        '''Use super() to create API connection.
-        Timeframes for reported data.'''
-        super(Extract, self).__init__()
-        self.thirtydays = None
-        self.month = None
-        self.quarter = None
-        self.year = None
-        self.alltime = None
+        if kwargs is not None:
+                    self.id_and_date.update(kwargs)
+
+        self.contacts_with_dates = self.dates(**self.id_and_date)
+
+        return self.contacts_with_dates
+
+    def invoices(self, target_id=None, **kwargs):
+        '''Iterate over list from contact_idanddatecreated() to get target_id.'''
+
+        if type(target_id) is str:
+            pass
+        elif (target_id is not None and type(target_id) is int):
+            target_id = str(target_id)
+        else:
+            print("Input on invoices() failed, check target_id")
+
+
+        self.inv_args = dict(
+            table='Invoice',
+            limit=9,
+            page=0,
+            queryData={'ContactId': target_id},
+            returnData=['DateCreated']
+            )
+
+        if kwargs is not None:
+                    self.inv_args.update(kwargs)
+
+        self.inv_dates = self._basequery(**self.inv_args)
+
+        return self.inv_dates
+
 
 
 class CostSaleLeadsource(Extract):
@@ -171,7 +210,7 @@ class CostSaleLeadsource(Extract):
 
 
 class AvgerageTransactionValue(Extract):
-    '''Retrun average amount of transaction across all products.
+    '''Return average amount of transaction across all products.
     TODO: segment by time period, leadsource, product etc.
     '''
     def average_transaction_value(self):
@@ -197,48 +236,8 @@ class LeadtimeToSale(Extract):
 
 class ContactIdAndDate(Extract):
     '''Return array of contact ids with date created. Most analysis will need
-    to cross-reference this data.
+    to cross-reference this data. This should perhaps be in Extract.
     '''
-    def contact_idanddate(self, **kwargs):
-        ''' returns Id AND DateCreated at once for cross-reference later '''
-
-        self.id_and_date = dict(
-            limit=9,
-            returnData=['Id','DateCreated']
-            )
-
-        if kwargs is not None:
-                    self.id_and_date.update(kwargs)
-
-        self.contacts_with_dates = self.dates(**self.id_and_date)
-
-        return self.contacts_with_dates
-
-    def invoices(self, target_id=None, **kwargs):
-        ''' iterate over list from contact_idanddatecreated() to get target_id '''
-
-        if type(target_id) is str:
-            pass
-        elif (target_id is not None and type(target_id) is int):
-            target_id = str(target_id)
-        else:
-            print("Input on invoices() failed, check target_id")
-
-
-        self.inv_args = dict(
-            table='Invoice',
-            limit=9,
-            page=0,
-            queryData={'ContactId': target_id},
-            returnData=['DateCreated']
-            )
-
-        if kwargs is not None:
-                    self.inv_args.update(kwargs)
-
-        self.inv_dates = self._basequery(**self.inv_args)
-
-        return self.inv_dates
 
     def contact_invoices(self, id_list=None, inv_list=None):
         ''' combine date from contact_idanddate() and invoices() '''
