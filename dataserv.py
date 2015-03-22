@@ -168,7 +168,7 @@ class Extract(Query):
         return self.contacts_with_dates
 
     def invoices(self, target_id=None, **kwargs):
-        '''Iterate over list from contact_idanddatecreated() to get target_id.'''
+        '''Iterate over list from contact_idanddatec() to get target_id.'''
 
         if type(target_id) is str:
             pass
@@ -216,17 +216,18 @@ class CustomerLifetimeValue(Extract):
 
 
 class LeadtimeToSale(Extract):
-    ''''Return length of time from gaining a lead to making first sale.
-    TODO: Use histograms and other stats to analyse this.
+    '''Return length of time from gaining a lead to making first sale.
+       TODO: Use histograms and other stats to analyse this.
     '''
     def leadtime_to_sale(self):
 
         raise NotImplementedError
 
 
-class ContactIdAndDate(Extract):
-    '''Return array of contact ids with date created. Most analysis will need
-    to cross-reference this data. This should perhaps be in Extract.
+class InvoiceDates(Extract):
+    '''Return array of contact ids with date created for their invoices. 
+       Most analysis will need to cross-reference this data. 
+       This should perhaps be in Extract.
     '''
 
     def contact_invoices(self, id_list=None, inv_list=None):
@@ -247,7 +248,7 @@ class ContactIdAndDate(Extract):
                 self.yaq = self.invoices(target_id=idx)
 
             self.contact_invlist.append([idx, self.yaq])
-                # append() keeps Id with invoice date, don't use extend()
+                # don't use extend(), append() keeps Id with invoice date
 
         return self.contact_invlist
 

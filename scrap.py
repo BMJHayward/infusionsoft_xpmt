@@ -1,3 +1,4 @@
+import dataserv
 
 def list_to_file(targ_list):
 
@@ -60,3 +61,28 @@ def compare_date(date1, date2):
     leadtime = abs(date1 - date2)
 
     return leadtime
+
+def leadtime():
+
+    testcontlist = dataserv.Extract().contact_idanddate()
+    testinvlist = dataserv.InvoiceDates().contact_invoices()
+    '''
+        print(parse_datetimeobject(testinvlist[0][1], dataserv)
+        print(parse_datetimeobject(testcontlist), dataserv)
+    '''
+    return [testcontlist,testinvlist]
+
+def padlist(list1, list2):
+
+    if len(list1)>len(list2):
+        padding=(len(list1)-len(list2))*[0]
+        list2.extend(padding)
+    elif len(list2)>len(list1):
+        padding=(len(list2-len(list1))*[0])
+        list1.extend(padding)
+    else:
+        print("doesn't work, give me only 2 lists please")
+
+    ziplist = zip(list1, list2)
+
+    return ziplist

@@ -12,7 +12,7 @@ import scrap
 iqcxn = iq.Query()
 iqout = iq.Output()
 iqext = iq.Extract()
-iqcid = iq.ContactIdAndDate()
+iqinv = iq.InvoiceDates()
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
@@ -112,13 +112,13 @@ class TestExtract(unittest.TestCase):
         pass
 
 
-class TestContactIdAndDate(unittest.TestCase):
+class TestInvoiceDates(unittest.TestCase):
 
     def test_contact_invoices(self):
 
         test_id_list = dict(limit=99)
         test_inv_list = dict(limit=99)
-        cntct_invlist = iqcid.contact_invoices(test_id_list, test_inv_list)
+        cntct_invlist = iqinv.contact_invoices(test_id_list, test_inv_list)
         self.assertIs(type(cntct_invlist), list)
 
 
