@@ -225,8 +225,8 @@ class LeadtimeToSale(Extract):
 
 
 class InvoiceDates(Extract):
-    '''Return array of contact ids with date created for their invoices. 
-       Most analysis will need to cross-reference this data. 
+    '''Return array of contact ids with date created for their invoices.
+       Most analysis will need to cross-reference this data.
        This should perhaps be in Extract.
     '''
 

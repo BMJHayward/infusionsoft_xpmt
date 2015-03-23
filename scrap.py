@@ -56,6 +56,12 @@ def parse_datetimeobject(dtobj, dataserv):
     dates = dtobjframe.iter_array()
     return dates
 
+def earliest_date(datearray):
+
+    earliest = min(datearray)
+
+    return earliest
+
 def compare_date(date1, date2):
 
     leadtime = abs(date1 - date2)
