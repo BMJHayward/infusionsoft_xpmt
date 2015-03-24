@@ -154,7 +154,7 @@ class Extract(Query):
         return self.leadsource
 
     def contact_idanddate(self, **kwargs):
-        '''Return Id AND DateCreated at once for cross-reference later.'''
+        '''Return list of dicts, keys are 'Id' AND 'DateCreated'.'''
 
         self.id_and_date = dict(
             returnData=['Id','DateCreated']
@@ -168,7 +168,9 @@ class Extract(Query):
         return self.contacts_with_dates
 
     def invoices(self, target_id=None, **kwargs):
-        '''Iterate over list from contact_idanddatec() to get target_id.'''
+        ''' Returns list of dicts, key is 'DateCreated'.
+           USAGE:Iterate over list from contact_idanddate() to get target_id.
+        '''
 
         if type(target_id) is str:
             pass
@@ -190,6 +192,43 @@ class Extract(Query):
         self.inv_dates = self._basequery(**self.inv_args)
 
         return self.inv_dates
+
+class LeadtimeToSale(Extract):
+    '''Return length of time from gaining a lead to making first sale.
+       TODO: Use histograms and other stats to analyse this.
+    '''
+    def leadtime_to_sale(self):
+        ''' Use extract() to get data, use process() to make it sensible.
+           Return an object useful for visualistion.
+        '''
+        raise NotImplementedError
+
+    def contact_invoices(self, id_list=None, inv_list=None):
+        ''' Combine date from contact_idanddate() and invoices()
+           Return array of contact ids with date created for their invoices.
+           Most analysis will need to cross-reference this data.
+           This should perhaps be in Extract.
+        '''
+
+        if id_list is not None:
+            self.iddate_list = self.contact_idanddate(**id_list)
+        elif id_list is None:
+            self.iddate_list = self.contact_idanddate()
+        else:
+            print("No idea how this happened. Check id_list args. ", id_list)
+
+        for cntct in self.iddate_list:
+            idx = cntct['Id']
+            if inv_list is not None:
+                self.yaq = self.invoices(target_id=idx, **inv_list)
+            elif inv_list is None:
+                self.yaq = self.invoices(target_id=idx)
+            else:
+                print("No idea how this happened. Check inv_list args. ", inv_list)
+
+            cntct['invoices'] = self.yaq
+
+        return self.iddate_list
 
 
 class CostSaleLeadsource(Extract):
@@ -215,42 +254,6 @@ class CustomerLifetimeValue(Extract):
         raise NotImplementedError
 
 
-class LeadtimeToSale(Extract):
-    '''Return length of time from gaining a lead to making first sale.
-       TODO: Use histograms and other stats to analyse this.
-    '''
-    def leadtime_to_sale(self):
-
-        raise NotImplementedError
-
-
-class InvoiceDates(Extract):
-    '''Return array of contact ids with date created for their invoices.
-       Most analysis will need to cross-reference this data.
-       This should perhaps be in Extract.
-    '''
-
-    def contact_invoices(self, id_list=None, inv_list=None):
-        ''' combine date from contact_idanddate() and invoices() '''
-
-        if id_list is not None:
-            self.iddate_list = self.contact_idanddate(**id_list)
-        else:
-            self.iddate_list = self.contact_idanddate()
-
-        self.idinv_list = [i['Id'] for i in self.iddate_list]
-
-        self.contact_invlist = []
-        for idx in self.idinv_list:
-            if inv_list is not None:
-                self.yaq = self.invoices(target_id=idx, **inv_list)
-            else:
-                self.yaq = self.invoices(target_id=idx)
-
-            self.contact_invlist.append([idx, self.yaq])
-                # don't use extend(), append() keeps Id with invoice date
-
-        return self.contact_invlist
 
 
 class Process:

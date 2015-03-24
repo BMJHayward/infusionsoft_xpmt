@@ -12,7 +12,7 @@ import scrap
 iqcxn = iq.Query()
 iqout = iq.Output()
 iqext = iq.Extract()
-iqinv = iq.InvoiceDates()
+iqlts = iq.LeadtimeToSale()
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
@@ -84,14 +84,14 @@ class TestExtract(unittest.TestCase):
 
     def test_contact_idanddate(self):
 
-        id_date = dict(limit=99)
+        id_date = dict(limit=9)
         contact_with_date_list = iqext.contact_idanddate(**id_date)
         self.assertIs(type(contact_with_date_list), list)
 
     def test_invoices(self):
 
         targ_id = 1000
-        inv_arg = dict(limit=99)
+        inv_arg = dict(limit=9)
         inv_list = iqext.invoices(targ_id, **inv_arg)
         self.assertIs(type(inv_list), list)
 
@@ -116,9 +116,9 @@ class TestInvoiceDates(unittest.TestCase):
 
     def test_contact_invoices(self):
 
-        test_id_list = dict(limit=99)
-        test_inv_list = dict(limit=99)
-        cntct_invlist = iqinv.contact_invoices(test_id_list, test_inv_list)
+        test_id_list = dict(limit=9)
+        test_inv_list = dict(limit=9)
+        cntct_invlist = iqlts.contact_invoices(test_id_list, test_inv_list)
         self.assertIs(type(cntct_invlist), list)
 
 
