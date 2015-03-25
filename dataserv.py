@@ -234,13 +234,13 @@ class LeadtimeToSale(Extract):
 class CostSaleLeadsource(Extract):
     '''Return a cost per sale per leadsource object.'''
     def cost_sale_leadsource(self):
-    '''
-    +get expenses per leadsource
-    +get number of sales per leadsource
-    +combine the two
-    ^OR^
-    +run leadsource ROI report
-    '''
+        '''
+        +get expenses per leadsource
+        +get number of sales per leadsource
+        +combine the two
+        ^OR^
+        +run leadsource ROI report
+        '''
         raise NotImplementedError
 
 
@@ -249,23 +249,23 @@ class AvgerageTransactionValue(Extract):
     TODO: segment by time period, leadsource, product etc.
     '''
     def average_transaction_value(self):
-    '''
-    +get all sales
-    +get number of sales
-    +do arithmetic mean
-    '''
+        '''
+        +get all sales
+        +get number of sales
+        +do arithmetic mean
+        '''
         raise NotImplementedError
 
 
 class CustomerLifetimeValue(Extract):
     '''Calculate how much any given customer spends on average long term.'''
     def customer_lifetime_value(self):
-    '''
-    +get target contact invoices
-    +sum value of all invoices
-    +repeat for all contacts who have purchased
-    +get average of all contacts lifetimevalue
-    '''
+        '''
+        +get target contact invoices
+        +sum value of all invoices
+        +repeat for all contacts who have purchased
+        +get average of all contacts lifetimevalue
+        '''
         raise NotImplementedError
 
 
