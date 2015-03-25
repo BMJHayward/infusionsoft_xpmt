@@ -8,7 +8,8 @@ import pandas as pd
 
 dates = eval(open('dates.txt','r+').read())
 datescount = Counter(dates)
-datescount[20080627] = 500 # this value skews the graph too much, original value is approx 23K
+datescount[20080627] = 500
+# this value skews the graph too much, original value is approx 23K
 
 def matplot_bar():
     labels, values = zip(*datescount.items())
