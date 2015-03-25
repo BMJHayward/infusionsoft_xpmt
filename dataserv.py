@@ -291,6 +291,7 @@ class Process:
         if 'GroupId' in dictionary.keys():
 
             tag = dictionary['GroupId']
+
             return tag
 
         elif 'DateCreated' in dictionary.keys():
@@ -303,13 +304,20 @@ class Process:
         elif 'Leadsource' in dictionary.keys():
 
             lead = dictionary['Leadsource']
+
             return lead
 
+        elif 'Id' in dictionary.keys():
+
+            idnum = dictionary['Id']
+
+            return idnum
 
     def combine_list(self, *lists):
 
         ziplist = zip(*lists)
         ziplist = list(ziplist)
+
         return ziplist
 
 

@@ -41,11 +41,12 @@ def histogram():
 
 
 def sourcelist(cxn):
+
     testlist = [cxn.dates(), cxn.tags(), cxn.leadsources()]
 
     return testlist
 
-def parse_datetimeobject(dtobj, dataserv):
+def parse_datetimeobject(dtobj):
 
     '''
     try this later:
@@ -54,6 +55,7 @@ def parse_datetimeobject(dtobj, dataserv):
     '''
     dtobjframe = dataserv.Process(dtobj)
     dates = dtobjframe.iter_array()
+
     return dates
 
 def earliest_date(datearray):
@@ -71,7 +73,7 @@ def compare_date(date1, date2):
 def leadtime():
 
     testcontlist = dataserv.Extract().contact_idanddate()
-    testinvlist = dataserv.InvoiceDates().contact_invoices()
+    testinvlist = dataserv.LeadtimeToSale().contact_invoices()
     '''
         print(parse_datetimeobject(testinvlist[0][1], dataserv)
         print(parse_datetimeobject(testcontlist), dataserv)
@@ -87,7 +89,7 @@ def padlist(list1, list2):
         padding=(len(list2-len(list1))*[0])
         list1.extend(padding)
     else:
-        print("doesn't work, give me only 2 lists please")
+        print("Didn't work, give me only 2 lists please")
 
     ziplist = zip(list1, list2)
 
