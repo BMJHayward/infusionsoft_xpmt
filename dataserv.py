@@ -23,10 +23,12 @@ TODO:
 ######
 
 + include recordcount() to return all data when using 'all' argument
++ LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
 + composition basic query objects for use in reporting class
 + possible Report() class for inidividual reports to inherit from
 + use pandas or matplotlib for dataviz
 + statistics?
++ create file of functions to call _basequery() with different args
 '''
 
 import os
