@@ -165,7 +165,6 @@ class Extract(Query):
         else:
             print("Input on invoices() failed, check target_id")
 
-
         self.inv_args = dict(
             table='Invoice',
             queryData={'ContactId': target_id},
@@ -179,6 +178,7 @@ class Extract(Query):
 
         return self.inv_dates
 
+
 class LeadtimeToSale(Extract):
     '''Return length of time from gaining a lead to making first sale.'''
     def leadtime_to_sale(self):
@@ -187,11 +187,11 @@ class LeadtimeToSale(Extract):
         '''
 
         self.idd=self.iddates()
-        self.idd=[list(item.values()) for item in self.idd]
+        # self.idd=[list(item.values()) for item in self.idd]
 
-        for element in self.idd:
-            self.invlist=self.get_inv(target_id=element[0])
-            element.append(self.invlist)
+        for i in self.idd:
+            idarg=i['Id']
+            i['Invoices']=(self.get_inv(idarg))
 
         return self.idd
 
@@ -201,7 +201,7 @@ class LeadtimeToSale(Extract):
 
         return self._basequery(**self.id)
 
-    def get_inv(idarg=idarg):
+    def get_inv(self, idarg):
 
         self.xinf=self.invoices(target_id=idarg)
 
