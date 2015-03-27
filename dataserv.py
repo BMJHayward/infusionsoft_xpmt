@@ -183,7 +183,7 @@ class Extract(Query):
 
 class LeadtimeToSale(Extract):
     '''Return length of time from gaining a lead to making first sale.'''
-    def leadtime_to_sale(self):
+    def leadtime(self):
         ''' Use extract() to get data, use process() to make it sensible.
            Return an object useful for visualistion.
         '''
@@ -251,47 +251,47 @@ class CustomerLifetimeValue(Extract):
 class Process:
     '''Raw query data processed here for target output.'''
 
-    def iter_array(self, array):
+    def procarray(self, array):
 
         self.data = []
         for dictionary in array:
-            if type(dictionary) is list: self.iter_array(dictionary)
-            for key in dictionary:
-                self.data.append(self.query_process(dictionary))
+            if type(dictionary) is list: self.procarray(dictionary)
+            for key in dictionary.keys():
+                self.data.append(self.procdict(key, dictionary))
 
         return self.data
 
 
-    def query_process(self, dictionary):
+    def procdict(self, key, dictionary):
 
-        if 'GroupId' in dictionary.keys():
+        if key is 'GroupId':
 
             tag = dictionary['GroupId']
 
             return tag
 
-        elif 'DateCreated' in dictionary.keys():
+        elif key is 'DateCreated':
             date = str(dictionary['DateCreated'])
             date = date.split('T')[0]
             date = int(date)
 
             return date
 
-        elif 'Leadsource' in dictionary.keys():
+        elif key is 'Leadsource':
 
             lead = dictionary['Leadsource']
 
             return lead
 
-        elif 'Id' in dictionary.keys():
+        elif key is 'Id':
 
             idnum = dictionary['Id']
 
             return idnum
 
-        elif 'Invoices' in dictionary.keys():
+        elif key is 'Invoices':
 
-            invlist = self.iter_array(dictionary['Invoices'])
+            invlist = self.procarray(dictionary['Invoices'])
 
             return invlist
 
