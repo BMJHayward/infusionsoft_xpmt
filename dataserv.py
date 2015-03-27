@@ -256,7 +256,8 @@ class Process:
         self.data = []
         for dictionary in array:
             if type(dictionary) is list: self.iter_array(dictionary)
-            self.data.append(self.query_process(dictionary))
+            for key in dictionary:
+                self.data.append(self.query_process(dictionary))
 
         return self.data
 
