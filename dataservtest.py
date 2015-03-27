@@ -7,7 +7,6 @@ cgi.test() to test script with HTTP headers and HTML.
 '''
 import unittest
 import dataserv as iq
-import scrap
 
 iqcxn = iq.Query()
 iqout = iq.Output()
@@ -121,16 +120,19 @@ class TestProcess(unittest.TestCase):
     def test_query_process(self):
 
         tags = iqext.tags()
-        self.assertIsNotNone(tags)
-        print(tags)
-        self.assertIs(type(tags[0].get('GroupId')), int)
+        taglist = [iqprc.query_process(tag) for tag in tags]
+        for tag in taglist:
+            self.assertIs(type(tag), int)
 
-    def test_testlist(self):
+        dates = iqext.dates()
+        datelist = [iqprc.query_process(date) for date in dates]
+        for date in datelist:
+            self.assertIs(type(date), int)
 
-        testlist = scrap.sourcelist(iqext)
-        print(testlist)
-        self.assertIsNotNone(testlist)
-        self.assertIs(type(testlist), list)
+        sources = iqext.leadsources()
+        srclist = [iqprc.query_process(src) for src in sources]
+        for src in srclist:
+            self.assertIs(type(src), str)
 
 class TestOutput(unittest.TestCase):
 
