@@ -188,6 +188,7 @@ class LeadtimeToSale(Extract):
 
         self.idd=self.iddates()
         # self.idd=[list(item.values()) for item in self.idd]
+        # perhaps keep this to ready data for final export
 
         for i in self.idd:
             idarg=i['Id']
@@ -285,9 +286,9 @@ class Process:
 
             return idnum
 
-        elif 'invoices' in dictionary.keys():
+        elif 'Invoices' in dictionary.keys():
 
-            invlist = self.iter_array(dictionary['invoices'])
+            invlist = self.iter_array(dictionary['Invoices'])
 
             return invlist
 

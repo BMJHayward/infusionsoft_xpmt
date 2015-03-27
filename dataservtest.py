@@ -12,6 +12,7 @@ import scrap
 iqcxn = iq.Query()
 iqout = iq.Output()
 iqext = iq.Extract()
+iqprc = iq.Process()
 iqlts = iq.LeadtimeToSale()
 
 class TestQuery(unittest.TestCase):
@@ -82,12 +83,6 @@ class TestExtract(unittest.TestCase):
         data = iqext.leadsources()
         self.assertIs(type(data), list)
 
-    def test_contact_idanddate(self):
-
-        id_date = dict(limit=9)
-        contact_with_date_list = iqext.contact_idanddate(**id_date)
-        self.assertIs(type(contact_with_date_list), list)
-
     def test_invoices(self):
 
         targ_id = 1000
@@ -112,27 +107,16 @@ class TestExtract(unittest.TestCase):
         pass
 
 
-class TestInvoiceDates(unittest.TestCase):
-
-    def test_contact_invoices(self):
-
-        test_id_list = dict(limit=9)
-        test_inv_list = dict(limit=9)
-        cntct_invlist = iqlts.contact_invoices(test_id_list, test_inv_list)
-        self.assertIs(type(cntct_invlist), list)
-
-
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 
     def test_iter_array(self):
 
         sample_list = iqext.leadsources()
-        lead_list = iq.Process(sample_list)
-        final_list = lead_list.iter_array()
-        print(final_list)
-        self.assertIsNotNone(final_list)
-        self.assertIs(type(final_list), list)
+        lead_list = iqprc.iter_array(sample_list)
+        print(lead_list)
+        self.assertIsNotNone(lead_list)
+        self.assertIs(type(lead_list), list)
 
     def test_query_process(self):
 
