@@ -90,20 +90,36 @@ class TestExtract(unittest.TestCase):
         self.assertIs(type(inv_list), list)
 
     def test_cost_sale_leadsource(self):
-        # raise NotImplementedError
+
         pass
 
     def test_average_transaction_value(self):
-        # raise NotImplementedError
+
         pass
 
     def test_customer_lifetime_value(self):
-        # raise NotImplementedError
+
         pass
 
+class TestLeadtimeToSale(unittest.TestCase):
+
     def test_leadtime_to_sale(self):
-        # raise NotImplementedError
-        pass
+        ltslist = iqlts.leadtime_to_sale()
+        for dic in ltslist:
+            self.assertTrue('Invoices' in dic and
+            'DateCreated' in dic and
+            'Id' in dic
+            )
+
+    def test_iddates(self):
+        datelist = iqlts.iddates()
+        for dic in datelist:
+            self.assertTrue('Id' in dic and 'DateCreated' in dic)
+
+    def test_get_inv(self):
+        invlist = iqlts.get_inv(11)  # using 11 as dummy id
+        for dic in invlist:
+            self.assertTrue('DateCreated' in dic)
 
 
 class TestProcess(unittest.TestCase):
