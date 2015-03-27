@@ -181,7 +181,7 @@ class Extract(Query):
         return self.inv_dates
 
 
-class LeadtimeToSale(Extract):
+class LeadtimetoSale(Extract):
     '''Return length of time from gaining a lead to making first sale.'''
     def leadtime(self):
         ''' Use extract() to get data, use process() to make it sensible.
@@ -253,47 +253,29 @@ class Process:
 
     def procarray(self, array):
 
-        self.data = []
-        for dictionary in array:
-            if type(dictionary) is list: self.procarray(dictionary)
-            for key in dictionary.keys():
-                self.data.append(self.procdict(key, dictionary))
+        for dictionary in range(0, len(array)):
 
-        return self.data
+            if type(array[dictionary]) is list:
+                self.procarray(array[dictionary])
+
+            elif type(array[dictionary]) is dict:
+                array[dictionary]=list(array[dictionary].values())
 
 
     def procdict(self, key, dictionary):
 
-        if key is 'GroupId':
-
-            tag = dictionary['GroupId']
-
-            return tag
-
-        elif key is 'DateCreated':
-            date = str(dictionary['DateCreated'])
+        if key is 'DateCreated':
+            date = str(dictionary[key])
             date = date.split('T')[0]
             date = int(date)
 
-            return date
-
-        elif key is 'Leadsource':
-
-            lead = dictionary['Leadsource']
-
-            return lead
-
-        elif key is 'Id':
-
-            idnum = dictionary['Id']
-
-            return idnum
+            dictionary[key] = date
 
         elif key is 'Invoices':
 
             invlist = self.procarray(dictionary['Invoices'])
 
-            return invlist
+            dictionary[key] = invlist
 
     def combine_list(self, *lists):
 
