@@ -7,11 +7,11 @@ cgi.test() to test script with HTTP headers and HTML.
 '''
 import unittest
 import dataserv as iq
-import scrap
 
 iqcxn = iq.Query()
 iqout = iq.Output()
 iqext = iq.Extract()
+iqprc = iq.Process()
 iqlts = iq.LeadtimeToSale()
 
 class TestQuery(unittest.TestCase):
@@ -82,12 +82,6 @@ class TestExtract(unittest.TestCase):
         data = iqext.leadsources()
         self.assertIs(type(data), list)
 
-    def test_contact_idanddate(self):
-
-        id_date = dict(limit=9)
-        contact_with_date_list = iqext.contact_idanddate(**id_date)
-        self.assertIs(type(contact_with_date_list), list)
-
     def test_invoices(self):
 
         targ_id = 1000
@@ -96,30 +90,36 @@ class TestExtract(unittest.TestCase):
         self.assertIs(type(inv_list), list)
 
     def test_cost_sale_leadsource(self):
-        # raise NotImplementedError
+
         pass
 
     def test_average_transaction_value(self):
-        # raise NotImplementedError
+
         pass
 
     def test_customer_lifetime_value(self):
-        # raise NotImplementedError
+
         pass
+
+class TestLeadtimeToSale(unittest.TestCase):
 
     def test_leadtime_to_sale(self):
-        # raise NotImplementedError
-        pass
+        ltslist = iqlts.leadtime_to_sale()
+        for dic in ltslist:
+            self.assertTrue('Invoices' in dic and
+            'DateCreated' in dic and
+            'Id' in dic
+            )
 
+    def test_iddates(self):
+        datelist = iqlts.iddates()
+        for dic in datelist:
+            self.assertTrue('Id' in dic and 'DateCreated' in dic)
 
-class TestInvoiceDates(unittest.TestCase):
-
-    def test_contact_invoices(self):
-
-        test_id_list = dict(limit=9)
-        test_inv_list = dict(limit=9)
-        cntct_invlist = iqlts.contact_invoices(test_id_list, test_inv_list)
-        self.assertIs(type(cntct_invlist), list)
+    def test_get_inv(self):
+        invlist = iqlts.get_inv(11)  # using 11 as dummy id
+        for dic in invlist:
+            self.assertTrue('DateCreated' in dic)
 
 
 class TestProcess(unittest.TestCase):
@@ -128,25 +128,27 @@ class TestProcess(unittest.TestCase):
     def test_iter_array(self):
 
         sample_list = iqext.leadsources()
-        lead_list = iq.Process(sample_list)
-        final_list = lead_list.iter_array()
-        print(final_list)
-        self.assertIsNotNone(final_list)
-        self.assertIs(type(final_list), list)
+        lead_list = iqprc.iter_array(sample_list)
+        print(lead_list)
+        self.assertIsNotNone(lead_list)
+        self.assertIs(type(lead_list), list)
 
     def test_query_process(self):
 
         tags = iqext.tags()
-        self.assertIsNotNone(tags)
-        print(tags)
-        self.assertIs(type(tags[0].get('GroupId')), int)
+        taglist = [iqprc.query_process(tag) for tag in tags]
+        for tag in taglist:
+            self.assertIs(type(tag), int)
 
-    def test_testlist(self):
+        dates = iqext.dates()
+        datelist = [iqprc.query_process(date) for date in dates]
+        for date in datelist:
+            self.assertIs(type(date), int)
 
-        testlist = scrap.sourcelist(iqext)
-        print(testlist)
-        self.assertIsNotNone(testlist)
-        self.assertIs(type(testlist), list)
+        sources = iqext.leadsources()
+        srclist = [iqprc.query_process(src) for src in sources]
+        for src in srclist:
+            self.assertIs(type(src), str)
 
 class TestOutput(unittest.TestCase):
 

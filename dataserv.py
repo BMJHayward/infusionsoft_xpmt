@@ -155,20 +155,6 @@ class Extract(Query):
 
         return self.leadsource
 
-    def contact_idanddate(self, **kwargs):
-        '''Return list of dicts, keys are 'Id' AND 'DateCreated'.'''
-
-        self.id_and_date = dict(
-            returnData=['Id','DateCreated']
-            )
-
-        if kwargs is not None:
-                    self.id_and_date.update(kwargs)
-
-        self.contacts_with_dates = self.dates(**self.id_and_date)
-
-        return self.contacts_with_dates
-
     def invoices(self, target_id=None, **kwargs):
         ''' Returns list of dicts, key is 'DateCreated'.
            USAGE:Iterate over list from contact_idanddate() to get target_id.
@@ -180,7 +166,6 @@ class Extract(Query):
             target_id = str(target_id)
         else:
             print("Input on invoices() failed, check target_id")
-
 
         self.inv_args = dict(
             table='Invoice',
@@ -195,43 +180,35 @@ class Extract(Query):
 
         return self.inv_dates
 
+
 class LeadtimeToSale(Extract):
-    '''Return length of time from gaining a lead to making first sale.
-       TODO: Use histograms and other stats to analyse this.
-    '''
+    '''Return length of time from gaining a lead to making first sale.'''
     def leadtime_to_sale(self):
         ''' Use extract() to get data, use process() to make it sensible.
            Return an object useful for visualistion.
         '''
-        raise NotImplementedError
 
-    def contact_invoices(self, id_list=None, inv_list=None):
-        ''' Combine date from contact_idanddate() and invoices()
-           Return array of contact ids with date created for their invoices.
-           Most analysis will need to cross-reference this data.
-           This should perhaps be in Extract.
-        '''
+        self.idd=self.iddates()
+        # self.idd=[list(item.values()) for item in self.idd]
+        # perhaps keep this to ready data for final export
 
-        if id_list is not None:
-            self.iddate_list = self.contact_idanddate(**id_list)
-        elif id_list is None:
-            self.iddate_list = self.contact_idanddate()
-        else:
-            print("No idea how this happened. Check id_list args. ", id_list)
+        for i in self.idd:
+            idarg=i['Id']
+            i['Invoices']=(self.get_inv(idarg))
 
-        for cntct in self.iddate_list:
-            idx = cntct['Id']
-            if inv_list is not None:
-                self.yaq = self.invoices(target_id=idx, **inv_list)
-            elif inv_list is None:
-                self.yaq = self.invoices(target_id=idx)
-            else:
-                print("No idea how this happened. Check inv_list args. ", inv_list)
+        return self.idd
 
-            cntct['invoices'] = self.yaq
+    def iddates(self, **kwargs):
 
-        return self.iddate_list
+        self.id = dict(returnData=['Id', 'DateCreated'])
 
+        return self._basequery(**self.id)
+
+    def get_inv(self, idarg):
+
+        self.xinf=self.invoices(target_id=idarg)
+
+        return self.xinf
 
 class CostSaleLeadsource(Extract):
     '''Return a cost per sale per leadsource object.'''
@@ -272,20 +249,16 @@ class CustomerLifetimeValue(Extract):
 
 
 class Process:
-    ''' raw query data processed here for target output'''
+    '''Raw query data processed here for target output.'''
 
-    def __init__(self, array):
+    def iter_array(self, array):
 
-        self.array = array
+        self.data = []
+        for dictionary in array:
+            if type(dictionary) is list: self.iter_array(dictionary)
+            self.data.append(self.query_process(dictionary))
 
-
-    def iter_array(self):
-
-        data = []
-        for dictionary in self.array:
-            data.append(self.query_process(dictionary))
-
-        return data
+        return self.data
 
 
     def query_process(self, dictionary):
@@ -314,6 +287,12 @@ class Process:
             idnum = dictionary['Id']
 
             return idnum
+
+        elif 'Invoices' in dictionary.keys():
+
+            invlist = self.iter_array(dictionary['Invoices'])
+
+            return invlist
 
     def combine_list(self, *lists):
 
