@@ -1,4 +1,19 @@
+import csv
 import dataserv
+
+def ascsv():
+    '''
+    Put this in Output() class, passing result of query as list of 
+    dicts from query. Alternately, use elif to pass result objects in
+    different forms to the one function, or to several similar functions
+    contained in Output class.
+    '''
+    writer=csv.writer(open('dataserv.csv', 'w'))
+    lts=dataserv.LeadtimeToSale().leadtime_to_sale()
+    for item in lts:
+        for key, value in item.items():
+            writer.writerow([key, value])
+
 
 def list_to_file(targ_list):
 
