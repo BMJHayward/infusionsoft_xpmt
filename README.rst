@@ -22,6 +22,7 @@ TODO:
 ######
 
 + include recordcount() to return all data when using 'all' argument
++ use CSV module to write to file
 + composition basic query objects for use in reporting class
 + possible Report() class for inidividual reports to inherit from
 + use pandas or matplotlib for dataviz
