@@ -29,6 +29,7 @@ TODO:
 + use pandas or matplotlib for dataviz
 + statistics?
 + create file of functions to call _basequery() with different args
++ include csv.DictWriter() to output files
 '''
 
 import os

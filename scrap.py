@@ -3,7 +3,7 @@ import dataserv
 
 def ascsv():
     '''
-    Put this in Output() class, passing result of query as list of 
+    Put this in Output() class, passing result of query as list of
     dicts from query. Alternately, use elif to pass result objects in
     different forms to the one function, or to several similar functions
     contained in Output class.
@@ -14,6 +14,13 @@ def ascsv():
         for key, value in item.items():
             writer.writerow([key, value])
 
+def ascsvdict():
+    '''Similar to ascsv(), but uses DictWriter class.'''
+    with open('dataserv.csv','w') as f:
+        for item in lts:
+           w = csv.DictWriter(f,item.keys())
+           w.writeheader()  #  this will add duplicate headers, clean up later
+           w.writerow(item)
 
 def list_to_file(targ_list):
 
