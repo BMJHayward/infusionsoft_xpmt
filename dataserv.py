@@ -33,6 +33,7 @@ TODO:
 '''
 
 import os
+import csv
 from infusionsoft.library import Infusionsoft
 
 
@@ -311,15 +312,26 @@ class Output:
                 self.tempfile.write("\n")
                 print(line)
 
-    def asscv(self, queryfunc, filename):
+def ascsv():
+    '''
+    Put this in Output() class, passing result of query as list of
+    dicts from query. Alternately, use elif to pass result objects in
+    different forms to the one function, or to several similar functions
+    contained in Output class.
+    '''
+    writer=csv.writer(open('dataserv.csv', 'w'))
+    lts=dataserv.LeadtimeToSale().leadtime_to_sale()
+    for item in lts:
+        for key, value in item.items():
+            writer.writerow([key, value])
 
-        # import csv
-        # with open(filename, newline="") as source:
-            # rdr = DictReader(source)
-            # data = list(rdr)
-            # return data
-
-        raise NotImplementedError
+def ascsvdict():
+    '''Similar to ascsv(), but uses DictWriter class.'''
+    with open('dataserv.csv','w') as f:
+        for item in lts:
+           w = csv.DictWriter(f,item.keys())
+           w.writeheader()  #  this will add duplicate headers, clean up later
+           w.writerow(item)
 
     def ashtml(self, queryfunc, filename):
 
