@@ -262,7 +262,13 @@ class Process:
                 array[dictionary] = list(array[dictionary].values())[0]
 
 
-    def procdict(self, key, dictionary):
+    def procdict(self, dictionary):
+
+        for key in dictionary.keys():
+
+            self.prockeys(self, key, dictionary)
+
+    def prockeys(self, key, dictionary):
 
         if key is 'DateCreated':
             date = str(dictionary[key])
