@@ -261,39 +261,34 @@ class Process:
             elif type(array[dictionary]) is dict:
                 array[dictionary] = list(array[dictionary].values())[0]
 
-
     def procdict(self, dictionary):
 
         for key in dictionary.keys():
 
-            self.prockeys(self, key, dictionary)
+            if key == 'DateCreated':
+                date = str(dictionary[key])
+                date = date.split('T')[0]
+                date = int(date)
+                dictionary[key] = date
 
-    def prockeys(self, key, dictionary):
+            elif key == 'Invoices':
+                invlist = procarray(dictionary['Invoices'])
+                dictionary[key] = invlist
 
-        if key is 'DateCreated':
-            date = str(dictionary[key])
-            date = date.split('T')[0]
-            date = int(date)
-            dictionary[key] = date
+            elif key == 'GroupId':
+                tag = dictionary['GroupId']
 
-        elif key is 'Invoices':
-            invlist = self.procarray(dictionary['Invoices'])
-            dictionary[key] = invlist
+                return tag
 
-        elif key is 'GroupId':
-            tag = dictionary['GroupId']
+            elif key == 'Leadsource':
+                lead = dictionary['Leadsource']
 
-            return tag
+                return lead
 
-        elif key is 'Leadsource':
-            lead = dictionary['Leadsource']
+            elif key == 'Id':
+                idnum = dictionary['Id']
 
-            return lead
-
-        elif key is 'Id':
-            idnum = dictionary['Id']
-
-            return idnum
+                return idnum
 
     def combine_list(self, *lists):
 
