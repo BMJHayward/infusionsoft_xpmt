@@ -182,9 +182,9 @@ class Extract(Query):
         return self.inv_dates
 
 
-class LeadtimeToSale(Extract):
+class LeadtimetoSale(Extract):
     '''Return length of time from gaining a lead to making first sale.'''
-    def leadtime_to_sale(self):
+    def leadtime(self):
         ''' Use extract() to get data, use process() to make it sensible.
            Return an object useful for visualistion.
         '''
@@ -252,49 +252,34 @@ class CustomerLifetimeValue(Extract):
 class Process:
     '''Raw query data processed here for target output.'''
 
-    def iter_array(self, array):
+    def procarray(self, array):
 
-        self.data = []
-        for dictionary in array:
-            if type(dictionary) is list: self.iter_array(dictionary)
-            for key in dictionary:
-                self.data.append(self.query_process(dictionary))
+        for dictionary in range(0, len(array)):
 
-        return self.data
+            if type(array[dictionary]) is list:
+                self.procarray(array[dictionary])
 
+            elif type(array[dictionary]) is dict:
+                array[dictionary] = list(array[dictionary].values())[0]
 
-    def query_process(self, dictionary):
+    def procdict(self, dictionary):
 
-        if 'GroupId' in dictionary.keys():
+        for key in dictionary.keys():
 
-            tag = dictionary['GroupId']
+            if key == 'DateCreated':
+                self.procdate(key, dictionary)
 
-            return tag
+            elif key == 'Invoices':
+                invlist = dictionary[key]
+                for inv in invlist:
+                    self.procdict(inv)
 
-        elif 'DateCreated' in dictionary.keys():
-            date = str(dictionary['DateCreated'])
-            date = date.split('T')[0]
-            date = int(date)
+    def procdate(self, key, dictionary):
 
-            return date
-
-        elif 'Leadsource' in dictionary.keys():
-
-            lead = dictionary['Leadsource']
-
-            return lead
-
-        elif 'Id' in dictionary.keys():
-
-            idnum = dictionary['Id']
-
-            return idnum
-
-        elif 'Invoices' in dictionary.keys():
-
-            invlist = self.iter_array(dictionary['Invoices'])
-
-            return invlist
+        date = str(dictionary[key])
+        date = date.split('T')[0]
+        date = int(date)
+        dictionary[key] = date
 
     def combine_list(self, *lists):
 
