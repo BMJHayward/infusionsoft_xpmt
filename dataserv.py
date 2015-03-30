@@ -268,13 +268,10 @@ class Process:
             date = str(dictionary[key])
             date = date.split('T')[0]
             date = int(date)
-
             dictionary[key] = date
 
         elif key is 'Invoices':
-
             invlist = self.procarray(dictionary['Invoices'])
-
             dictionary[key] = invlist
 
     def combine_list(self, *lists):
