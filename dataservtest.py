@@ -12,7 +12,7 @@ iqcxn = iq.Query()
 iqout = iq.Output()
 iqext = iq.Extract()
 iqprc = iq.Process()
-iqlts = iq.LeadtimeToSale()
+iqlts = iq.LeadtimetoSale()
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
@@ -136,17 +136,19 @@ class TestProcess(unittest.TestCase):
     def test_query_process(self):
 
         tags = iqext.tags()
-        taglist = [iqprc.query_process(tag) for tag in tags]
+        taglist = []
+        for  tag in tags:
+            taglist.extend([iqprc.procdict(key, tag) for key in tag.keys()])
         for tag in taglist:
             self.assertIs(type(tag), int)
 
         dates = iqext.dates()
-        datelist = [iqprc.query_process(date) for date in dates]
+        datelist = [iqprc.procdict(date) for date in dates]
         for date in datelist:
             self.assertIs(type(date), int)
 
         sources = iqext.leadsources()
-        srclist = [iqprc.query_process(src) for src in sources]
+        srclist = [iqprc.procdict(src) for src in sources]
         for src in srclist:
             self.assertIs(type(src), str)
 

@@ -259,7 +259,7 @@ class Process:
                 self.procarray(array[dictionary])
 
             elif type(array[dictionary]) is dict:
-                array[dictionary]=list(array[dictionary].values())
+                array[dictionary] = list(array[dictionary].values())[0]
 
 
     def procdict(self, key, dictionary):
@@ -273,6 +273,21 @@ class Process:
         elif key is 'Invoices':
             invlist = self.procarray(dictionary['Invoices'])
             dictionary[key] = invlist
+
+        elif key is 'GroupId':
+            tag = dictionary['GroupId']
+
+            return tag
+
+        elif key is 'Leadsource':
+            lead = dictionary['Leadsource']
+
+            return lead
+
+        elif key is 'Id':
+            idnum = dictionary['Id']
+
+            return idnum
 
     def combine_list(self, *lists):
 
