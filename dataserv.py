@@ -266,29 +266,19 @@ class Process:
         for key in dictionary.keys():
 
             if key == 'DateCreated':
-                date = str(dictionary[key])
-                date = date.split('T')[0]
-                date = int(date)
-                dictionary[key] = date
+                self.procdate(key, dictionary)
 
             elif key == 'Invoices':
-                invlist = procarray(dictionary['Invoices'])
-                dictionary[key] = invlist
+                invlist = dictionary[key]
+                for inv in invlist:
+                    self.procdict(inv)
 
-            elif key == 'GroupId':
-                tag = dictionary['GroupId']
+    def procdate(self, key, dictionary):
 
-                return tag
-
-            elif key == 'Leadsource':
-                lead = dictionary['Leadsource']
-
-                return lead
-
-            elif key == 'Id':
-                idnum = dictionary['Id']
-
-                return idnum
+        date = str(dictionary[key])
+        date = date.split('T')[0]
+        date = int(date)
+        dictionary[key] = date
 
     def combine_list(self, *lists):
 

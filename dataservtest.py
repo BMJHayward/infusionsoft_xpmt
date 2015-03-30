@@ -104,7 +104,7 @@ class TestExtract(unittest.TestCase):
 class TestLeadtimeToSale(unittest.TestCase):
 
     def test_leadtime_to_sale(self):
-        ltslist = iqlts.leadtime_to_sale()
+        ltslist = iqlts.leadtime()
         for dic in ltslist:
             self.assertTrue('Invoices' in dic and
             'DateCreated' in dic and
@@ -125,32 +125,23 @@ class TestLeadtimeToSale(unittest.TestCase):
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 
-    def test_iter_array(self):
+    def test_procarray(self):
 
         sample_list = iqext.leadsources()
-        lead_list = iqprc.iter_array(sample_list)
-        print(lead_list)
-        self.assertIsNotNone(lead_list)
-        self.assertIs(type(lead_list), list)
+        iqprc.procarray(sample_list)
+        print(sample_list)
+        self.assertIsNotNone(sample_list)
+        self.assertIs(type(sample_list), list)
 
-    def test_query_process(self):
-
-        tags = iqext.tags()
-        taglist = []
-        for  tag in tags:
-            taglist.extend([iqprc.procdict(key, tag) for key in tag.keys()])
-        for tag in taglist:
-            self.assertIs(type(tag), int)
+    def test_procdict(self):
 
         dates = iqext.dates()
-        datelist = [iqprc.procdict(date) for date in dates]
-        for date in datelist:
-            self.assertIs(type(date), int)
+        for date in dates:
+            iqprc.procdict(date)
+        for date in dates:
+            for value in date.values():
+                self.assertIs(type(value), int)
 
-        sources = iqext.leadsources()
-        srclist = [iqprc.procdict(src) for src in sources]
-        for src in srclist:
-            self.assertIs(type(src), str)
 
 class TestOutput(unittest.TestCase):
 
