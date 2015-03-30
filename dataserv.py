@@ -201,13 +201,13 @@ class LeadtimetoSale(Extract):
         return self.idd
 
     def iddates(self, **kwargs):
-
+        '''Returns Id and DateCreated from Contact table as dict.'''
         self.id = dict(returnData=['Id', 'DateCreated'])
 
         return self._basequery(**self.id)
 
     def get_inv(self, idarg):
-
+        '''Returns DateCreated of invoices of id arg.'''
         self.xinf=self.invoices(target_id=idarg)
 
         return self.xinf
@@ -291,7 +291,7 @@ class Process:
 
 
 class Output:
-    ''' expects target_list to be of type list '''
+    '''Take data ready for output. Methods to write to file.'''
 
     def asfile(self, target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
@@ -312,37 +312,39 @@ class Output:
                 self.tempfile.write("\n")
                 print(line)
 
-def ascsv():
-    '''
-    Put this in Output() class, passing result of query as list of
-    dicts from query. Alternately, use elif to pass result objects in
-    different forms to the one function, or to several similar functions
-    contained in Output class.
-    '''
-    writer=csv.writer(open('dataserv.csv', 'w'))
-    lts=dataserv.LeadtimeToSale().leadtime_to_sale()
-    for item in lts:
-        for key, value in item.items():
-            writer.writerow([key, value])
+    @staticmethod
+    def ascsv(targlist):
+        '''
+        Pass in result of query as list of dicts from query. Alternately, use
+        elif to pass result objects in different forms to the one function,
+        or to several similar functions contained in Output class.
+        '''
+        with open('dataserv.csv', 'w') as datafile:
+            writer=csv.writer(datafile)
+            for item in targlist:
+                for key, value in item.items():
+                    writer.writerow([key, value])
 
-def ascsvdict():
-    '''Similar to ascsv(), but uses DictWriter class.'''
-    with open('dataserv.csv','w') as f:
-        for item in lts:
-           w = csv.DictWriter(f,item.keys())
-           w.writeheader()  #  this will add duplicate headers, clean up later
-           w.writerow(item)
+    @staticmethod
+    def ascsvdict(item):
+        '''Item arg is dictionary. Similar to ascsv but with DictWriter class.'''
+        with open('dataserv.csv','w') as f:
+            w = csv.DictWriter(f,item.keys())
+            w.writeheader()
+            for item in lts:
+               w.writerow(item)
 
+    @staticmethod
     def ashtml(self, queryfunc, filename):
 
         raise NotImplementedError
 
-
+    @staticmethod
     def asimage(self, queryfunc, filename):
 
         raise NotImplementedError
 
-
+    @staticmethod
     def as3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
 
