@@ -329,10 +329,11 @@ class Output:
     @staticmethod
     def ascsvdict(item):
         '''Item arg is dictionary. Similar to ascsv but with DictWriter class.'''
-        with open('dataserv.csv','w') as f:
-            w = csv.DictWriter(f,item.keys())
+        names=list(item[0].keys())
+        with open('dataserv.csv','w') as data:
+            w = csv.DictWriter(data, fieldnames=names)
             w.writeheader()
-            for entry in list(item.values()):
+            for entry in list(item):
                w.writerow(entry)
 
     @staticmethod
