@@ -293,23 +293,24 @@ class Process:
 class Output:
     '''Take data ready for output. Methods to write to file.'''
 
-    def asfile(self, target=None, query=None, filename='dataserv.csv'):
+    @staticmethod
+    def asfile(target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
 
-        self.data = None
+        data = None
         if target is not None:
-            self.data = target
+            data = target
         elif query is not None:
-            self.data = query
+            data = query
         else:
             msg = "No data to output"
             return msg
 
-        with open(filename, 'a+') as self.tempfile:
-            for line in self.data:
-                self.tempfile.write(repr(line))
-                self.tempfile.write(",")
-                self.tempfile.write("\n")
+        with open(filename, 'a+') as tempfile:
+            for line in data:
+                tempfile.write(repr(line))
+                tempfile.write(",")
+                tempfile.write("\n")
                 print(line)
 
     @staticmethod
@@ -331,8 +332,8 @@ class Output:
         with open('dataserv.csv','w') as f:
             w = csv.DictWriter(f,item.keys())
             w.writeheader()
-            for item in lts:
-               w.writerow(item)
+            for entry in list(item.values()):
+               w.writerow(entry)
 
     @staticmethod
     def ashtml(self, queryfunc, filename):
