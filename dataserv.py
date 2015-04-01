@@ -184,19 +184,25 @@ class Extract(Query):
 
 
 class LeadtimetoSale(Extract):
-    '''Return length of time from gaining a lead to making first sale.'''
+    '''
+    Return length of time from gaining a lead to making first sale.
+    HOW TO USE:
+    >>> leadtime = LeadtimetoSale().leadtime()
+    >>> Output().ascsvdict(leadtime)
+    '''
     def leadtime(self):
         ''' Use extract() to get data, use process() to make it sensible.
            Return an object useful for visualistion.
         '''
 
         self.idd=self.iddates()
-        # self.idd=[list(item.values()) for item in self.idd]
-        # perhaps keep this to ready data for final export
 
         for i in self.idd:
             idarg=i['Id']
             i['Invoices']=(self.get_inv(idarg))
+            Process().procdict(i)
+            self.first_inv_date(i)
+            self.created_minus_sale(i)
 
         return self.idd
 
@@ -211,6 +217,33 @@ class LeadtimetoSale(Extract):
         self.xinf=self.invoices(target_id=idarg)
 
         return self.xinf
+
+    # def get_leadtime(self, ltsquery):
+        # for result in ltsquery:
+            # self.first_inv_date(result)
+
+    def first_inv_date(self, dct):
+        '''Pass in dict with Invoices key, returns earliest invoice date.'''
+        if 'Invoices' in dct.keys():
+            inv = dct['Invoices']
+            for invoice in inv:
+                Process().procdict(invoice)
+            dates=[]
+            for invo in inv:
+                dates.extend(list(invo.values()))
+            if len(dates) == 0:
+                first_sale = 0
+            elif len(dates) != 0:
+                first_sale = min(dates)
+            dct['FirstDate'] = first_sale
+        else:
+            print("Need to give me a dictionary with an 'Invoices' key.")
+
+    def created_minus_sale(self, dct):
+        '''Gives number of days between date of lead and date of sale.'''
+        leadtime = dct['DateCreated'] - dct['FirstDate']
+        dct['LeadTime'] = leadtime
+
 
 class CostSaleLeadsource(Extract):
     '''Return a cost per sale per leadsource object.'''
