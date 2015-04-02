@@ -109,3 +109,10 @@ def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
     days = time.mktime(date1) - time.mktime(date2)
 
     return days
+
+def linecount(filename):
+    with open(filename) as file:
+        for i, l in enumerate(file):
+            pass
+
+        return i+1
