@@ -241,7 +241,7 @@ class LeadtimetoSale(Extract):
 
     def created_minus_sale(self, dct):
         '''Gives number of days between date of lead and date of sale.'''
-        leadtime = dct['DateCreated'] - dct['FirstDate']
+        leadtime = dct['FirstDate'] - dct['DateCreated']
         dct['LeadTime'] = leadtime
 
 
@@ -361,13 +361,12 @@ class Output:
 
     @staticmethod
     def ascsvdict(item):
-        '''Item arg is dictionary. Similar to ascsv but with DictWriter class.'''
-        names=list(item[0].keys())
-        with open('dataserv.csv','w') as data:
-            w = csv.DictWriter(data, fieldnames=names)
-            w.writeheader()
-            for entry in list(item):
-               w.writerow(entry)
+        '''Item arg is list of dicts. Like ascsv but with DictWriter class.'''
+        names = item[0].keys()
+        with open('dataserv.csv','w', newline='') as data:
+            writer = csv.DictWriter(data, fieldnames=names)
+            writer.writeheader()
+            writer.writerows(item)
 
     @staticmethod
     def ashtml(self, queryfunc, filename):
