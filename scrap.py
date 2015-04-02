@@ -97,3 +97,15 @@ def padlist(list1, list2):
     ziplist = zip(list1, list2)
 
     return ziplist
+
+def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
+    '''Calc days between 2 dates returned from IS.
+    Dates passed in must be xmlrpc.client.DateTime if python3.x or
+    xmlrpclib.DateTime if python2.x.
+    '''
+    import time
+    date1 = xmlrpcFirstSale.timetuple()
+    date2 = xmlrpcDateCreated.timetuple()
+    days = time.mktime(date1) - time.mktime(date2)
+
+    return days

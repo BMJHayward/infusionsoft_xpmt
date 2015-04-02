@@ -235,13 +235,13 @@ class LeadtimetoSale(Extract):
                 first_sale = 0
             elif len(dates) != 0:
                 first_sale = min(dates)
-            dct['FirstDate'] = first_sale
+            dct['FirstSale'] = first_sale
         else:
             print("Need to give me a dictionary with an 'Invoices' key.")
 
     def created_minus_sale(self, dct):
         '''Gives number of days between date of lead and date of sale.'''
-        leadtime = dct['FirstDate'] - dct['DateCreated']
+        leadtime = dct['FirstSale'] - dct['DateCreated']
         dct['LeadTime'] = leadtime
 
 
