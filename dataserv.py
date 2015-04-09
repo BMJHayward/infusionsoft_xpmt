@@ -35,6 +35,7 @@ TODO:
 import os
 import csv
 from infusionsoft.library import Infusionsoft
+import scrap
 
 
 class Query:
@@ -200,10 +201,10 @@ class LeadtimetoSale(Extract):
         for i in self.idd:
             idarg = i['Id']
             i['Invoices'] = (self.get_inv(idarg))
-            # i['Leadtime'] = scrap.get_daystosale(i)
             Process().procdict(i)
             self.first_inv_date(i)
-            self.created_minus_sale(i)  # use scrap.get_daystosale() in here somehow
+            scrap.get_daystosale(i)
+            # self.created_minus_sale(i)  # use scrap.get_daystosale() in here somehow
 
         return self.idd
 
@@ -227,8 +228,8 @@ class LeadtimetoSale(Extract):
         '''Pass in dict with Invoices key, returns earliest invoice date.'''
         if 'Invoices' in dct.keys():
             inv = dct['Invoices']
-            for invoice in inv:
-                Process().procdict(invoice)
+            # for invoice in inv:
+                # Process().procdict(invoice)
             dates = []
             for invo in inv:
                 dates.extend(list(invo.values()))

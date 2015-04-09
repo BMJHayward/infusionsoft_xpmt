@@ -110,7 +110,7 @@ def get_daystosale(leadtimedict):
         firstsale = leadtimedict['FirstSale']
         days = datecompare(created, firstsale)
 
-        return days
+        leadtimedict['LeadTime'] = days
 
 def linecount(filename):
     with open(filename) as file:
