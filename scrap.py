@@ -4,7 +4,6 @@ import dataserv
 
 
 def list_to_file(targ_list):
-
     with open('inv_list','a+') as tempfile:
         for i in range(0, len(targ_list)):
             tempfile.write(repr(targ_list[i]))
@@ -12,13 +11,11 @@ def list_to_file(targ_list):
             tempfile.write("\n")
 
 def extend_list(targ_list):
-
     idinv_list = []
     for i in targ_list:
         idinv_list.extend(i['Id'])
 
 def recurs_iter(target):
-
     if type(target) is list:
         src = recurs_iter(iter(target))
 
@@ -44,13 +41,11 @@ def histogram():
 
 
 def sourcelist(cxn):
-
     testlist = [cxn.dates(), cxn.tags(), cxn.leadsources()]
 
     return testlist
 
 def parse_datetimeobject(dtobj):
-
     '''
     try this later:
     from datetime import datetime
@@ -62,19 +57,16 @@ def parse_datetimeobject(dtobj):
     return dates
 
 def earliest_date(datearray):
-
     earliest = min(datearray)
 
     return earliest
 
 def compare_date(date1, date2):
-
     leadtime = abs(date1 - date2)
 
     return leadtime
 
 def leadtime():
-
     testcontlist = dataserv.Extract().contact_idanddate()
     testinvlist = dataserv.LeadtimeToSale().contact_invoices()
     '''
@@ -84,7 +76,6 @@ def leadtime():
     return [testcontlist,testinvlist]
 
 def padlist(list1, list2):
-
     if len(list1)>len(list2):
         padding=(len(list1)-len(list2))*[0]
         list2.extend(padding)
@@ -101,14 +92,25 @@ def padlist(list1, list2):
 def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
     '''Calc days between 2 dates returned from IS.
     Dates passed in must be xmlrpc.client.DateTime if python3.x or
-    xmlrpclib.DateTime if python2.x.
+    xmlrpclib.DateTime if python2.x. Can also use DateTime-like
+    objects which have the timetuple() method.
     '''
     import time
-    date1 = xmlrpcFirstSale.timetuple()
-    date2 = xmlrpcDateCreated.timetuple()
+
+    date1 = xmlrpcDateCreated.timetuple()
+    date2 = xmlrpcFirstSale.timetuple()
     days = time.mktime(date1) - time.mktime(date2)
 
     return days
+
+def get_daystosale(leadtimedict):
+    if 'DateCreated' and 'FirstSale' in leadtimedict.keys():
+
+        created = leadtimedict['DateCreated']
+        firstsale = leadtimedict['FirstSale']
+        days = datecompare(created, firstsale)
+
+        return days
 
 def linecount(filename):
     with open(filename) as file:

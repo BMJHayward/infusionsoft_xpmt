@@ -195,26 +195,27 @@ class LeadtimetoSale(Extract):
            Return an object useful for visualistion.
         '''
 
-        self.idd=self.iddates()
+        self.idd = self.iddates()
 
         for i in self.idd:
-            idarg=i['Id']
-            i['Invoices']=(self.get_inv(idarg))
+            idarg = i['Id']
+            i['Invoices'] = (self.get_inv(idarg))
+            # i['Leadtime'] = scrap.get_daystosale(i)
             Process().procdict(i)
             self.first_inv_date(i)
-            self.created_minus_sale(i)
+            self.created_minus_sale(i)  # use scrap.get_daystosale() in here somehow
 
         return self.idd
 
     def iddates(self, **kwargs):
         '''Returns Id and DateCreated from Contact table as dict.'''
-        self.id = dict(returnData=['Id', 'DateCreated'])
+        self.id = dict(returnData = ['Id', 'DateCreated'])
 
         return self._basequery(**self.id)
 
     def get_inv(self, idarg):
         '''Returns DateCreated of invoices of id arg.'''
-        self.xinf=self.invoices(target_id=idarg)
+        self.xinf=self.invoices(target_id = idarg)
 
         return self.xinf
 
@@ -228,7 +229,7 @@ class LeadtimetoSale(Extract):
             inv = dct['Invoices']
             for invoice in inv:
                 Process().procdict(invoice)
-            dates=[]
+            dates = []
             for invo in inv:
                 dates.extend(list(invo.values()))
             if len(dates) == 0:
