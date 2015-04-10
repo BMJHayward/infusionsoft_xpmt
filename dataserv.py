@@ -201,9 +201,9 @@ class LeadtimetoSale(Extract):
         for i in self.idd:
             idarg = i['Id']
             i['Invoices'] = (self.get_inv(idarg))
-            Process().procdict(i)
-            self.first_inv_date(i)
             scrap.get_daystosale(i)
+            Process().procdict(i)
+            # self.first_inv_date(i)
             # self.created_minus_sale(i)  # use scrap.get_daystosale() in here somehow
 
         return self.idd
@@ -219,10 +219,6 @@ class LeadtimetoSale(Extract):
         self.xinf=self.invoices(target_id = idarg)
 
         return self.xinf
-
-    # def get_leadtime(self, ltsquery):
-        # for result in ltsquery:
-            # self.first_inv_date(result)
 
     def first_inv_date(self, dct):
         '''Pass in dict with Invoices key, returns earliest invoice date.'''

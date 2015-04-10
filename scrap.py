@@ -104,13 +104,16 @@ def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
     return days
 
 def get_daystosale(leadtimedict):
+    '''Pass in dict from LeadtimetoSale(), returns number of days from
+    lead generation to first purchase for that contact.
+    '''
     if 'DateCreated' and 'FirstSale' in leadtimedict.keys():
-
         created = leadtimedict['DateCreated']
         firstsale = leadtimedict['FirstSale']
         days = datecompare(created, firstsale)
-
         leadtimedict['LeadTime'] = days
+    else:
+        print('Need to know FirstSale to do this.')
 
 def linecount(filename):
     with open(filename) as file:
