@@ -201,10 +201,10 @@ class LeadtimetoSale(Extract):
         for i in self.idd:
             idarg = i['Id']
             i['Invoices'] = (self.get_inv(idarg))
+            self.first_inv_date(i)
             scrap.get_daystosale(i)
-            Process().procdict(i)
-            # self.first_inv_date(i)
-            # self.created_minus_sale(i)  # use scrap.get_daystosale() in here somehow
+            # Process().procdict(i)  # Process class should be used last I think
+            # self.created_minus_sale(i)
 
         return self.idd
 
@@ -223,17 +223,16 @@ class LeadtimetoSale(Extract):
     def first_inv_date(self, dct):
         '''Pass in dict with Invoices key, returns earliest invoice date.'''
         if 'Invoices' in dct.keys():
-            inv = dct['Invoices']
-            # for invoice in inv:
-                # Process().procdict(invoice)
-            dates = []
-            for invo in inv:
-                dates.extend(list(invo.values()))
-            if len(dates) == 0:
+            inv_dates = dct['Invoices']
+            for date in range(0, len(inv_dates)):
+                inv_dates[date] = inv_dates[date]['DateCreated']
+            if len(inv_dates) == 0:
                 first_sale = 0
-            elif len(dates) != 0:
-                first_sale = min(dates)
+            elif len(inv_dates) != 0:
+                first_sale = min(inv_dates)
+
             dct['FirstSale'] = first_sale
+
         else:
             print("Need to give me a dictionary with an 'Invoices' key.")
 
