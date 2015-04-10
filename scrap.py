@@ -96,25 +96,36 @@ def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
     objects which have the timetuple() method.
     '''
     import time
-
+    # need to handle int values of 0 for dates here
     date1 = xmlrpcDateCreated.timetuple()
-    date2 = xmlrpcFirstSale.timetuple()
-    days = time.mktime(date1) - time.mktime(date2)
+    if type(xmlrpcFirstSale) is not int:
+        date2 = xmlrpcFirstSale.timetuple()
+        days = time.mktime(date2) - time.mktime(date1)
+        seconds_per_annum = 60*60*24
+        days = days // seconds_per_annum
+    else:
+        days = 999999  # create outlier to filter or review
 
     return days
 
 def get_daystosale(leadtimedict):
+    '''Pass in dict from LeadtimetoSale(), returns number of days from
+    lead generation to first purchase for that contact.
+    '''
     if 'DateCreated' and 'FirstSale' in leadtimedict.keys():
-
         created = leadtimedict['DateCreated']
         firstsale = leadtimedict['FirstSale']
         days = datecompare(created, firstsale)
-
-        return days
+        leadtimedict['LeadTime'] = days
+    else:
+        print('Need to know FirstSale to do this.')
 
 def linecount(filename):
+    if type(filename) != str:
+        filename = str(filename)
+
     with open(filename) as file:
         for i, l in enumerate(file):
             pass
 
-        return i+1
+        return i + 1
