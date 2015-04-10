@@ -26,10 +26,11 @@ TODO:
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
 + composition basic query objects for use in reporting class
 + possible Report() class for inidividual reports to inherit from
++ possible Transform() class for things common to each report
++ complete methods to compare datetime objects
 + use pandas or matplotlib for dataviz
 + statistics?
 + create file of functions to call _basequery() with different args
-+ include csv.DictWriter() to output files
 '''
 
 import os
