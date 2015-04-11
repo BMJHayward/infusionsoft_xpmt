@@ -31,6 +31,7 @@ TODO:
 + use pandas or matplotlib for dataviz
 + statistics?
 + create file of functions to call _basequery() with different args
++ tests for class: LeadtimetoSale()
 '''
 
 import os
@@ -282,39 +283,51 @@ class CustomerLifetimeValue(Extract):
 
 
 class Process:
-    '''Raw query data processed here for target output.'''
+    '''Raw query data processed here for target output. Primary method to use
+    is procarray(), but others are used for specific cases.
+    '''
 
-    def procarray(self, array):
-
+    @staticmethod
+    def procarray(array):
+        '''IS api returns list of entries for each query. Pass the whole array
+        in here to format ready for output.
+        '''
         for dictionary in range(0, len(array)):
 
             if type(array[dictionary]) is list:
-                self.procarray(array[dictionary])
+                procarray(array[dictionary])
 
             elif type(array[dictionary]) is dict:
                 array[dictionary] = list(array[dictionary].values())[0]
 
-    def procdict(self, dictionary):
-
+    @staticmethod
+    def procdict(dictionary):
+        '''IS api returns entries as dicts, here if/elif/else is used to
+        filter entries by keys.
+        '''
         for key in dictionary.keys():
 
             if key == 'DateCreated':
-                self.procdate(key, dictionary)
+                Process.procdate(key, dictionary)
 
             elif key == 'Invoices':
                 invlist = dictionary[key]
                 for inv in invlist:
-                    self.procdict(inv)
+                    Process.procdict(inv)
 
-    def procdate(self, key, dictionary):
-
+    @staticmethod
+    def procdate(key, dictionary):
+        '''Pass a dictionary with "DateCreated" key, strip out date as YYYYMMDD
+        without converting object type.
+        '''
         date = str(dictionary[key])
         date = date.split('T')[0]
         date = int(date)
         dictionary[key] = date
 
-    def combine_list(self, *lists):
-
+    @staticmethod
+    def combine_list(*lists):
+        '''Pass in arbitrary number of lists, zip em all up!'''
         ziplist = zip(*lists)
         ziplist = list(ziplist)
 
