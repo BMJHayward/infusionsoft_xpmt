@@ -10,7 +10,9 @@ import dataserv as iq
 
 iqcxn = iq.Query()
 iqout = iq.Output()
-
+iqext = iq.Extract()
+iqprc = iq.Process()
+iqlts = iq.LeadtimetoSale()
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
@@ -27,21 +29,6 @@ class TestQuery(unittest.TestCase):
 
         print(iqcxn.infusionsoft.DataService('query', table, limit,
               page, query, returnFields))
-
-    def test_querytags(self):
-
-        data = iqcxn.tags()
-        self.assertIs(type(data), list)
-
-    def test_querydate(self):
-
-        data = iqcxn.dates()
-        self.assertIs(type(data), list)
-
-    def test_queryleadsource(self):
-
-        data = iqcxn.leadsources()
-        self.assertIs(type(data), list)
 
     def test_basequery(self):
 
@@ -77,40 +64,92 @@ class TestQuery(unittest.TestCase):
         print(pagecount)
         self.assertIs(type(pagecount), int)
 
+
+class TestExtract(unittest.TestCase):
+
+    def test_querytags(self):
+
+        data = iqext.tags()
+        self.assertIs(type(data), list)
+
+    def test_querydate(self):
+
+        data = iqext.dates()
+        self.assertIs(type(data), list)
+
+    def test_queryleadsource(self):
+
+        data = iqext.leadsources()
+        self.assertIs(type(data), list)
+
+    def test_invoices(self):
+
+        targ_id = 1000
+        inv_arg = dict(limit=9)
+        inv_list = iqext.invoices(targ_id, **inv_arg)
+        self.assertIs(type(inv_list), list)
+
+    def test_cost_sale_leadsource(self):
+
+        pass
+
+    def test_average_transaction_value(self):
+
+        pass
+
+    def test_customer_lifetime_value(self):
+
+        pass
+
+class TestLeadtimeToSale(unittest.TestCase):
+
+    def test_leadtime_to_sale(self):
+        ltslist = iqlts.leadtime()
+        for dic in ltslist:
+            self.assertTrue('Invoices' in dic and
+            'DateCreated' in dic and
+            'Id' in dic
+            )
+
+    def test_iddates(self):
+        datelist = iqlts.iddates()
+        for dic in datelist:
+            self.assertTrue('Id' in dic and 'DateCreated' in dic)
+
+    def test_get_inv(self):
+        invlist = iqlts.get_inv(11)  # using 11 as dummy id
+        for dic in invlist:
+            self.assertTrue('DateCreated' in dic)
+
+
 class TestProcess(unittest.TestCase):
     ''' test query data is processed correctly '''
 
+    def test_procarray(self):
 
-    def test_iter_array(self):
+        sample_list = iqext.leadsources()
+        iqprc.procarray(sample_list)
+        print(sample_list)
+        self.assertIsNotNone(sample_list)
+        self.assertIs(type(sample_list), list)
 
-        sample_list = iqcxn.leadsources()
-        lead_list = iq.Process(sample_list)
-        final_list = lead_list.iter_array()
-        print(final_list)
-        self.assertIsNotNone(final_list)
-        self.assertIs(type(final_list), list)
+    def test_procdict(self):
 
-    def test_query_process(self):
+        dates = iqext.dates()
+        for date in dates:
+            iqprc.procdict(date)
+        for date in dates:
+            for value in date.values():
+                self.assertIs(type(value), int)
 
-        tags = iq.Query().tags()
-        self.assertIsNotNone(tags)
-        print(tags)
-        self.assertIs(type(tags[0].get('GroupId')), int)
-
-    def test_testlist(self):
-
-        testlist = iq.sourcelist()
-        print(testlist)
-        self.assertIsNotNone(testlist)
-        self.assertIs(type(testlist), list)
 
 class TestOutput(unittest.TestCase):
 
-    
     def test_asfile(self):
 
         test_msg = iqout.asfile()
         self.assertIs(type(test_msg), str)
+
 
 if __name__ == '__main__':
     unittest.main()
