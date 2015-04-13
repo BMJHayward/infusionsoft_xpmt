@@ -108,6 +108,16 @@ def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
 
     return days
 
+def better_datecompare(date1,date2):
+    from datetime import datetime, timedelta
+    date1=date1.timetuple()
+    date2=date2.timetuple()
+    date1=datetime(date1.tm_year,date1.tm_mon,date1.tm_mday)
+    date2=datetime(date2.tm_year,date2.tm_mon,date2.tm_mday)
+    days=date2-date1
+
+    return days
+
 def get_daystosale(leadtimedict):
     '''Pass in dict from LeadtimetoSale(), returns number of days from
     lead generation to first purchase for that contact.

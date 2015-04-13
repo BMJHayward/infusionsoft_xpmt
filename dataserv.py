@@ -283,51 +283,39 @@ class CustomerLifetimeValue(Extract):
 
 
 class Process:
-    '''Raw query data processed here for target output. Primary method to use
-    is procarray(), but others are used for specific cases.
-    '''
+    '''Raw query data processed here for target output.'''
 
-    @staticmethod
-    def procarray(array):
-        '''IS api returns list of entries for each query. Pass the whole array
-        in here to format ready for output.
-        '''
+    def procarray(self, array):
+
         for dictionary in range(0, len(array)):
 
             if type(array[dictionary]) is list:
-                procarray(array[dictionary])
+                self.procarray(array[dictionary])
 
             elif type(array[dictionary]) is dict:
                 array[dictionary] = list(array[dictionary].values())[0]
 
-    @staticmethod
-    def procdict(dictionary):
-        '''IS api returns entries as dicts, here if/elif/else is used to
-        filter entries by keys.
-        '''
+    def procdict(self, dictionary):
+
         for key in dictionary.keys():
 
             if key == 'DateCreated':
-                Process.procdate(key, dictionary)
+                self.procdate(key, dictionary)
 
             elif key == 'Invoices':
                 invlist = dictionary[key]
                 for inv in invlist:
-                    Process.procdict(inv)
+                    self.procdict(inv)
 
-    @staticmethod
-    def procdate(key, dictionary):
-        '''Pass a dictionary with "DateCreated" key, strip out date as YYYYMMDD
-        without converting object type.
-        '''
+    def procdate(self, key, dictionary):
+
         date = str(dictionary[key])
         date = date.split('T')[0]
         date = int(date)
         dictionary[key] = date
 
-    @staticmethod
-    def combine_list(*lists):
-        '''Pass in arbitrary number of lists, zip em all up!'''
+    def combine_list(self, *lists):
+
         ziplist = zip(*lists)
         ziplist = list(ziplist)
 
