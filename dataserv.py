@@ -36,6 +36,7 @@ TODO:
 
 import os
 import csv
+from datetime import datetime, timedelta
 from infusionsoft.library import Infusionsoft
 import scrap
 
@@ -293,7 +294,7 @@ class Process:
                 self.procarray(array[dictionary])
 
             elif type(array[dictionary]) is dict:
-                array[dictionary] = list(array[dictionary].values())[0]
+                self.procdict(dictionary)
 
     def procdict(self, dictionary):
 

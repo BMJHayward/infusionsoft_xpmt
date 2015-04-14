@@ -118,6 +118,18 @@ def better_datecompare(date1,date2):
 
     return days
 
+def convert_infusiondate(IS_dateobject):
+    from datetime import datetime
+    date = IS_dateobject.timetuple()
+    date = datetime(date.tm_year, date.tm_mon, date.tm_mday)
+
+    return date
+
+def datetime_to_excel(dateobj):
+    xldate = dateobj.strftime('%x')
+
+    return xldate
+
 def get_daystosale(leadtimedict):
     '''Pass in dict from LeadtimetoSale(), returns number of days from
     lead generation to first purchase for that contact.
