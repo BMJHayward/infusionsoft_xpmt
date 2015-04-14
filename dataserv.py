@@ -284,7 +284,7 @@ class Process:
                 self.procarray(array[dictionary])
 
             elif type(array[dictionary]) is dict:
-                self.procdict(dictionary)
+                self.procdict(array[dictionary])
 
     def procdict(self, dictionary):
         for key in dictionary.keys():
@@ -293,9 +293,7 @@ class Process:
                 self.procdate(key, dictionary)
 
             elif key == 'Invoices':
-                invlist = dictionary[key]
-                for inv in invlist:
-                    self.procdict(inv)
+                self.procarray(dictionary[key])
 
     def procdate(self, key, dictionary):
         IS_date = dictionary[key]
