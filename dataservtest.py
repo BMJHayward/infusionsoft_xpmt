@@ -6,6 +6,7 @@ cgi.test() to test script with HTTP headers and HTML.
     See docs.python.org/3/library/cgi.html
 '''
 import unittest
+from datetime import datetime
 import dataserv as iq
 
 iqcxn = iq.Query()
@@ -140,7 +141,7 @@ class TestProcess(unittest.TestCase):
             iqprc.procdict(date)
         for date in dates:
             for value in date.values():
-                self.assertIs(type(value), int)
+                self.assertIs(type(value), datetime)
 
 
 class TestOutput(unittest.TestCase):
