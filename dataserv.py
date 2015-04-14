@@ -48,7 +48,6 @@ class Query:
         ''' Instantiate Infusionsoft object and create connection to
            account app.
         '''
-
         self.key = os.environ['INFUSION_APIKEY']
         self.app_name = os.environ['INFUSION_APPNAME']
         self.infusionsoft = Infusionsoft(self.app_name, self.key)
@@ -78,21 +77,18 @@ class Query:
             return self.data
 
         except Exception as exc:
-
             print('Error running query: ', exc)
 
     def _count(self, table, field):
         '''Return number of entries in table to retrieve all data.
             Return an int to use as limit in queries, append to list results.
         '''
-
         self.count = self.infusionsoft.DataService('count', table, {field: '%'})
 
         return self.count
 
     def _getpages(self, table, field):
         '''Calculate number of pages to search through using dataservice.'''
-
         self.totalrecords = self._count(table, field)
         self.pages = (self.totalrecords//999 + 1)
 
@@ -103,7 +99,6 @@ class Extract(Query):
     '''Pull mass data for analysis using Query() as base. Intended as layer
       between direct queries and each report class.
     '''
-
     def __init__(self):
         '''Use super() to create API connection.
         Timeframes for reported data.'''
@@ -116,7 +111,6 @@ class Extract(Query):
 
     def tags(self, **kwargs):
         '''Return tags for target contact.'''
-
         self.tagargs = dict(
             table='ContactGroupAssign',
             queryData={'ContactId': '154084'},
@@ -132,7 +126,6 @@ class Extract(Query):
 
     def dates(self, **kwargs):
         '''Return list of date created for all contact types.'''
-
         self.dateargs = dict(
             table='Contact',
             queryData={'ContactType': '%'},
@@ -198,7 +191,6 @@ class LeadtimetoSale(Extract):
         ''' Use extract() to get data, use process() to make it sensible.
            Return an object useful for visualistion.
         '''
-
         self.idd = self.iddates()
 
         for i in self.idd:
@@ -285,9 +277,7 @@ class CustomerLifetimeValue(Extract):
 
 class Process:
     '''Raw query data processed here for target output.'''
-
     def procarray(self, array):
-
         for dictionary in range(0, len(array)):
 
             if type(array[dictionary]) is list:
@@ -297,7 +287,6 @@ class Process:
                 self.procdict(dictionary)
 
     def procdict(self, dictionary):
-
         for key in dictionary.keys():
 
             if key == 'DateCreated':
@@ -309,14 +298,17 @@ class Process:
                     self.procdict(inv)
 
     def procdate(self, key, dictionary):
+        IS_date = dictionary[key]
+        newdate = self.convert_date(IS_date)
+        dictionary[key] = newdate
 
-        date = str(dictionary[key])
-        date = date.split('T')[0]
-        date = int(date)
-        dictionary[key] = date
+    def convert_date(self, IS_dateobject):
+        convdate = IS_dateobject.timetuple()
+        convdate = datetime(convdate.tm_year, convdate.tm_mon, convdate.tm_mday)
+
+        return convdate
 
     def combine_list(self, *lists):
-
         ziplist = zip(*lists)
         ziplist = list(ziplist)
 
@@ -325,7 +317,6 @@ class Process:
 
 class Output:
     '''Take data ready for output. Methods to write to file.'''
-
     @staticmethod
     def asfile(target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
