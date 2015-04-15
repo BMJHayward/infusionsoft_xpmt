@@ -188,11 +188,11 @@ class LeadtimetoSale(Extract):
     >>> leadtime = LeadtimetoSale().leadtime()
     >>> Output().ascsvdict(leadtime)
     '''
-    def leadtime(self):
+    def leadtime(self, **kwargs):
         ''' Use extract() to get data, use process() to make it sensible.
            Return an object useful for visualistion.
         '''
-        self.idd = self.iddates()
+        self.idd = self.iddates(**kwargs)
 
         for i in self.idd:
             idarg = i['Id']
@@ -207,6 +207,8 @@ class LeadtimetoSale(Extract):
     def iddates(self, **kwargs):
         '''Returns Id and DateCreated from Contact table as dict.'''
         self.id = dict(returnData = ['Id', 'DateCreated'])
+        if kwargs is not None:
+            self.id.update(kwargs)
 
         return self._basequery(**self.id)
 
