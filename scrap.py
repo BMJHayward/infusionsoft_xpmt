@@ -151,3 +151,24 @@ def linecount(filename):
             pass
 
         return i + 1
+
+def leadtime_test():
+    import dataserv as ds
+    limit=dict(limit=1000)
+    lts=ds.LeadtimetoSale().leadtime(**limit)
+    ds.Process().procarray(lts)
+    for item in lts:
+        print(item)
+
+def leadtime_test2():
+    import dataserv as ds
+    id_pages = ds.Query()._getpages('Contact','Id')
+    limit = 999
+    lts = []
+    dscxn = ds.LeadtimetoSale()
+    for page in range(0, id_pages + 1):
+        ref_point = dict(page = page, limit = limit)
+        lts.extend(dscxn.leadtime(**ref_point))
+    ds.Process().procarray(lts)
+    for item in lts:
+        print(item)
