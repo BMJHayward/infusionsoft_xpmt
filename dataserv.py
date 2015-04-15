@@ -37,6 +37,7 @@ TODO:
 import os
 import csv
 from datetime import datetime, timedelta
+import time
 from infusionsoft.library import Infusionsoft
 import scrap
 
@@ -292,8 +293,14 @@ class Process:
             if key == 'DateCreated':
                 self.procdate(key, dictionary)
 
+            elif key == 'FirstSale' and type(dictionary[key]) != int:
+                self.procdate(key,dictionary)
+
             elif key == 'Invoices':
                 self.procarray(dictionary[key])
+
+            else:
+                pass
 
     def procdate(self, key, dictionary):
         IS_date = dictionary[key]
@@ -301,10 +308,13 @@ class Process:
         dictionary[key] = newdate
 
     def convert_date(self, IS_dateobject):
-        convdate = IS_dateobject.timetuple()
-        convdate = datetime(convdate.tm_year, convdate.tm_mon, convdate.tm_mday)
+        try:
+            convdate = IS_dateobject.timetuple()
+            convdate = datetime(convdate.tm_year, convdate.tm_mon, convdate.tm_mday)
 
-        return convdate
+            return convdate
+        except TypeError as te:
+            print("wrong type ", te)
 
     def combine_list(self, *lists):
         ziplist = zip(*lists)
