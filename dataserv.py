@@ -297,8 +297,11 @@ class Process:
                 self.procdate(key,dictionary)
 
             elif key == 'Invoices':
-                self.procarray(dictionary[key])
-
+                # self.procarray(dictionary[key])
+                invlist = dictionary[key]
+                for inv in range(0,len(invlist)):
+                    invlist[inv] = self.convert_date(invlist[inv])
+                dictionary[key] = invlist
             else:
                 pass
 

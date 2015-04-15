@@ -101,8 +101,8 @@ def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
     if type(xmlrpcFirstSale) is not int:
         date2 = xmlrpcFirstSale.timetuple()
         days = time.mktime(date2) - time.mktime(date1)
-        seconds_per_annum = 60*60*24
-        days = days // seconds_per_annum
+        seconds_per_day = 60*60*24
+        days = days // seconds_per_day
     else:
         days = 999999  # create outlier to filter or review
 
