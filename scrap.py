@@ -2,7 +2,6 @@ import csv
 import dataserv
 
 
-
 def list_to_file(targ_list):
     with open('inv_list','a+') as tempfile:
         for i in range(0, len(targ_list)):
@@ -38,7 +37,6 @@ def histogram():
     datescount = Counter(dates)
 
     return datescount
-
 
 def sourcelist(cxn):
     testlist = [cxn.dates(), cxn.tags(), cxn.leadsources()]
