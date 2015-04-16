@@ -39,7 +39,7 @@ import csv
 from datetime import datetime, timedelta
 import time
 from infusionsoft.library import Infusionsoft
-import scrap
+import scrap  # FUTURE TODO: remove this import when ready
 
 
 class Query:

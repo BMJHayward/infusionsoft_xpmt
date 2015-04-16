@@ -45,36 +45,6 @@ def sourcelist(cxn):
 
     return testlist
 
-def parse_datetimeobject(dtobj):
-    '''
-    try this later:
-    from datetime import datetime
-    date_obj = datetime.strptime(dtobj)
-    '''
-    dtobjframe = dataserv.Process(dtobj)
-    dates = dtobjframe.iter_array()
-
-    return dates
-
-def earliest_date(datearray):
-    earliest = min(datearray)
-
-    return earliest
-
-def compare_date(date1, date2):
-    leadtime = abs(date1 - date2)
-
-    return leadtime
-
-def leadtime():
-    testcontlist = dataserv.Extract().contact_idanddate()
-    testinvlist = dataserv.LeadtimeToSale().contact_invoices()
-    '''
-        print(parse_datetimeobject(testinvlist[0][1], dataserv)
-        print(parse_datetimeobject(testcontlist), dataserv)
-    '''
-    return [testcontlist,testinvlist]
-
 def padlist(list1, list2):
     if len(list1)>len(list2):
         padding=(len(list1)-len(list2))*[0]
@@ -88,25 +58,6 @@ def padlist(list1, list2):
     ziplist = zip(list1, list2)
 
     return ziplist
-
-def datecompare(xmlrpcDateCreated, xmlrpcFirstSale):
-    '''Calc days between 2 dates returned from IS.
-    Dates passed in must be xmlrpc.client.DateTime if python3.x or
-    xmlrpclib.DateTime if python2.x. Can also use DateTime-like
-    objects which have the timetuple() method.
-    '''
-    import time
-    # need to handle int values of 0 for dates here
-    date1 = xmlrpcDateCreated.timetuple()
-    if type(xmlrpcFirstSale) is not int:
-        date2 = xmlrpcFirstSale.timetuple()
-        days = time.mktime(date2) - time.mktime(date1)
-        seconds_per_day = 60*60*24
-        days = days // seconds_per_day
-    else:
-        days = 999999  # create outlier to filter or review
-
-    return days
 
 def better_datecompare(date1,date2):
     from datetime import datetime, timedelta
