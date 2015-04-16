@@ -198,7 +198,7 @@ class LeadtimetoSale(Extract):
             idarg = i['Id']
             i['Invoices'] = (self.get_inv(idarg))
             self.first_inv_date(i)
-            scrap.get_daystosale(i)
+            self.get_daystosale(i)
             # Process().procdict(i)  # Process class should be used last I think
             # self.created_minus_sale(i)
 
@@ -238,6 +238,37 @@ class LeadtimetoSale(Extract):
         '''Gives number of days between date of lead and date of sale.'''
         leadtime = dct['FirstSale'] - dct['DateCreated']
         dct['LeadTime'] = leadtime
+
+    def get_daystosale(self, leadtimedict):
+        '''Pass in dict from LeadtimetoSale(), returns number of days from
+        lead generation to first purchase for that contact.
+        '''
+        if 'DateCreated' and 'FirstSale' in leadtimedict.keys():
+            self.created = leadtimedict['DateCreated']
+            self.firstsale = leadtimedict['FirstSale']
+            self.days = datecompare(self.created, self.firstsale)
+            leadtimedict['LeadTime'] = self.days
+        else:
+            print('Need to know FirstSale to do this.')
+
+    def datecompare(self, xmlrpcDateCreated, xmlrpcFirstSale):
+        '''Calc days between 2 dates returned from IS.
+        Dates passed in must be xmlrpc.client.DateTime if python3.x or
+        xmlrpclib.DateTime if python2.x. Can also use DateTime-like
+        objects which have the timetuple() method.
+        '''
+        import time
+        # need to handle int values of 0 for dates here
+        self.date1 = xmlrpcDateCreated.timetuple()
+        if type(xmlrpcFirstSale) is not int:
+            self.date2 = xmlrpcFirstSale.timetuple()
+            self.days = time.mktime(date2) - time.mktime(date1)
+            seconds_per_day = 60*60*24
+            self.days = self.days // seconds_per_day
+        else:
+            self.days = 999999  # create outlier to filter or review
+
+        return self.days
 
 
 class CostSaleLeadsource(Extract):
@@ -371,6 +402,12 @@ class Output:
             writer = csv.DictWriter(data, fieldnames=names)
             writer.writeheader()
             writer.writerows(item)
+
+    @staticmethod
+    def datetime_to_excel(dateobj):
+        xldate = dateobj.strftime('%x')
+
+        return xldate
 
     @staticmethod
     def ashtml(self, queryfunc, filename):
