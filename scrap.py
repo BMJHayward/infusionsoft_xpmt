@@ -97,10 +97,9 @@ def leadtime_test2():
     id_pages = ds.Query()._getpages('Contact','Id')
     limit = 999
     lts = []
-    dscxn = ds.LeadtimetoSale()
     for page in range(0, id_pages + 1):
         ref_point = dict(page = page, limit = limit)
-        lts.extend(dscxn.leadtime(**ref_point))
+        lts.extend(ds.LeadtimetoSale().leadtime(**ref_point))
     ds.Process().procarray(lts)
     for item in lts:
         print(item)

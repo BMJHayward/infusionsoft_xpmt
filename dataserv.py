@@ -246,7 +246,7 @@ class LeadtimetoSale(Extract):
         if 'DateCreated' and 'FirstSale' in leadtimedict.keys():
             self.created = leadtimedict['DateCreated']
             self.firstsale = leadtimedict['FirstSale']
-            self.days = datecompare(self.created, self.firstsale)
+            self.days = self.datecompare(self.created, self.firstsale)
             leadtimedict['LeadTime'] = self.days
         else:
             print('Need to know FirstSale to do this.')
@@ -262,7 +262,7 @@ class LeadtimetoSale(Extract):
         self.date1 = xmlrpcDateCreated.timetuple()
         if type(xmlrpcFirstSale) is not int:
             self.date2 = xmlrpcFirstSale.timetuple()
-            self.days = time.mktime(date2) - time.mktime(date1)
+            self.days = time.mktime(self.date2) - time.mktime(self.date1)
             seconds_per_day = 60*60*24
             self.days = self.days // seconds_per_day
         else:
