@@ -1,6 +1,8 @@
 import csv
 import dataserv
+import pdb
 
+pdb.set_trace()
 
 def list_to_file(targ_list):
     with open('inv_list','a+') as tempfile:
