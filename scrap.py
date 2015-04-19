@@ -103,3 +103,20 @@ def leadtime_test2():
     ds.Process().procarray(lts)
     for item in lts:
         print(item)
+
+def extract_toDB(query_array):
+    '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
+    in tables to avoid type conversion for datetime objects.
+    '''
+    import sqlite3
+    conn = sqlite3.connect('dataserv.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE contacts
+            (id text, datecrtd text, leadsrc text)''')
+    for item in query_array:
+        # insert item into db. think about datatypes here
+        # could possibly just write item as one whole string.
+        # read it back in as dict later
+        pass
+    conn.commit()
+    conn.close()
