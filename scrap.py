@@ -111,13 +111,12 @@ def sendto_sqlite(query_array):
     import sqlite3
     conn = sqlite3.connect('dataserv.db')
     c = conn.cursor()
-    c.execute('''CREATE TABLE contacts
-            (id text, datecrtd text, leadsrc text)''')
+    c.execute('CREATE TABLE contacts (key text, value integer);')
     for item in query_array:
         # insert item into db. think about datatypes here
         # could possibly just write item as one whole string.
         # read it back in as dict later
-        pass
+        c.executemany('insert into contacts values (?,?);', item.iteritems())
     conn.commit()
     conn.close()
 
@@ -127,4 +126,3 @@ def sendto_json(query_array):
     with open('dataserv.json') as file:
         for item in diclist:
             json.dump(item, file)
-
