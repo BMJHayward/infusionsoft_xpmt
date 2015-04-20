@@ -104,7 +104,7 @@ def leadtime_test2():
     for item in lts:
         print(item)
 
-def extract_toDB(query_array):
+def sendto_sqlite(query_array):
     '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
     in tables to avoid type conversion for datetime objects.
     '''
@@ -120,3 +120,11 @@ def extract_toDB(query_array):
         pass
     conn.commit()
     conn.close()
+
+def sendto_json(query_array):
+    '''Use json to store entire query as json file.'''
+    import json
+    with open('dataserv.json') as file:
+        for item in diclist:
+            json.dump(item, file)
+
