@@ -126,3 +126,11 @@ def sendto_json(query_array):
     with open('dataserv.json') as file:
         for item in diclist:
             json.dump(item, file)
+
+def get_csv(filename):
+    if type(filename) != str:
+        filename = str(filename)
+    with open(filename) as csvfile:
+        reader = csv.DictReader(csvfile)
+
+    return reader
