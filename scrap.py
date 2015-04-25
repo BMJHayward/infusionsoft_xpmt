@@ -130,7 +130,7 @@ def sendto_json(query_array):
 def get_csv(filename):
     if type(filename) != str:
         filename = str(filename)
-    with open(filename) as csvfile:
-        reader = csv.DictReader(csvfile)
+    with open(filename, newline = '') as csvfile:
+        reader = csv.reader(csvfile, delimiter = ',')
 
     return reader
