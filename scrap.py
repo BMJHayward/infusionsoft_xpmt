@@ -135,3 +135,14 @@ def get_csv(filename):
         reader = csv.reader(csvfile, delimiter = ',')
         csvdata.extend([entry for entry in reader])
     return csvdata
+
+def convert_invoice(invoicetotal):
+    '''Use in database on sales.Inv Total column, passing one row at a time.'''
+    import locale
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+    purchase=invoicetotal[0]
+    purhcase=purchase.strip('AUD')
+    purchase=purchase.strip('-AUD')
+    purchase=locale.atof(purchase)
+    
+    return purchase
