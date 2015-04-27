@@ -156,3 +156,10 @@ def convert_invoice():
     c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', invoices)
     conn.commit()
     conn.close()
+
+leadtime_sqlquery =
+'''SELECT sales.ContactId, contacts.[Date Created] as entrydate, sales.[Inv Total], sales.Date as saledate
+FROM contacts
+INNER JOIN sales
+ON contacts.Id=sales.ContactId;
+'''
