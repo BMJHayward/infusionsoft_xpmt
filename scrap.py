@@ -139,10 +139,19 @@ def get_csv(filename):
 def convert_invoice(invoicetotal):
     '''Use in database on sales.Inv Total column, passing one row at a time.'''
     import locale
-    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
-    purchase=invoicetotal[0]
-    purhcase=purchase.strip('AUD')
-    purchase=purchase.strip('-AUD')
-    purchase=locale.atof(purchase)
-    
-    return purchase
+    import sqllite3
+    conn = sqlite3.connect('dataserv.db')
+    c = conn.cursor()
+    c.execute('SELECT rowid, [Inv Total] from sales;')
+    invoices = c.fetchall()
+    newinvoices = []
+    for invoice in invoices:
+        purchase = invoicel[1]
+        purhcase = purchase.strip('AUD')
+        purchase = purchase.strip('-AUD')
+        purchase = locale.atof(purchase)
+        newinvoices.extend((purchase, invoices.index(invoice)))
+
+    c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', (newinvoices))
+    conn.commit()
+    conn.close()
