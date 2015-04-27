@@ -136,22 +136,23 @@ def get_csv(filename):
         csvdata.extend([entry for entry in reader])
     return csvdata
 
-def convert_invoice(invoicetotal):
-    '''Use in database on sales.Inv Total column, passing one row at a time.'''
+def convert_invoice():
+    '''Converts currency column in AUD to float.'''
     import locale
     import sqllite3
+    locale.setlocale(LC_ALL, '')
     conn = sqlite3.connect('dataserv.db')
     c = conn.cursor()
-    c.execute('SELECT rowid, [Inv Total] from sales;')
+    c.execute('SELECT [Inv Total], rowid from sales;')
     invoices = c.fetchall()
-    newinvoices = []
+    for row in invoices:
+        invoices[invoices.index(row)] = list(row)
     for invoice in invoices:
-        purchase = invoicel[1]
-        purhcase = purchase.strip('AUD')
-        purchase = purchase.strip('-AUD')
-        purchase = locale.atof(purchase)
-        newinvoices.extend((purchase, invoices.index(invoice)))
-
-    c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', (newinvoices))
+        invoice[0] = invoice[0].strip('AUD')
+        invoice[0] = invoice[0].strip('-AUD')
+        invoice[0] = locale.atof(invoice[0])
+    for row in invoices:
+        invoices[invoices.index(row)] = tuple(row)
+    c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', invoices)
     conn.commit()
     conn.close()
