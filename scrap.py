@@ -139,8 +139,8 @@ def get_csv(filename):
 def convert_invoice():
     '''Converts currency column in AUD to float.'''
     import locale
-    import sqllite3
-    locale.setlocale(LC_ALL, '')
+    import sqlite3
+    locale.setlocale(locale.LC_ALL, '')
     conn = sqlite3.connect('dataserv.db')
     c = conn.cursor()
     c.execute('SELECT [Inv Total], rowid from sales;')
