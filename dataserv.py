@@ -293,6 +293,7 @@ class AvgerageTransactionValue(Extract):
         +get all sales
         +get number of sales
         +do arithmetic mean
+        + e.g: in SQL: SELECT AVG([Inv Total]) FROM sales;
         '''
         raise NotImplementedError
 

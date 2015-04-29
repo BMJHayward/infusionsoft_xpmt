@@ -156,3 +156,22 @@ def convert_invoice():
     c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', invoices)
     conn.commit()
     conn.close()
+
+joinContacts_invoices='''
+SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],sales.[Inv Total], sales.Date
+FROM contacts INNER JOIN sales
+ON contacts.Id = sales.ContactId;
+'''
+def get_invoicedates():
+    import sqlite3
+    conn=sqlite3.connect('dataserv.db')
+    c=conn.cursor()
+    conn.text_factory=int
+    c.execute('SELECT Id FROM contacts;')
+    contact_idlist=c.fetchall()
+    contact_invlist=dict()
+    for cid in contact_idlist:
+        c.execute('SELECT Date FROM sales where sales.ContactId = (?);', cid)
+        contact_invlist[cid]=c.fetchall()
+    conn.close()
+    return contact_invlist
