@@ -164,6 +164,7 @@ ON contacts.Id = sales.ContactId;
 '''
 def get_invoicedates():
     import sqlite3
+
     conn=sqlite3.connect('dataserv.db')
     c=conn.cursor()
     conn.text_factory=int
@@ -175,3 +176,12 @@ def get_invoicedates():
         contact_invlist[cid]=c.fetchall()
     conn.close()
     return contact_invlist
+
+def leadtime_fromdb():
+    import datetime
+    import time
+    datestr1 = min(invdates)
+    invd1=time.strptime(datestr1, '%d/%m/%Y')
+    invd2=time.strptime(datecreated, '%d/%m/%Y')
+    leadtime = (time.mktime(invd1)-time.mktime(invd2))//(60*60*24)
+    return leadtime
