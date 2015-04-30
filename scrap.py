@@ -201,10 +201,17 @@ def leadtime_fromdb(datecreated, invdates):
     datecreated: contact creation date
     invdates: list of invoice dates for same contact
     '''
-    import datetime
-    import time
-    datestr1 = min(invdates)
-    invd1 = time.strptime(datestr1, '%d/%m/%Y')
-    invd2 = time.strptime(datecreated, '%d/%m/%Y')
-    leadtime = (time.mktime(invd1) - time.mktime(invd2))//(60*60*24)
+
+    dt_creat = convert_datestring(datecreated)
+    new_invdates = [convert_datestring(date) for date in invdates]
+    firstsale = min(new_invdates)
+    leadtime = firstsale - dt_creat
+
     return leadtime  # this will be number of days
+
+def convert_datestring(targetdate):
+    import time
+    newdate = time.strptime(targetdate.split()[0], '%d/%m/%Y')
+    newdate = time.mktime(newdate)
+    
+    return newdate
