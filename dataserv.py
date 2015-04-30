@@ -35,6 +35,7 @@ TODO:
 '''
 
 import os
+import sqlite3
 import csv
 from datetime import datetime, timedelta
 import time
@@ -295,8 +296,13 @@ class AvgerageTransactionValue(Extract):
         +do arithmetic mean
         + e.g: in SQL: SELECT AVG([Inv Total]) FROM sales;
         '''
-        raise NotImplementedError
 
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        c.execute('SELECT AVG([Inv Total]) FROM sales;')
+        atv = c.fetchall()
+
+        return atv
 
 class CustomerLifetimeValue(Extract):
     '''Calculate how much any given customer spends on average long term.'''
