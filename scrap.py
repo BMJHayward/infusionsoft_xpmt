@@ -171,6 +171,7 @@ def get_invoicedates():
     c.execute('SELECT Id FROM contacts;')
     contact_idlist=c.fetchall()
     contact_invlist=dict()
+    conn.text_factory=str
     for cid in contact_idlist:
         c.execute('SELECT Date FROM sales where sales.ContactId = (?);', cid)
         contact_invlist[cid]=c.fetchall()

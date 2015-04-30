@@ -285,7 +285,7 @@ class CostSaleLeadsource(Extract):
         raise NotImplementedError
 
 
-class AvgerageTransactionValue(Extract):
+class AverageTransactionValue(Extract):
     '''Return average amount of transaction across all products.
     TODO: segment by time period, leadsource, product etc.
     '''
