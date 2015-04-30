@@ -157,32 +157,54 @@ def convert_invoice():
     conn.commit()
     conn.close()
 
-joinContacts_invoices='''
-SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],sales.[Inv Total], sales.Date
-FROM contacts INNER JOIN sales
-ON contacts.Id = sales.ContactId;
-'''
+def create_joinlisttable():
+    import sqlite3
+    
+    conn = sqlite3.connect('dataserv.db')
+    c = conn.cursor()
+    
+    join_contacts_invoices = '''\
+    SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],\
+    sales.[Inv Total], sales.Date \
+    FROM contacts INNER JOIN sales \
+    ON contacts.Id = sales.ContactId;\
+    '''
+    c.execute(join_contacts_invoices)
+    joinlist = c.fetchall()
+    joinlist.sort(key = lambda x: x[0])
+
+    c.execute('''CREATE TABLE contactsales(
+    contactid text, entrydate text, leadsource text, invamount text, invdate text);''')
+    c.executemany('INSERT INTO contactsales VALUES (?,?,?,?,?);', joinlist)
+    
+    conn.commit()
+    conn.close()
+
 def get_invoicedates():
     import sqlite3
 
-    conn=sqlite3.connect('dataserv.db')
-    c=conn.cursor()
-    conn.text_factory=int
+    conn = sqlite3.connect('dataserv.db')
+    c = conn.cursor()
+    conn.text_factory = int
     c.execute('SELECT Id FROM contacts;')
-    contact_idlist=c.fetchall()
-    contact_invlist=dict()
-    conn.text_factory=str
+    contact_idlist = c.fetchall()
+    contact_invlist = dict()
+    conn.text_factory = str
     for cid in contact_idlist:
         c.execute('SELECT Date FROM sales where sales.ContactId = (?);', cid)
-        contact_invlist[cid]=c.fetchall()
+        contact_invlist[cid] = c.fetchall()
     conn.close()
     return contact_invlist
 
-def leadtime_fromdb():
+def leadtime_fromdb(datecreated, invdates):
+    '''
+    datecreated: contact creation date
+    invdates: list of invoice dates for same contact
+    '''
     import datetime
     import time
     datestr1 = min(invdates)
-    invd1=time.strptime(datestr1, '%d/%m/%Y')
-    invd2=time.strptime(datecreated, '%d/%m/%Y')
-    leadtime = (time.mktime(invd1)-time.mktime(invd2))//(60*60*24)
-    return leadtime
+    invd1 = time.strptime(datestr1, '%d/%m/%Y')
+    invd2 = time.strptime(datecreated, '%d/%m/%Y')
+    leadtime = (time.mktime(invd1) - time.mktime(invd2))//(60*60*24)
+    return leadtime  # this will be number of days
