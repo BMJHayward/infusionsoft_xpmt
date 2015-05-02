@@ -240,9 +240,16 @@ def leadtime_from_db(targetlist):
         if row[0] not in newlist.keys():
             newlist[row[0]] = dict(entrydate = row[1], invdates = [row[4]])
         else: 
-            newlist[row[0]]['invdate'].append(row[4])
+            newlist[row[0]]['invdates'].append(row[4])
     
-        leadtime = min(newlist['invdate']) - newlist['entrydate']
+        leadtime = min(newlist[row[0]]['invdates']) - newlist[row[0]]['entrydate']
         newlist[row[0]]['leadtime'] = leadtime
 
     return newlist
+
+def get_leadtime():
+    data = get_db_table('dataserv.db', 'contactsales')
+    data = list_convert(data)
+    data = leadtime_from_db(data)
+    
+    return data
