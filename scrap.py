@@ -216,6 +216,14 @@ def convert_datestring(targetdate):
     
     return newdate
 
+def list_convert(targetlist):
+    newlist = [list(row) for row in targetlist]
+    for newrow in newlist:
+        newrow[1] = convert_datestring(newrow[1])
+        newrow[4] = convert_datestring(newrow[4])
+
+    return newlist
+
 def get_db_table(db_name, db_table):
     import sqlite3
 
@@ -225,3 +233,16 @@ def get_db_table(db_name, db_table):
     db_tbl = c.fetchall()
 
     return db_tbl
+
+def leadtime_from_db(targetlist):
+    newlist = dict()
+    for row in targetlist:
+        if row[0] not in newlist.keys():
+            newlist[row[0]] = dict(entrydate = row[1], invdates = [row[4]])
+        else: 
+            newlist[row[0]]['invdate'].append(row[4])
+    
+        leadtime = min(newlist['invdate']) - newlist['entrydate']
+        newlist[row[0]]['leadtime'] = leadtime
+
+    return newlist
