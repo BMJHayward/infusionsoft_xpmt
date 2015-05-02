@@ -211,9 +211,11 @@ def leadtime_fromdb(datecreated, invdates):
 
 def convert_datestring(targetdate):
     import time
+    seconds_per_day = 60*60*24
     newdate = time.strptime(targetdate.split()[0], '%d/%m/%Y')
     newdate = time.mktime(newdate)
-    
+    newdate = newdate // seconds_per_day
+
     return newdate
 
 def list_convert(targetlist):
@@ -247,9 +249,30 @@ def leadtime_from_db(targetlist):
 
     return newlist
 
-def get_leadtime():
+def get_data():
     data = get_db_table('dataserv.db', 'contactsales')
     data = list_convert(data)
     data = leadtime_from_db(data)
     
     return data
+
+def get_leadtime():
+    leadtime = [row['leadtime'] for row in get_data().values()]
+
+    return leadtime
+
+def stats_leadtime():
+    lt = get_leadtime()
+    average_leadtime = sum(lt)/len(lt)
+    std_dev = statistics.pstdev(lt)
+    quintile_5 = 0.8*len(lt)
+    eightypercentofsales = lt[quintile_5]
+    median_leadtime = statistics.median(lt)
+
+    stats = dict(average_leadtime = average_leadtime,
+                standard_deviation = standard_deviation,
+                eightypercent = eightypercentofsales,
+                median = meadian_leadtime,
+                fulllist = lt)
+
+    return stats
