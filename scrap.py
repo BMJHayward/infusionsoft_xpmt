@@ -215,3 +215,13 @@ def convert_datestring(targetdate):
     newdate = time.mktime(newdate)
     
     return newdate
+
+def get_db_table(db_name, db_table):
+    import sqlite3
+
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    c.execute('SELECT * FROM {}'.format(db_table))
+    db_tbl = c.fetchall()
+
+    return db_tbl
