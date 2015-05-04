@@ -157,9 +157,122 @@ def convert_invoice():
     conn.commit()
     conn.close()
 
-leadtime_sqlquery =
-'''SELECT sales.ContactId, contacts.[Date Created] as entrydate, sales.[Inv Total], sales.Date as saledate
-FROM contacts
-INNER JOIN sales
-ON contacts.Id=sales.ContactId;
-'''
+def create_joinlisttable():
+    import sqlite3
+
+    conn = sqlite3.connect('dataserv.db')
+    c = conn.cursor()
+
+    join_contacts_invoices = '''\
+    SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],\
+    sales.[Inv Total], sales.Date \
+    FROM contacts INNER JOIN sales \
+    ON contacts.Id = sales.ContactId;\
+    '''
+    c.execute(join_contacts_invoices)
+    joinlist = c.fetchall()
+    joinlist.sort(key = lambda x: x[0])
+
+    c.execute('''CREATE TABLE contactsales(
+    contactid text, entrydate text, leadsource text, invamount text, invdate text);''')
+    c.executemany('INSERT INTO contactsales VALUES (?,?,?,?,?);', joinlist)
+
+    conn.commit()
+    conn.close()
+
+def get_invoicedates():
+    import sqlite3
+
+    conn = sqlite3.connect('dataserv.db')
+    c = conn.cursor()
+    conn.text_factory = int
+    c.execute('SELECT Id FROM contacts;')
+    contact_idlist = c.fetchall()
+    contact_invlist = dict()
+    conn.text_factory = str
+    for cid in contact_idlist:
+        c.execute('SELECT Date FROM sales where sales.ContactId = (?);', cid)
+        contact_invlist[cid] = c.fetchall()
+    conn.close()
+    return contact_invlist
+
+def leadtime_fromdb(datecreated, invdates):
+    '''
+    datecreated: contact creation date
+    invdates: list of invoice dates for same contact
+    '''
+
+    dt_creat = convert_datestring(datecreated)
+    new_invdates = [convert_datestring(date) for date in invdates]
+    firstsale = min(new_invdates)
+    leadtime = firstsale - dt_creat
+
+    return leadtime  # this will be number of days
+
+def convert_datestring(targetdate):
+    import time
+    seconds_per_day = 60*60*24
+    newdate = time.strptime(targetdate.split()[0], '%d/%m/%Y')
+    newdate = time.mktime(newdate)
+    newdate = newdate // seconds_per_day
+
+    return newdate
+
+def list_convert(targetlist):
+    newlist = [list(row) for row in targetlist]
+    for newrow in newlist:
+        newrow[1] = convert_datestring(newrow[1])
+        newrow[4] = convert_datestring(newrow[4])
+
+    return newlist
+
+def get_db_table(db_name, db_table):
+    import sqlite3
+
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    c.execute('SELECT * FROM {}'.format(db_table))
+    db_tbl = c.fetchall()
+
+    return db_tbl
+
+def leadtime_from_db(targetlist):
+    newlist = dict()
+    for row in targetlist:
+        if row[0] not in newlist.keys():
+            newlist[row[0]] = dict(entrydate = row[1], invdates = [row[4]])
+        else:
+            newlist[row[0]]['invdates'].append(row[4])
+
+        leadtime = min(newlist[row[0]]['invdates']) - newlist[row[0]]['entrydate']
+        newlist[row[0]]['leadtime'] = leadtime
+
+    return newlist
+
+def get_data():
+    data = get_db_table('dataserv.db', 'contactsales')
+    data = list_convert(data)
+    data = leadtime_from_db(data)
+
+    return data
+
+def get_leadtime():
+    leadtime = [row['leadtime'] for row in get_data().values()]
+
+    return leadtime
+
+def stats_leadtime():
+    lt = get_leadtime()
+    average_leadtime = sum(lt)/len(lt)
+    std_dev = statistics.pstdev(lt)
+    quintile_5 = 0.8*len(lt)
+    eightypercentofsales = lt[quintile_5]
+    median_leadtime = statistics.median(lt)
+
+    stats = dict(average_leadtime = average_leadtime,
+                standard_deviation = standard_deviation,
+                eightypercent = eightypercentofsales,
+                median = meadian_leadtime,
+                fulllist = lt)
+
+    return stats

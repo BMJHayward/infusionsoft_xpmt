@@ -35,6 +35,7 @@ TODO:
 '''
 
 import os
+import sqlite3
 import csv
 from datetime import datetime, timedelta
 import time
@@ -284,7 +285,7 @@ class CostSaleLeadsource(Extract):
         raise NotImplementedError
 
 
-class AvgerageTransactionValue(Extract):
+class AverageTransactionValue(Extract):
     '''Return average amount of transaction across all products.
     TODO: segment by time period, leadsource, product etc.
     '''
@@ -293,9 +294,15 @@ class AvgerageTransactionValue(Extract):
         +get all sales
         +get number of sales
         +do arithmetic mean
+        + e.g: in SQL: SELECT AVG([Inv Total]) FROM sales;
         '''
-        raise NotImplementedError
 
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        c.execute('SELECT AVG([Inv Total]) FROM sales;')
+        atv = c.fetchall()
+
+        return atv
 
 class CustomerLifetimeValue(Extract):
     '''Calculate how much any given customer spends on average long term.'''
