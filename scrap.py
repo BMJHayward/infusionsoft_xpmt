@@ -1,6 +1,6 @@
 import csv
 import dataserv
-
+import statistics
 
 def list_to_file(targ_list):
     with open('inv_list','a+') as tempfile:
@@ -265,14 +265,14 @@ def stats_leadtime():
     lt = get_leadtime()
     average_leadtime = sum(lt)/len(lt)
     std_dev = statistics.pstdev(lt)
-    quintile_5 = 0.8*len(lt)
+    quintile_5 = int(0.8*len(lt))
     eightypercentofsales = lt[quintile_5]
     median_leadtime = statistics.median(lt)
 
     stats = dict(average_leadtime = average_leadtime,
-                standard_deviation = standard_deviation,
+                standard_deviation = std_dev,
                 eightypercent = eightypercentofsales,
-                median = meadian_leadtime,
+                median = median_leadtime,
                 fulllist = lt)
 
     return stats
