@@ -261,7 +261,7 @@ class LeadtimetoSale(Extract):
         import time
         # need to handle int values of 0 for dates here
         self.date1 = xmlrpcDateCreated.timetuple()
-        if type(xmlrpcFirstSale) is not int:
+        if type(xmlrpcFirstSale) != int:
             self.date2 = xmlrpcFirstSale.timetuple()
             self.days = time.mktime(self.date2) - time.mktime(self.date1)
             seconds_per_day = 60*60*24
@@ -282,7 +282,7 @@ class CostSaleLeadsource(Extract):
         ^OR^
         +run leadsource ROI report
         '''
-        raise NotImplementedError
+        pass
 
 
 class AverageTransactionValue(Extract):
@@ -313,7 +313,7 @@ class CustomerLifetimeValue(Extract):
         +repeat for all contacts who have purchased
         +get average of all contacts lifetimevalue
         '''
-        raise NotImplementedError
+        pass
 
 
 class Process:
@@ -418,16 +418,25 @@ class Output:
 
     @staticmethod
     def ashtml(self, queryfunc, filename):
-
-        raise NotImplementedError
+        '''Put in data, intended to save as valid static webpage.'''
+        pass
 
     @staticmethod
     def asimage(self, queryfunc, filename):
-
-        raise NotImplementedError
+        '''If you just want the visual form of your data.'''
+        pass
 
     @staticmethod
     def as3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
 
-        raise NotImplementedError
+        pass
+
+    @staticmethod
+    def to_picklejar(data_to_save, name):
+        '''Give whatever object you have to pickle, save it for your next session with given name.'''
+        import pickle
+        if type(name) != str:
+            name = str(name)
+        with open(name, 'wb') as picklejar:
+            pickle.dump(data_to_save, picklejar)
