@@ -208,7 +208,7 @@ def leadtime_fromdb(datecreated, invdates):
     leadtime = firstsale - dt_creat
 
     return leadtime  # this will be number of days
-
+''' === Leadtime calcs begin here to EOF === '''
 def convert_datestring(targetdate):
     import time
     seconds_per_day = 60*60*24
@@ -263,9 +263,9 @@ def get_leadtime():
 
 def stats_leadtime():
     lt = get_leadtime()
-    average_leadtime = sum(lt)/len(lt)
+    average_leadtime = sum(lt) / len(lt)
     std_dev = statistics.pstdev(lt)
-    quintile_5 = int(0.8*len(lt))
+    quintile_5 = int(0.8 * len(lt))
     eightypercentofsales = lt[quintile_5]
     median_leadtime = statistics.median(lt)
 
@@ -276,3 +276,5 @@ def stats_leadtime():
                 fulllist = lt)
 
     return stats
+
+''' Leadtime calcs end here '''
