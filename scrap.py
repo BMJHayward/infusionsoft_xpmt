@@ -1,6 +1,7 @@
 import csv
 import dataserv
 import statistics
+import sqlite3
 
 def list_to_file(targ_list):
     with open('inv_list','a+') as tempfile:
@@ -208,60 +209,14 @@ def leadtime_fromdb(datecreated, invdates):
     leadtime = firstsale - dt_creat
 
     return leadtime  # this will be number of days
+
 ''' === Leadtime calcs begin here to EOF === '''
-def convert_datestring(targetdate):
-    import time
-    seconds_per_day = 60*60*24
-    newdate = time.strptime(targetdate.split()[0], '%d/%m/%Y')
-    newdate = time.mktime(newdate)
-    newdate = newdate // seconds_per_day
-
-    return newdate
-
-def list_convert(targetlist):
-    newlist = [list(row) for row in targetlist]
-    for newrow in newlist:
-        newrow[1] = convert_datestring(newrow[1])
-        newrow[4] = convert_datestring(newrow[4])
-
-    return newlist
-
-def get_db_table(db_name, db_table):
-    import sqlite3
-
-    conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    c.execute('SELECT * FROM {}'.format(db_table))
-    db_tbl = c.fetchall()
-
-    return db_tbl
-
-def leadtime_from_db(targetlist):
-    newlist = dict()
-    for row in targetlist:
-        if row[0] not in newlist.keys():
-            newlist[row[0]] = dict(entrydate = row[1], invdates = [row[4]])
-        else:
-            newlist[row[0]]['invdates'].append(row[4])
-
-        leadtime = min(newlist[row[0]]['invdates']) - newlist[row[0]]['entrydate']
-        newlist[row[0]]['leadtime'] = leadtime
-
-    return newlist
-
-def get_data():
-    data = get_db_table('dataserv.db', 'contactsales')
-    data = list_convert(data)
-    data = leadtime_from_db(data)
-
-    return data
-
-def get_leadtime():
-    leadtime = [row['leadtime'] for row in get_data().values()]
-
-    return leadtime
 
 def stats_leadtime():
+    ''' Main entry point for database form of Leadtime class.
+       Pass it nothing, get back dictionary mean, median, quintile and
+       std deviation. Component functions listed below in order of appearance.
+    '''
     lt = get_leadtime()
     average_leadtime = sum(lt) / len(lt)
     std_dev = statistics.pstdev(lt)
@@ -276,5 +231,58 @@ def stats_leadtime():
                 fulllist = lt)
 
     return stats
+
+def get_leadtime():
+    leadtime = [row['leadtime'] for row in get_data().values()]
+
+    return leadtime
+
+def get_data():
+    data = get_db_table('dataserv.db', 'contactsales')
+    data = list_convert(data)
+    data = leadtime_from_db(data)
+
+    return data
+
+def get_db_table(db_name, db_table):
+
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    c.execute('SELECT * FROM {}'.format(db_table))
+    db_tbl = c.fetchall()
+
+    return db_tbl
+
+def list_convert(targetlist):
+    newlist = [list(row) for row in targetlist]
+    for newrow in newlist:
+        newrow[1] = convert_datestring(newrow[1])
+        newrow[4] = convert_datestring(newrow[4])
+
+    return newlist
+
+def leadtime_from_db(targetlist):
+    newlist = dict()
+    for row in targetlist:
+        if row[0] not in newlist.keys():
+            newlist[row[0]] = dict(entrydate = row[1], invdates = [row[4]])
+        else:
+            newlist[row[0]]['invdates'].append(row[4])
+
+        leadtime = min(newlist[row[0]]['invdates']) - newlist[row[0]]['entrydate']
+        # leadtime = abs(leadtime)  # may not want this, may want to ignore negative values completely
+        newlist[row[0]]['leadtime'] = leadtime
+
+    return newlist
+
+def convert_datestring(targetdate):
+    import time
+    seconds_per_day = 60*60*24
+    newdate = time.strptime(targetdate.split()[0], '%d/%m/%Y')
+    newdate = time.mktime(newdate)
+    newdate = newdate // seconds_per_day
+
+    return newdate
+
 
 ''' Leadtime calcs end here '''
