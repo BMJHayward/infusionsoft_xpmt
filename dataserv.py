@@ -37,10 +37,109 @@ TODO:
 import os
 import sqlite3
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import time
 from infusionsoft.library import Infusionsoft
-import scrap  # FUTURE TODO: remove this import when ready
+
+
+class LocalDB:
+    @staticmethod
+    def sendto_sqlite(query_array):
+        '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
+        in tables to avoid type conversion for datetime objects.
+        '''
+        import sqlite3
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        c.execute('CREATE TABLE contacts (key text, value integer);')
+        for item in query_array:
+            # insert item into db. think about datatypes here
+            # could possibly just write item as one whole string.
+            # read it back in as dict later
+            c.executemany('insert into contacts values (?,?);', item.iteritems())
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def sendto_json(query_array):
+        '''Use json to store entire query as json file.'''
+        import json
+        with open('dataserv.json') as file:
+            for item in diclist:
+                json.dump(item, file)
+
+    @staticmethod
+    def get_csv(filename):
+        if type(filename) != str:
+            filename = str(filename)
+        csvdata = []
+        with open(filename, newline = '') as csvfile:
+            reader = csv.reader(csvfile, delimiter = ',')
+            csvdata.extend([entry for entry in reader])
+        return csvdata
+
+    @staticmethod
+    def convert_invoice():
+        '''Converts currency column in AUD to float.'''
+        import locale
+        import sqlite3
+        locale.setlocale(locale.LC_ALL, '')
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        c.execute('SELECT [Inv Total], rowid from sales;')
+        invoices = c.fetchall()
+        for row in invoices:
+            invoices[invoices.index(row)] = list(row)
+        for invoice in invoices:
+            invoice[0] = invoice[0].strip('AUD')
+            invoice[0] = invoice[0].strip('-AUD')
+            invoice[0] = locale.atof(invoice[0])
+        for row in invoices:
+            invoices[invoices.index(row)] = tuple(row)
+        c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', invoices)
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def create_joinlisttable():
+        import sqlite3
+
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+
+        join_contacts_invoices = '''\
+        SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],\
+        sales.[Inv Total], sales.Date \
+        FROM contacts INNER JOIN sales \
+        ON contacts.Id = sales.ContactId;\
+        '''
+        c.execute(join_contacts_invoices)
+        joinlist = c.fetchall()
+        joinlist.sort(key = lambda x: x[0])
+
+        c.execute('''CREATE TABLE contactsales(
+        contactid text, entrydate text, leadsource text, invamount text, invdate text);''')
+        c.executemany('INSERT INTO contactsales VALUES (?,?,?,?,?);', joinlist)
+
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def get_invoicedates():
+        import sqlite3
+
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        conn.text_factory = int
+        c.execute('SELECT Id FROM contacts;')
+        contact_idlist = c.fetchall()
+        contact_invlist = dict()
+        conn.text_factory = str
+        for cid in contact_idlist:
+            c.execute('SELECT Date FROM sales where sales.ContactId = (?);', cid)
+            contact_invlist[cid] = c.fetchall()
+        conn.close()
+        return contact_invlist
 
 
 class Query:
@@ -181,6 +280,91 @@ class Extract(Query):
 
         return self.inv_dates
 
+class Leadtime:
+    '''
+    Use local database to calculate leadtime instead of API.
+    Just call stats_leadtime(), returns dict with everything.
+    '''
+
+    @staticmethod
+    def stats_leadtime():
+        ''' Main entry point for database form of Leadtime class.
+           Pass it nothing, get back dictionary mean, median, quintile and
+           std deviation. Component functions listed below in order of appearance.
+        '''
+        lt = get_leadtime()
+        average_leadtime = sum(lt) / len(lt)
+        std_dev = statistics.pstdev(lt)
+        quintile_5 = int(0.8 * len(lt))
+        eightypercentofsales = lt[quintile_5]
+        median_leadtime = statistics.median(lt)
+
+        stats = dict(average_leadtime = average_leadtime,
+                    standard_deviation = std_dev,
+                    eightypercent = eightypercentofsales,
+                    median = median_leadtime,
+                    fulllist = lt)
+
+        return stats
+
+    @staticmethod
+    def get_leadtime():
+        leadtime = [row['leadtime'] for row in get_data().values()]
+        leadtime = [i for i in leadtime if i >= 0]
+
+        return leadtime
+
+    @staticmethod
+    def get_data():
+        data = get_db_table('dataserv.db', 'contactsales')
+        data = list_convert(data)
+        data = leadtime_from_db(data)
+
+        return data
+
+    @staticmethod
+    def get_db_table(db_name, db_table):
+
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+        c.execute('SELECT * FROM {}'.format(db_table))
+        db_tbl = c.fetchall()
+
+        return db_tbl
+
+    @staticmethod
+    def list_convert(targetlist):
+        newlist = [list(row) for row in targetlist]
+        for newrow in newlist:
+            newrow[1] = convert_datestring(newrow[1])
+            newrow[4] = convert_datestring(newrow[4])
+
+        return newlist
+
+    @staticmethod
+    def leadtime_from_db(targetlist):
+        newlist = dict()
+        for row in targetlist:
+            if row[0] not in newlist.keys():
+                newlist[row[0]] = dict(entrydate = row[1], invdates = [row[4]])
+            else:
+                newlist[row[0]]['invdates'].append(row[4])
+
+            leadtime = min(newlist[row[0]]['invdates']) - newlist[row[0]]['entrydate']
+            newlist[row[0]]['leadtime'] = leadtime.days
+
+        return newlist
+
+    @staticmethod
+    def convert_datestring(targetdate):
+
+        newdate = targetdate.split()[0]
+        newdate = newdate.split('/')
+        newdate = [int(n) for n in newdate]
+        newdate.reverse()
+        newdate = date(newdate[0], newdate[1], newdate[2])
+     
+        return newdate
 
 class LeadtimetoSale(Extract):
     '''

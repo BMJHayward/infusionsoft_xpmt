@@ -15,6 +15,22 @@ iqext = iq.Extract()
 iqprc = iq.Process()
 iqlts = iq.LeadtimetoSale()
 
+class TestLocalDB(unittest.TestCase):
+
+    def test_sendto_sqlite():
+        pass
+    def test_sendto_json():
+        pass
+    def test_get_csv():
+        pass
+    def test_convert_invoices():
+        pass
+    def test_create_joinlisttable():
+        pass
+    def test_get_invoicedates():
+        pass
+
+
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
         class for each component class
@@ -150,6 +166,24 @@ class TestOutput(unittest.TestCase):
 
         test_msg = iqout.asfile()
         self.assertIs(type(test_msg), str)
+
+
+class TestLeadtime(unittest.TestCase):
+
+    def test_stats_leadtime():
+        pass
+    def test_get_leadtime():
+        pass
+    def test_get_data():
+        pass
+    def test_get_db_table():
+        pass
+    def test_list_convert():
+        pass
+    def test_leadtime_from_db():
+        pass
+    def test_convert_datestring():
+        pass
 
 
 if __name__ == '__main__':
