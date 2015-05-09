@@ -14,20 +14,23 @@ iqout = iq.Output()
 iqext = iq.Extract()
 iqprc = iq.Process()
 iqlts = iq.LeadtimetoSale()
+iqlt2 = iq.Leadtime()
+iqldb = iq.LocalDB()
+
 
 class TestLocalDB(unittest.TestCase):
 
-    def test_sendto_sqlite():
+    def test_sendto_sqlite(self):
         pass
-    def test_sendto_json():
+    def test_sendto_json(self):
         pass
-    def test_get_csv():
+    def test_get_csv(self):
         pass
-    def test_convert_invoices():
+    def test_convert_invoices(self):
         pass
-    def test_create_joinlisttable():
+    def test_create_joinlisttable(self):
         pass
-    def test_get_invoicedates():
+    def test_get_invoicedates(self):
         pass
 
 
@@ -170,19 +173,19 @@ class TestOutput(unittest.TestCase):
 
 class TestLeadtime(unittest.TestCase):
 
-    def test_stats_leadtime():
+    def test_stats_leadtime(self):
         pass
-    def test_get_leadtime():
+    def test_get_leadtime(self):
         pass
-    def test_get_data():
+    def test_get_data(self):
         pass
-    def test_get_db_table():
+    def test_get_db_table(self):
         pass
-    def test_list_convert():
+    def test_list_convert(self):
         pass
-    def test_leadtime_from_db():
+    def test_leadtime_from_db(self):
         pass
-    def test_convert_datestring():
+    def test_convert_datestring(self):
         pass
 
 
