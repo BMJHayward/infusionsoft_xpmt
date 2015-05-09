@@ -2,6 +2,8 @@ import csv
 import dataserv
 import statistics
 import sqlite3
+from datetime import date
+import time
 
 def list_to_file(targ_list):
     with open('inv_list','a+') as tempfile:
@@ -234,6 +236,7 @@ def stats_leadtime():
 
 def get_leadtime():
     leadtime = [row['leadtime'] for row in get_data().values()]
+    leadtime = [i for i in leadtime if i >= 0]
 
     return leadtime
 
@@ -270,19 +273,18 @@ def leadtime_from_db(targetlist):
             newlist[row[0]]['invdates'].append(row[4])
 
         leadtime = min(newlist[row[0]]['invdates']) - newlist[row[0]]['entrydate']
-        # leadtime = abs(leadtime)  # may not want this, may want to ignore negative values completely
-        newlist[row[0]]['leadtime'] = leadtime
+        newlist[row[0]]['leadtime'] = leadtime.days
 
     return newlist
 
 def convert_datestring(targetdate):
-    import time
-    seconds_per_day = 60*60*24
-    newdate = time.strptime(targetdate.split()[0], '%d/%m/%Y')
-    newdate = time.mktime(newdate)
-    newdate = newdate // seconds_per_day
 
+    newdate = targetdate.split()[0]
+    newdate = newdate.split('/')
+    newdate = [int(n) for n in newdate]
+    newdate.reverse()
+    newdate = date(newdate[0], newdate[1], newdate[2])
+ 
     return newdate
-
 
 ''' Leadtime calcs end here '''
