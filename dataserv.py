@@ -37,8 +37,9 @@ TODO:
 import os
 import sqlite3
 import csv
-from datetime import datetime, timedelta, date
 import time
+import statistics
+from datetime import datetime, timedelta, date
 from infusionsoft.library import Infusionsoft
 
 
@@ -286,14 +287,14 @@ class Leadtime:
     Just call stats_leadtime(), returns dict with everything.
     '''
 
-    @staticmethod
-    def stats_leadtime():
+
+    def stats_leadtime(self, ):
         ''' Main entry point for database form of Leadtime class.
            Pass it nothing, get back dictionary mean, median, quintile and
            std deviation. Component functions listed below in order of appearance.
         '''
-        lt = get_leadtime()
-        average_leadtime = sum(lt) / len(lt)
+        lt = self.get_leadtime()
+        average_leadtime = statistics.mean(lt)
         std_dev = statistics.pstdev(lt)
         quintile_5 = int(0.8 * len(lt))
         eightypercentofsales = lt[quintile_5]
@@ -307,23 +308,23 @@ class Leadtime:
 
         return stats
 
-    @staticmethod
-    def get_leadtime():
-        leadtime = [row['leadtime'] for row in get_data().values()]
+
+    def get_leadtime(self, ):
+        leadtime = [row['leadtime'] for row in self.get_data().values()]
         leadtime = [i for i in leadtime if i >= 0]
 
         return leadtime
 
-    @staticmethod
-    def get_data():
-        data = get_db_table('dataserv.db', 'contactsales')
-        data = list_convert(data)
-        data = leadtime_from_db(data)
+
+    def get_data(self, ):
+        data = self.get_db_table('dataserv.db', 'contactsales')
+        data = self.list_convert(data)
+        data = self.leadtime_from_db(data)
 
         return data
 
-    @staticmethod
-    def get_db_table(db_name, db_table):
+
+    def get_db_table(self, db_name, db_table):
 
         conn = sqlite3.connect(db_name)
         c = conn.cursor()
@@ -332,17 +333,17 @@ class Leadtime:
 
         return db_tbl
 
-    @staticmethod
-    def list_convert(targetlist):
+
+    def list_convert(self, targetlist):
         newlist = [list(row) for row in targetlist]
         for newrow in newlist:
-            newrow[1] = convert_datestring(newrow[1])
-            newrow[4] = convert_datestring(newrow[4])
+            newrow[1] = self.convert_datestring(newrow[1])
+            newrow[4] = self.convert_datestring(newrow[4])
 
         return newlist
 
-    @staticmethod
-    def leadtime_from_db(targetlist):
+
+    def leadtime_from_db(self, targetlist):
         newlist = dict()
         for row in targetlist:
             if row[0] not in newlist.keys():
@@ -355,15 +356,15 @@ class Leadtime:
 
         return newlist
 
-    @staticmethod
-    def convert_datestring(targetdate):
+
+    def convert_datestring(self, targetdate):
 
         newdate = targetdate.split()[0]
         newdate = newdate.split('/')
         newdate = [int(n) for n in newdate]
         newdate.reverse()
         newdate = date(newdate[0], newdate[1], newdate[2])
-     
+
         return newdate
 
 class LeadtimetoSale(Extract):
