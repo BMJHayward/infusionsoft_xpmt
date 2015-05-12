@@ -484,8 +484,10 @@ class AverageTransactionValue(Extract):
 
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
-        c.execute('SELECT AVG([Inv Total]) FROM sales;')
+        c.execute('SELECT [Inv Total] FROM sales;')
         atv = c.fetchall()
+        atv = [float(i[0]) for i in atv]
+        atv = statisticsmean(atv)
 
         return atv
 
