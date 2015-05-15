@@ -54,12 +54,23 @@ class LocalDB:
         '''
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
-        c.execute('CREATE TABLE (?) (key text, value integer);', (newtable,))
-        for item in query_array:
-            # insert item into db. think about datatypes here
-            # could possibly just write item as one whole string.
-            # read it back in as dict later
-            c.executemany('insert into contacts values (?,?);', item.iteritems())
+        if isinstance(query_array, dict):
+            create_table = 'CREATE TABLE ' + newtable + ' (key text, value integer);'
+            c.execute(create_table)
+            insert_into_table = 'INSERT INTO ' + newtable + ' values (?,?);'
+            for item in query_array:
+                # insert item into db. think about datatypes here
+                # could possibly just write item as one whole string.
+                # read it back in as dict later
+                c.executemany(insert_into_table, item.iteritems())
+        elif isinstance(query_array, list):
+            create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array[0])) + ' ;'
+            c.execute(create_table)
+            questionmarks = '('+''.join(['?,' for i in range(len(query_array[0])-1)])+'?)'
+            insert_into_table = 'INSERT INTO ' + newtable + ' values ' + questionmarks + ';'
+            for row in query_array:
+                row = tuple(row)
+                c.executemany(insert_into_table, row)
         conn.commit()
         conn.close()
 
