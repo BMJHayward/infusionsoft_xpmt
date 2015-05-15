@@ -41,6 +41,9 @@ import time
 import statistics
 from datetime import datetime, timedelta, date
 from infusionsoft.library import Infusionsoft
+import json
+import locale
+import pickle
 
 
 class LocalDB:
@@ -49,7 +52,6 @@ class LocalDB:
         '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
         in tables to avoid type conversion for datetime objects.
         '''
-        import sqlite3
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
         c.execute('CREATE TABLE (?) (key text, value integer);', (newtable,))
@@ -64,7 +66,7 @@ class LocalDB:
     @staticmethod
     def sendto_json(query_array):
         '''Use json to store entire query as json file.'''
-        import json
+
         with open('dataserv.json') as file:
             for item in diclist:
                 json.dump(item, file)
@@ -82,8 +84,7 @@ class LocalDB:
     @staticmethod
     def convert_invoice():
         '''Converts currency column in AUD to float.'''
-        import locale
-        import sqlite3
+
         locale.setlocale(locale.LC_ALL, '')
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
@@ -103,7 +104,6 @@ class LocalDB:
 
     @staticmethod
     def create_joinlisttable():
-        import sqlite3
 
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
@@ -127,7 +127,6 @@ class LocalDB:
 
     @staticmethod
     def get_invoicedates():
-        import sqlite3
 
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
@@ -443,7 +442,7 @@ class LeadtimetoSale(Extract):
         xmlrpclib.DateTime if python2.x. Can also use DateTime-like
         objects which have the timetuple() method.
         '''
-        import time
+
         # need to handle int values of 0 for dates here
         self.date1 = xmlrpcDateCreated.timetuple()
         if type(xmlrpcFirstSale) != int:
@@ -622,7 +621,7 @@ class Output:
     @staticmethod
     def to_picklejar(data_to_save, name):
         '''Give whatever object you have to pickle, save it for your next session with given name.'''
-        import pickle
+
         if type(name) != str:
             name = str(name)
         with open(name, 'wb') as picklejar:
