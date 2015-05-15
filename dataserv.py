@@ -52,7 +52,7 @@ class LocalDB:
         import sqlite3
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
-        c.execute('CREATE TABLE (?) (key text, value integer);', newtable)
+        c.execute('CREATE TABLE (?) (key text, value integer);', (newtable,))
         for item in query_array:
             # insert item into db. think about datatypes here
             # could possibly just write item as one whole string.
