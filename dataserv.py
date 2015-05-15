@@ -288,7 +288,7 @@ class Leadtime:
     '''
 
 
-    def stats_leadtime(self, ):
+    def stats_leadtime(self):
         ''' Main entry point for database form of Leadtime class.
            Pass it nothing, get back dictionary mean, median, quintile and
            std deviation. Component functions listed below in order of appearance.
@@ -309,14 +309,14 @@ class Leadtime:
         return stats
 
 
-    def get_leadtime(self, ):
+    def get_leadtime(self):
         leadtime = [row['leadtime'] for row in self.get_data().values()]
         leadtime = [i for i in leadtime if i >= 0]
 
         return leadtime
 
 
-    def get_data(self, ):
+    def get_data(self):
         data = self.get_db_table('dataserv.db', 'contactsales')
         data = self.list_convert(data)
         data = self.leadtime_from_db(data)
@@ -576,23 +576,23 @@ class Output:
                 print(line)
 
     @staticmethod
-    def ascsv(targlist):
+    def ascsv(targlist, outfile):
         '''
         Pass in result of query as list of dicts from query. Alternately, use
         elif to pass result objects in different forms to the one function,
         or to several similar functions contained in Output class.
         '''
-        with open('dataserv.csv', 'w') as datafile:
+        with open(outfile, 'w') as datafile:
             writer=csv.writer(datafile)
             for item in targlist:
                 for key, value in item.items():
                     writer.writerow([key, value])
 
     @staticmethod
-    def ascsvdict(item):
+    def ascsvdict(item, outfile):
         '''Item arg is list of dicts. Like ascsv but with DictWriter class.'''
         names = item[0].keys()
-        with open('dataserv.csv','w', newline='') as data:
+        with open(outfile,'w', newline='') as data:
             writer = csv.DictWriter(data, fieldnames=names)
             writer.writeheader()
             writer.writerows(item)
