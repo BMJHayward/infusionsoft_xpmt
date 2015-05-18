@@ -16,22 +16,21 @@ DESCRIPTION
 Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, numpy etc.
 This project will keep to the stdlib where ever possible to minimise dependencies, and simplify deployment in several environments.
 
+There are 2 base classes: LocalDB and Query. LocalDB creates a local database from csv files exported from IS.
+Query uses the IS API to get data. LocalDB is the current prefferred method due to API limitation.
 
 dataserv.py is the main file of interest for the moment. this may be broken up in future as more classes are added.
 
 TODO:
 ######
 
-+ include recordcount() to return all data when using 'all' argument
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
-+ composition basic query objects for use in reporting class
 + possible Report() class for inidividual reports to inherit from
 + possible Transform() class for things common to each report
 + complete methods to compare datetime objects
 + use pandas or matplotlib for dataviz
 + statistics?
 + create file of functions to call _basequery() with different args
-+ tests for class: LeadtimetoSale()
 '''
 
 import os
@@ -47,6 +46,9 @@ import pickle
 
 
 class LocalDB:
+    ''' Methods for operating on local sqlite database.
+        Would like report classes to be able use either Query or LocalDB in the same way. Maybe.
+    '''
     @staticmethod
     def sendto_sqlite(query_array, newtable):
         '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
@@ -82,6 +84,7 @@ class LocalDB:
 
     @staticmethod
     def get_csv(filename):
+        ''' Give local csv file as string, returns a list of lists of that file. '''
         if type(filename) != str:
             filename = str(filename)
         csvdata = []
@@ -113,7 +116,9 @@ class LocalDB:
 
     @staticmethod
     def create_joinlisttable():
-
+        ''' Creates join of two tables. Currently on uses sales and contacts table.
+            Might open this to other tables later.
+        '''
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
 
@@ -136,7 +141,7 @@ class LocalDB:
 
     @staticmethod
     def get_invoicedates():
-
+        ''' Returns list of purchase dates for each contact. '''
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
         conn.text_factory = int
