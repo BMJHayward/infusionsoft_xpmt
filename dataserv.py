@@ -64,13 +64,11 @@ class LocalDB:
                 # read it back in as dict later
                 c.executemany(insert_into_table, item.iteritems())
         elif isinstance(query_array, list):
-            create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array[0])) + ' ;'
+            create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
             c.execute(create_table)
             questionmarks = '('+''.join(['?,' for i in range(len(query_array[0])-1)])+'?)'
             insert_into_table = 'INSERT INTO ' + newtable + ' values ' + questionmarks + ';'
-            for row in query_array:
-                row = tuple(row)
-                c.executemany(insert_into_table, row)
+            c.executemany(insert_into_table, query_array)
         conn.commit()
         conn.close()
 
