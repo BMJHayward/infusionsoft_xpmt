@@ -491,10 +491,11 @@ class CostSaleLeadsource(LocalDB):
         +run leadsource ROI report
         '''
         self.leadsource_ROI = self.get_db_table('dataserv.db', 'leadsource_ROI')
+        CSL = {}
         for entry in self.leadsource_ROI:
             entry = list(entry)
             self.destring_leadsourceROI_table(entry)
-        CSL = {entry[2]: (entry[5]-entry[4]) for entry in self.leadsource_ROI}
+            CSL[entry[2]] = entry[5] - entry[4]
 
         return CSL
 
