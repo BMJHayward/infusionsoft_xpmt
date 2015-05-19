@@ -40,9 +40,12 @@ def linecount(filename):
         return i + 1
 
 def destring_leadsourceROI_table(row):
-    ''' This probably belongs in class CostSaleLeadsource. '''
+    ''' This probably belongs in class CostSaleLeadsource.
+    Might also want to use named constants in to_float and to_int, but
+    I will probably only use this here and nowhere else.
+    '''
     to_float = {4,5,6,8,10,13,14}  # Uses set because I hardly ever use them and they are cool
-    to_int = {0,1,7,9,12}
+    to_int = {0,1,7,9,12}  # I also like looking at them
 
     for x in to_float:
         row[x] = float(row[x])

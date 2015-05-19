@@ -479,7 +479,7 @@ class LeadtimetoSale(Extract):
         return self.days
 
 
-class CostSaleLeadsource(Extract):
+class CostSaleLeadsource(LocalDB):
     '''Return a cost per sale per leadsource object.'''
     def cost_sale_leadsource(self):
         '''
@@ -489,8 +489,9 @@ class CostSaleLeadsource(Extract):
         ^OR^
         +run leadsource ROI report
         '''
-        pass
-
+        leadsource_ROI = get_db_table('dataserv.db', 'leadource_ROI')
+        for row in '''scrap.'''leadsource_ROI:
+            destring_leadsource_ROI_table(row)
 
 class AverageTransactionValue(Extract):
     '''Return average amount of transaction across all products.
