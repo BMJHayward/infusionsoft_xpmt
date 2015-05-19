@@ -484,8 +484,8 @@ class CostSaleLeadsource(LocalDB):
     def cost_sale_leadsource(self):
 
         '''
-        +get expenses per leadsource
-        +get number of sales per leadsource
+        +get expenses per leadsource via API
+        +get number of sales per leadsource via API
         +combine the two
         ^OR^
         +run leadsource ROI report
@@ -495,7 +495,7 @@ class CostSaleLeadsource(LocalDB):
         for entry in self.leadsource_ROI:
             entry = list(entry)
             self.destring_leadsourceROI_table(entry)
-            CSL[entry[2]] = entry[5] - entry[4]
+            CSL[entry[2]] = self.ROI_stats(entry)
 
         return CSL
 
@@ -517,6 +517,24 @@ class CostSaleLeadsource(LocalDB):
                 row[y] = int(row[y])
             except:
                 row[y] = 0
+
+    def ROI_stats(self, leadsource_row):
+        ''' Used to create a dict of dicts with stats for each leadsource. '''
+        try:
+            percent_profit = (1 - (leadsource_row[4] / leadsource_row[5])) * 100,
+        except ZeroDivisionError:
+            percent_profit = 0
+        dollar_profit  = leadsource_row[5] - leadsource_row[4],
+        revenue        = leadsource_row[5],
+        expenses       = leadsource_row[4]
+        stat_dict = dict(
+            percent_profit = percent_profit,
+            dollar_profit  = dollar_profit,
+            revenue        = revenue,
+            expenses       = expenses
+            )
+
+        return stat_dict
 
 
 class AverageTransactionValue(Extract):
