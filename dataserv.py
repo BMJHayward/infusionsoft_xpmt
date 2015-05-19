@@ -482,6 +482,7 @@ class LeadtimetoSale(Extract):
 class CostSaleLeadsource(LocalDB):
     '''Return a cost per sale per leadsource object.'''
     def cost_sale_leadsource(self):
+
         '''
         +get expenses per leadsource
         +get number of sales per leadsource
@@ -489,9 +490,33 @@ class CostSaleLeadsource(LocalDB):
         ^OR^
         +run leadsource ROI report
         '''
-        leadsource_ROI = get_db_table('dataserv.db', 'leadource_ROI')
-        for row in '''scrap.'''leadsource_ROI:
-            destring_leadsource_ROI_table(row)
+        self.leadsource_ROI = self.get_db_table('dataserv.db', 'leadsource_ROI')
+        for entry in self.leadsource_ROI:
+            entry = list(entry)
+            self.destring_leadsourceROI_table(entry)
+        CSL = {entry[2]: (entry[5]-entry[4]) for entry in self.leadsource_ROI}
+
+        return CSL
+
+    def destring_leadsourceROI_table(self, row):
+        ''' This probably belongs in class CostSaleLeadsource.
+        Might also want to use named constants in to_float and to_int, but
+        I will probably only use this here and nowhere else.
+        '''
+        to_float = {4,5,6,8,10,13,14}  # Uses set because I hardly ever use them and they are cool
+        to_int = {0,1,7,9,12}  # I also like looking at them
+
+        for x in to_float:
+            try:
+                row[x] = float(row[x])
+            except:
+                row[x] = 0
+        for y in to_int:
+            try:
+                row[y] = int(row[y])
+            except:
+                row[y] = 0
+
 
 class AverageTransactionValue(Extract):
     '''Return average amount of transaction across all products.
