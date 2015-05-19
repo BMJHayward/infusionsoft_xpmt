@@ -38,3 +38,13 @@ def linecount(filename):
             pass
 
         return i + 1
+
+def destring_leadsourceROI_table(row):
+    ''' This probably belongs in class CostSaleLeadsource. '''
+    to_float = {4,5,6,8,10,13,14}  # Uses set because I hardly ever use them and they are cool
+    to_int = {0,1,7,9,12}
+
+    for x in to_float:
+        row[x] = float(row[x])
+    for y in to_int:
+        row[y] = int(row[y])

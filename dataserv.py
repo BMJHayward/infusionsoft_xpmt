@@ -83,6 +83,16 @@ class LocalDB:
                 json.dump(item, file)
 
     @staticmethod
+    def get_db_table(db_name, db_table):
+
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+        c.execute('SELECT * FROM {}'.format(db_table))
+        db_tbl = c.fetchall()
+
+        return db_tbl
+
+    @staticmethod
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
         if type(filename) != str:
@@ -138,6 +148,16 @@ class LocalDB:
 
         conn.commit()
         conn.close()
+
+    @staticmethod
+    def get_table(tablename):
+        ''' Literally returns the entire table. '''
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        selection = 'SELECT * FROM ' + tablename + ';'
+        c.execute(selection)
+        whole_table = c.fetchall()
+        return whole_table
 
     @staticmethod
     def get_invoicedates():
@@ -294,7 +314,7 @@ class Extract(Query):
 
         return self.inv_dates
 
-class Leadtime:
+class Leadtime(LocalDB):
     '''
     Use local database to calculate leadtime instead of API.
     Just call stats_leadtime(), returns dict with everything.
@@ -335,17 +355,6 @@ class Leadtime:
         data = self.leadtime_from_db(data)
 
         return data
-
-
-    def get_db_table(self, db_name, db_table):
-
-        conn = sqlite3.connect(db_name)
-        c = conn.cursor()
-        c.execute('SELECT * FROM {}'.format(db_table))
-        db_tbl = c.fetchall()
-
-        return db_tbl
-
 
     def list_convert(self, targetlist):
         newlist = [list(row) for row in targetlist]
