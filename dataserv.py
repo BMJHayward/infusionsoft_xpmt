@@ -564,9 +564,16 @@ class AverageTransactionValue:
 
 class CustomerLifetimeValue(LocalDB):
     '''Calculate how much any given customer spends on average long term.'''
-    SQL_QUERY = 'SELECT ContactId, SUM([Inv Total]), [Lead Source] FROM sales \
-                 GROUP BY ContactId \
-                 ORDER BY ContactId;'
+
+    def __init__(self):
+        SQL_QUERY = 'SELECT ContactId, SUM([Inv Total]), [Lead Source] FROM sales \
+             GROUP BY ContactId \
+             ORDER BY ContactId;'
+        conn = sqlite3.connect('dataserv.db')
+        c = conn.cursor()
+        c.execute(SQL_QUERY)
+        CLV_DATA = c.fetchall()
+        lifetime_spend = [row[1] for row in CLV_DATA]
 
     def customer_lifetime_value(self):
         '''
