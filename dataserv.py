@@ -480,7 +480,7 @@ class LeadtimetoSale(Extract):
 
 
 class CostSaleLeadsource(LocalDB):
-    '''Return a cost per sale per leadsource object.'''
+    '''Return a cost per sale per leadsource dictionary.'''
     def cost_sale_leadsource(self):
 
         '''
@@ -512,6 +512,7 @@ class CostSaleLeadsource(LocalDB):
                 row[x] = float(row[x])
             except:
                 row[x] = 0
+
         for y in to_int:
             try:
                 row[y] = int(row[y])
@@ -527,6 +528,7 @@ class CostSaleLeadsource(LocalDB):
         dollar_profit  = leadsource_row[5] - leadsource_row[4],
         revenue        = leadsource_row[5],
         expenses       = leadsource_row[4]
+
         stat_dict = dict(
             percent_profit = percent_profit,
             dollar_profit  = dollar_profit,
@@ -555,6 +557,7 @@ class AverageTransactionValue(Extract):
         atv = c.fetchall()
         atv = [float(i[0]) for i in atv]
         atv = statistics.mean(atv)
+        conn.close()
 
         return atv
 
