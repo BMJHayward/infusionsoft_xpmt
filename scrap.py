@@ -41,10 +41,10 @@ def filelinecount(filename):
         return i + 1
 
 def linecount():
-    nump = []
+    numlines = []
     for file in list(os.walk('.'))[0][2]:
         if file.endswith('py'):
             try:
-                nump.append(filelinecount(file))
+                numlines.append(filelinecount(file))
             except: pass
-    return sum(nump)
+    return sum(numlines)

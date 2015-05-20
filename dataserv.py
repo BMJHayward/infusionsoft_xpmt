@@ -542,6 +542,7 @@ class CostSaleLeadsource(LocalDB):
 class AverageTransactionValue:
     '''Return average amount of transaction across all products.
     TODO: segment by time period, leadsource, product etc.
+    +Wouldn't mind breaking this down for each leadsource
     '''
     def average_transaction_value(self):
         '''
@@ -561,14 +562,19 @@ class AverageTransactionValue:
 
         return atv
 
-class CustomerLifetimeValue(Extract):
+class CustomerLifetimeValue(LocalDB):
     '''Calculate how much any given customer spends on average long term.'''
+    SQL_QUERY = 'SELECT ContactId, SUM([Inv Total]), [Lead Source] FROM sales \
+                 GROUP BY ContactId \
+                 ORDER BY ContactId;'
+
     def customer_lifetime_value(self):
         '''
         +get target contact invoices
         +sum value of all invoices
         +repeat for all contacts who have purchased
         +get average of all contacts lifetimevalue
+        +wouldn't mind breaking down CLV by leadsource
         '''
         pass
 
