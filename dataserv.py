@@ -29,8 +29,11 @@ TODO:
 + possible Transform() class for things common to each report
 + complete methods to compare datetime objects
 + use pandas or matplotlib for dataviz
-+ statistics?
++ base method for common statistics
++ base method to return dict of common statistics
++ base method to connect to DB, do query, fetchall(), return and close DB
 + create file of functions to call _basequery() with different args
++
 '''
 
 import os
@@ -573,7 +576,9 @@ class CustomerLifetimeValue(LocalDB):
         c = conn.cursor()
         c.execute(SQL_QUERY)
         CLV_DATA = c.fetchall()
-        lifetime_spend = [row[1] for row in CLV_DATA]
+        self.spend = [row[1] for row in CLV_DATA]
+
+        conn.close()
 
     def customer_lifetime_value(self):
         '''
@@ -583,7 +588,20 @@ class CustomerLifetimeValue(LocalDB):
         +get average of all contacts lifetimevalue
         +wouldn't mind breaking down CLV by leadsource
         '''
-        pass
+        average_CLV = statistics.mean(self.spend)
+        median_CLV = statistics.median(self.spend)
+        mode_CLV = statistics.mode(self.spend)
+        std_dev = statistics.pstdev(self.spend)
+        quintile_5 = int(0.8 * len(self.spend))
+        eighty_percent = self.spend[quintile_5]
+
+        stats = dict(average_CLV = average_CLV,
+                            standard_deviation = std_dev,
+                            eightypercent = eighty_percent,
+                            median = median_CLV,
+                            mode = mode_CLV)
+
+        return stats
 
 
 class Process:
