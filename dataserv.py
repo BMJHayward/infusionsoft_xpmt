@@ -539,7 +539,7 @@ class CostSaleLeadsource(LocalDB):
         return stat_dict
 
 
-class AverageTransactionValue(Extract):
+class AverageTransactionValue:
     '''Return average amount of transaction across all products.
     TODO: segment by time period, leadsource, product etc.
     '''
