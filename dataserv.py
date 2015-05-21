@@ -324,7 +324,7 @@ class Leadtime(LocalDB):
     '''
 
 
-    def stats_leadtime(self, INCLUDE_LIST = False):
+    def stats_LT(self, INCLUDE_LIST = False):
         ''' Main entry point for database form of Leadtime class.
            Pass it nothing, get back dictionary mean, median, quintile and
            std deviation. Component functions listed below in order of appearance.
@@ -349,7 +349,6 @@ class Leadtime(LocalDB):
                     median = median_leadtime)
 
         return stats
-
 
     def get_leadtime(self):
         leadtime = [row['leadtime'] for row in self.get_data().values()]
@@ -490,7 +489,7 @@ class LeadtimetoSale(Extract):
 
 class CostSaleLeadsource(LocalDB):
     '''Return a cost per sale per leadsource dictionary.'''
-    def cost_sale_leadsource(self):
+    def stats_CSL(self):
 
         '''
         +get expenses per leadsource via API
@@ -553,7 +552,7 @@ class AverageTransactionValue:
     TODO: segment by time period, leadsource, product etc.
     +Wouldn't mind breaking this down for each leadsource
     '''
-    def average_transaction_value(self):
+    def stats_ATV(self):
         '''
         +get all sales
         +get number of sales
@@ -586,7 +585,7 @@ class CustomerLifetimeValue(LocalDB):
 
         conn.close()
 
-    def customer_lifetime_value(self):
+    def stats_CLV(self):
         '''
         +get target contact invoices
         +sum value of all invoices
