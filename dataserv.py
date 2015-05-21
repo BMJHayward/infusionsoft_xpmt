@@ -337,16 +337,16 @@ class Leadtime(LocalDB):
         median_leadtime = statistics.median(lt)
 
         if INCLUDE_LIST == True:
-        stats = dict(average_leadtime = average_leadtime,
-                    standard_deviation = std_dev,
-                    eightypercent = eightypercentofsales,
-                    median = median_leadtime,
-                    fulllist = lt)
+            stats = dict(average_leadtime = average_leadtime,
+                standard_deviation = std_dev,
+                eightypercent = eightypercentofsales,
+                median = median_leadtime,
+                fulllist = lt)
         else:
             stats = dict(average_leadtime = average_leadtime,
-                    standard_deviation = std_dev,
-                    eightypercent = eightypercentofsales,
-                    median = median_leadtime)
+                standard_deviation = std_dev,
+                eightypercent = eightypercentofsales,
+                median = median_leadtime)
 
         return stats
 
@@ -661,6 +661,19 @@ class Process:
 
 class Output:
     '''Take data ready for output. Methods to write to file.'''
+    @staticmethod
+    def stats_getall():
+        ''' Get return data from all report classes,
+        return dict of reportname:data pairs.
+        '''
+        allstats = {
+            'LT': Leadtime().stats_LT(),
+            'CSL': CostSaleLeadsource().stats_CSL(),
+            'ATV': AverageTransactionValue().stats_ATV(),
+            'CLV': CustomerLifetimeValue().stats_CLV()
+            }
+
+        return allstats
     @staticmethod
     def asfile(target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
