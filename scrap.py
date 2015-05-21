@@ -47,4 +47,7 @@ def linecount():
             try:
                 numlines.append(filelinecount(file))
             except: pass
+    print(sum(numlines))
     return sum(numlines)
+
+linecount()
