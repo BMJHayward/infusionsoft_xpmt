@@ -662,6 +662,14 @@ class Process:
 class Output:
     '''Take data ready for output. Methods to write to file.'''
     @staticmethod
+    def stats_outputAll():
+        allstats = Output().stats_getall()
+        for report in allstats.keys():
+            Output().asfile(target=allstats[report], filename=report)
+            print(report.keys(),'\n')
+            print("Report: ", report, " saved to file successfully.")
+
+    @staticmethod
     def stats_getall():
         ''' Get return data from all report classes,
         return dict of reportname:data pairs.
@@ -688,11 +696,14 @@ class Output:
             return msg
 
         with open(filename, 'a+') as tempfile:
-            for line in data:
-                tempfile.write(repr(line))
-                tempfile.write(",")
-                tempfile.write("\n")
-                print(line)
+            try:
+                for line in data:
+                    tempfile.write(repr(line))
+                    tempfile.write(",")
+                    tempfile.write("\n")
+                    print(line)
+            except TypeError:
+                tempfile.write(data)
 
     @staticmethod
     def ascsv(targlist, outfile):
