@@ -324,7 +324,7 @@ class Leadtime(LocalDB):
     '''
 
 
-    def stats_leadtime(self):
+    def stats_leadtime(self, INCLUDE_LIST = False):
         ''' Main entry point for database form of Leadtime class.
            Pass it nothing, get back dictionary mean, median, quintile and
            std deviation. Component functions listed below in order of appearance.
@@ -336,11 +336,17 @@ class Leadtime(LocalDB):
         eightypercentofsales = lt[quintile_5]
         median_leadtime = statistics.median(lt)
 
+        if INCLUDE_LIST == True:
         stats = dict(average_leadtime = average_leadtime,
                     standard_deviation = std_dev,
                     eightypercent = eightypercentofsales,
                     median = median_leadtime,
                     fulllist = lt)
+        else:
+            stats = dict(average_leadtime = average_leadtime,
+                    standard_deviation = std_dev,
+                    eightypercent = eightypercentofsales,
+                    median = median_leadtime)
 
         return stats
 
