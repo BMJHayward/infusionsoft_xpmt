@@ -51,6 +51,6 @@ def linecount():
     return sum(numlines)
 
 
-if __name__ is "__main__":
+if __name__ == "__main__":
     x = linecount()
     print(x)
