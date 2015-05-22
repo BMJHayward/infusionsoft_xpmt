@@ -672,6 +672,7 @@ class Output:
             Output().ascsv([allstats[report]], report + '.csv')
 
             print("Report: ", report, " saved to file successfully.")
+        Output().strap_csvfiles()
 
     @staticmethod
     def strap_csvfiles():
@@ -739,7 +740,7 @@ class Output:
         elif to pass result objects in different forms to the one function,
         or to several similar functions contained in Output class.
         '''
-        with open(outfile, 'w') as datafile:
+        with open(outfile, 'w', newline='') as datafile:
             writer=csv.writer(datafile)
             for item in targlist:
                 for key, value in item.items():
