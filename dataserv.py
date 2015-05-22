@@ -566,6 +566,7 @@ class AverageTransactionValue:
         atv = c.fetchall()
         atv = [float(i[0]) for i in atv]
         atv = statistics.mean(atv)
+        atv = {'ATV': atv}  # output as dict for same formatting as other report classes
         conn.close()
 
         return atv
@@ -610,7 +611,10 @@ class CustomerLifetimeValue(LocalDB):
 
 
 class Process:
-    '''Raw query data processed here for target output.'''
+    '''Raw query data processed here for target output.
+    This class is really only useful when subclassing Extract.
+    Kept here for reference for now.
+    '''
     def procarray(self, array):
         for dictionary in range(0, len(array)):
 
@@ -662,11 +666,11 @@ class Process:
 class Output:
     '''Take data ready for output. Methods to write to file.'''
     @staticmethod
-    def stats_outputAll():
+    def stats_outputall():
         allstats = Output().stats_getall()
-        for report in allstats.keys():
-            Output().asfile(target=allstats[report], filename=report)
-            print(report.keys(),'\n')
+        for report in allstats:
+            Output().ascsv([allstats[report]], report + '.csv')
+
             print("Report: ", report, " saved to file successfully.")
 
     @staticmethod
