@@ -673,25 +673,27 @@ class Output:
 
             print("Report: ", report, " saved to file successfully.")
 
-@staticmethod
-def strap_csvfiles():
-    try:
-        import xlwt
-    except ImportError:
-        print('Python installation needs xlwt library. Try pip install xlwt on the command line.')
+    @staticmethod
+    def strap_csvfiles():
+        try:
+            import xlwt
+        except ImportError:
+            print('Python installation needs xlwt library. Try pip install xlwt on the command line.')
 
-    wb = xlwt.Workbook()
-    for filename in glob.glob('*.csv'):  #  TODO: change this to report fies LT,CLV,CSL,ATV
-        (f_path, f_name) = os.path.split(filename)
-        (f_short_name, f_extension) = os.path.splitext(f_name)
-        ws = wb.add_sheet(f_short_name)
-        spamReader = csv.reader(open(filename, 'rb'))
-        for rowx, row in enumerate(spamReader):
-            for colx, value in enumerate(row):
-                ws.write(rowx, colx, value)
-    wb.save('allstats.xls')
+        wb = xlwt.Workbook()
+        reportfiles = ['ATV.csv', 'LT.csv', 'CLV.csv', 'CSL.csv']
+        # for filename in glob.glob('*.csv'):  #  TODO: change this to report fies LT,CLV,CSL,ATV
+        for filename in reportfiles:
+            (f_path, f_name) = os.path.split(filename)
+            (f_short_name, f_extension) = os.path.splitext(f_name)
+            ws = wb.add_sheet(f_short_name)
+            spamReader = csv.reader(open(filename, 'r'))
+            for rowx, row in enumerate(spamReader):
+                for colx, value in enumerate(row):
+                    ws.write(rowx, colx, value)
+        wb.save('allstats.xls')
 
-    print('All done! Your file is named \"allstats.xls\".')
+        print('All done! Your file is named \"allstats.xls\".')
 
     @staticmethod
     def stats_getall():
@@ -706,6 +708,7 @@ def strap_csvfiles():
             }
 
         return allstats
+
     @staticmethod
     def asfile(target=None, query=None, filename='dataserv.csv'):
         ''' primarily to send to spreadsheet. TODO: use csv module '''
@@ -770,7 +773,6 @@ def strap_csvfiles():
     @staticmethod
     def as3rdparty(self, queryfunc, filename):
         '''' to send to pandas, matplotlib, etc etc '''
-
         pass
 
     @staticmethod
