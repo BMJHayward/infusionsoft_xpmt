@@ -33,7 +33,7 @@ TODO:
 + base method to return dict of common statistics
 + base method to connect to DB, do query, fetchall(), return and close DB
 + create file of functions to call _basequery() with different args
-+
++ refactor CostSaleLeadource to return table-like object with column names as headers
 '''
 import glob
 import os
