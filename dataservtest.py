@@ -5,7 +5,7 @@ import cgi
 cgi.test() to test script with HTTP headers and HTML.
     See docs.python.org/3/library/cgi.html
 '''
-import unittest
+import unittest, sys
 from datetime import datetime
 import dataserv as iq
 
@@ -21,7 +21,45 @@ iqldb = iq.LocalDB()
 class TestLocalDB(unittest.TestCase):
 
     def test_sendto_sqlite(self):
-        pass
+        db = ":memory:"
+        queryarray1 = {a:b for a,b in vars().items()}
+        queryarray2 = [x for x in range(99)]
+        error_args1 = dict(query_array = queryarray1, newtable = [], db = db)
+        error_args2  =  dict(query_array = {'derp', 1,54.54}, newtable = 'mixedset', db = db)
+        args1  =  dict(db = db, query_array = queryarray1, newtable = 'queryarray1')
+        args2  =  dict(db = db, query_array = queryarray2, newtable = 'queryarray2')
+        try:
+            self.assertRaises(Exception, iqldb.sendto_sqlite, **error_args1)
+        except TypeError as t_err:
+            print('TypeError: {0}'.format(t_err))
+        except AttributeError as att_err:
+            print('AttributeError: {0}'.format(att_err))
+        else: print('Everything fine.')
+
+        try:
+            self.assertRaises(Exception, iqldb.sendto_sqlite, **error_args2)
+        except TypeError as t_err:
+            print('TypeError: {0}'.format(t_err))
+        except AttributeError as att_err:
+            print('AttributeError: {0}'.format(att_err))
+        else: print('Everything fine.')
+
+        try:
+            iqldb.sendto_sqlite(**args1)
+        except TypeError as t_err:
+            print('TypeError: {0}'.format(t_err))
+        except AttributeError as att_err:
+            print('AttributeError: {0}'.format(att_err))
+        else: print('Everything fine.')
+
+        try:
+            iqldb.sendto_sqlite(**args2)
+        except TypeError as t_err:
+            print('TypeError: {0}'.format(t_err))
+        except AttributeError as att_err:
+            print('AttributeError: {0}'.format(att_err))
+        else: print('Everything fine.')
+
     def test_sendto_json(self):
         pass
     def test_get_csv(self):

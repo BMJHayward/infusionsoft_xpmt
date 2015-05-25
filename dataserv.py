@@ -25,6 +25,8 @@ TODO:
 ######
 
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
++ Update tests - remove duplication
++ refactor class LocalDB db connection, cursor, commit and close into a single function
 + possible Report() class for inidividual reports to inherit from
 + possible Transform() class for things common to each report
 + complete methods to compare datetime objects
@@ -53,11 +55,12 @@ class LocalDB:
         Would like report classes to be able use either Query or LocalDB in the same way. Maybe.
     '''
     @staticmethod
-    def sendto_sqlite(query_array, newtable):
+    def sendto_sqlite(query_array, newtable, db='dataserv.db'):
         '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
         in tables to avoid type conversion for datetime objects.
         '''
-        conn = sqlite3.connect('dataserv.db')
+        
+        conn = sqlite3.connect(db)
         c = conn.cursor()
         if isinstance(query_array, dict):
             create_table = 'CREATE TABLE ' + newtable + ' (key text, value integer);'
@@ -74,6 +77,8 @@ class LocalDB:
             questionmarks = '('+''.join(['?,' for i in range(len(query_array[0])-1)])+'?)'
             insert_into_table = 'INSERT INTO ' + newtable + ' values ' + questionmarks + ';'
             c.executemany(insert_into_table, query_array)
+        else:
+            raise TypeError('Need to pass list or dict')
         conn.commit()
         conn.close()
 
