@@ -3,12 +3,11 @@ Infusionsoft Experiment
 =========================
 
 
-.. image:: https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master
-    :target: https://travis-ci.org/BMJHayward/infusionsoft_xpmt
+[![Build Status](https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master)](https://travis-ci.org/BMJHayward/infusionsoft_xpmt)
 
 API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended usespecific reporting not found in
 
-For target reports see classes inheriting from Query and Extract in dataserv.py.
+For target reports see classes inheriting from LocalDB, Query and Extract in dataserv.py.
 
 DESCRIPTION
 =============
