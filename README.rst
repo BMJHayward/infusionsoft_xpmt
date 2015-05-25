@@ -1,5 +1,5 @@
-Infusionsoft Experiment
-########################
+#Infusionsoft Experiment
+
 
 .. image:: https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master
     :target: https://travis-ci.org/BMJHayward/infusionsoft_xpmt
@@ -8,8 +8,8 @@ API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intende
 
 For target reports see classes inheriting from Query and Extract in dataserv.py.
 
-DESCRIPTION
-############
+##DESCRIPTION
+
 
 Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, numpy etc.
 This project will keep to the stdlib where ever possible to minimise dependencies, simplify deployment in several environme
@@ -17,8 +17,8 @@ This project will keep to the stdlib where ever possible to minimise dependencie
 
 dataserv.py is the main file of interest for the moment. this may be broken up in futuremore classes are ad
 
-TODO:
-######
+##TODO:
+
 
 + include recordcount() to return all data when using 'all' argument
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
@@ -31,8 +31,8 @@ TODO:
 + create file of functions to call _basequery() with different args
 + tests for class: LeadtimetoSale()
 
-CLASSES:
-########
+##CLASSES:
+
 builtins.object
     Output
     Process
