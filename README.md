@@ -21,16 +21,18 @@ dataserv.py is the main file of interest for the moment. this may be broken up i
 TODO:
 ========
 
-+ include recordcount() to return all data when using 'all' argument
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
-+ composition basic query objects for use in reporting class
++ Update tests - remove duplication
++ refactor class LocalDB db connection, cursor, commit and close into a single function
 + possible Report() class for inidividual reports to inherit from
 + possible Transform() class for things common to each report
 + complete methods to compare datetime objects
 + use pandas or matplotlib for dataviz
-+ statistics?
++ base method for common statistics
++ base method to return dict of common statistics
++ base method to connect to DB, do query, fetchall(), return and close DB
 + create file of functions to call _basequery() with different args
-+ tests for class: LeadtimetoSale()
++ refactor CostSaleLeadource to return table-like object with column names as headers
 
 CLASSES:
 =========
