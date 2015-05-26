@@ -83,13 +83,6 @@ builtins.object
        Return tags for target contact.
 
    ----------------------------------------------------------------------
-   Data descriptors inherited from Query:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class CostSaleLeadsource(Extract)**
    Return a cost per sale per leadsource object.
@@ -130,13 +123,6 @@ builtins.object
        Return tags for target contact.
 
    ----------------------------------------------------------------------
-   Data descriptors inherited from Query:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class CustomerLifetimeValue(Extract)**
    Calculate how much any given customer spends on average long term.
@@ -176,13 +162,6 @@ builtins.object
        Return tags for target contact.
 
    ----------------------------------------------------------------------
-   Data descriptors inherited from Query:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class Extract(Query)**
    Pull mass data for analysis using Query() as base. Intended as layer
@@ -213,13 +192,6 @@ builtins.object
        Return tags for target contact.
 
    ----------------------------------------------------------------------
-   Data descriptors inherited from Query:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class LeadtimetoSale(Extract)**
    Return length of time from gaining a lead to making first sale.
@@ -272,13 +244,6 @@ builtins.object
        Return tags for target contact.
 
    ----------------------------------------------------------------------
-   Data descriptors inherited from Query:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class Output(builtins.object)**
    Take data ready for output. Methods to write to file.
@@ -304,13 +269,6 @@ builtins.object
    asimage(self, queryfunc, filename)
 
    ----------------------------------------------------------------------
-   Data descriptors defined here:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class Process(builtins.object)**
    Raw query data processed here for target output. Primary method to use
@@ -334,13 +292,6 @@ builtins.object
        filter entries by keys.
 
    ----------------------------------------------------------------------
-   Data descriptors defined here:
-
-   __dict__
-       dictionary for instance variables (if defined)
-
-   __weakref__
-       list of weak references to the object (if defined)
 
 **class Query(builtins.object)**
    Create connection to API and run basic queries.
@@ -351,11 +302,10 @@ builtins.object
        Instantiate Infusionsoft object and create connection to
        account app.
 
-   ----------------------------------------------------------------------
-   Data descriptors defined here:
 
-   __dict__
-       dictionary for instance variables (if defined)
 
-   __weakref__
-       list of weak references to the object (if defined)
+
+
+
+
+
