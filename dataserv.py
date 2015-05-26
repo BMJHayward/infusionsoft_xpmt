@@ -1,28 +1,26 @@
 '''
-########################
+=========================
 Infusionsoft Experiment
-########################
+=========================
 
-.. image:: https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master
-    :target: https://travis-ci.org/BMJHayward/infusionsoft_xpmt
 
-API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended use is specific reporting not found in IS.
+[![Build Status](https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master)](https://travis-ci.org/BMJHayward/infusionsoft_xpmt)
 
-For target reports see classes inheriting from Query and Extract in dataserv.py.
+API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended usespecific reporting not found in
+
+For target reports see classes inheriting from LocalDB, Query and Extract in dataserv.py.
 
 DESCRIPTION
-############
+=============
 
 Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, numpy etc.
-This project will keep to the stdlib where ever possible to minimise dependencies, and simplify deployment in several environments.
+This project will keep to the stdlib where ever possible to minimise dependencies, simplify deployment in several environme
 
-There are 2 base classes: LocalDB and Query. LocalDB creates a local database from csv files exported from IS.
-Query uses the IS API to get data. LocalDB is the current prefferred method due to API limitation.
 
-dataserv.py is the main file of interest for the moment. this may be broken up in future as more classes are added.
+dataserv.py is the main file of interest for the moment. this may be broken up in futuremore classes are ad
 
 TODO:
-######
+========
 
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
 + Update tests - remove duplication
@@ -59,7 +57,7 @@ class LocalDB:
         '''Use sqlite3 module to output to local DB. Saves API calls. Using text datatypes
         in tables to avoid type conversion for datetime objects.
         '''
-        
+
         conn = sqlite3.connect(db)
         c = conn.cursor()
         if isinstance(query_array, dict):
