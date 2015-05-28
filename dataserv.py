@@ -101,8 +101,7 @@ class LocalDB:
     @staticmethod
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
-        if type(filename) != str:
-            filename = str(filename)
+
         csvdata = []
         with open(filename, newline = '') as csvfile:
             reader = csv.reader(csvfile, delimiter = ',')
