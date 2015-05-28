@@ -7,6 +7,7 @@ cgi.test() to test script with HTTP headers and HTML.
 '''
 import unittest, sys, os
 from datetime import datetime
+import sqlite3
 import dataserv as iq
 
 iqcxn = iq.Query()
@@ -71,16 +72,16 @@ class TestLocalDB(unittest.TestCase):
     def test_get_csv(self):
         try:
             csvdata = iqldb.get_csv('dataserv.csv')
-            assertIsInstance(csvdata, list)
+            self.assertIsInstance(csvdata, list)
         except Exception as exc:
             print('Error: {0}'.format(exc))
 
-    def test_convert_invoices(self):
-        pass
-    def test_create_joinlisttable(self):
-        pass
-    def test_get_invoicedates(self):
-        pass
+    # def test_get_invoicedates(self):
+        # try:
+            # invlist = iqldb.get_invoicedates()
+            # self.assertIsInstance(invlist, dict)
+        # except Exception as exc:
+            # print('Error: {0}'.format(exc))
 
 
 class TestQuery(unittest.TestCase):

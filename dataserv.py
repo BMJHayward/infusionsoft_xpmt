@@ -155,16 +155,6 @@ class LocalDB:
         conn.close()
 
     @staticmethod
-    def get_table(tablename):
-        ''' Literally returns the entire table. '''
-        conn = sqlite3.connect('dataserv.db')
-        c = conn.cursor()
-        selection = 'SELECT * FROM ' + tablename + ';'
-        c.execute(selection)
-        whole_table = c.fetchall()
-        return whole_table
-
-    @staticmethod
     def get_invoicedates():
         ''' Returns list of purchase dates for each contact. '''
         conn = sqlite3.connect('dataserv.db')
