@@ -69,7 +69,12 @@ class TestLocalDB(unittest.TestCase):
             print('Error: {0}'.format(exc))
 
     def test_get_csv(self):
-        pass
+        try:
+            csvdata = iqldb.get_csv('dataserv.csv')
+            assertIsInstance(csvdata, list)
+        except Exception as exc:
+            print('Error: {0}'.format(exc))
+
     def test_convert_invoices(self):
         pass
     def test_create_joinlisttable(self):
