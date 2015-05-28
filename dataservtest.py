@@ -5,7 +5,7 @@ import cgi
 cgi.test() to test script with HTTP headers and HTML.
     See docs.python.org/3/library/cgi.html
 '''
-import unittest, sys
+import unittest, sys, os
 from datetime import datetime
 import dataserv as iq
 
@@ -61,7 +61,13 @@ class TestLocalDB(unittest.TestCase):
         else: print('Everything fine.')
 
     def test_sendto_json(self):
-        pass
+        filename = 'test.json'
+        query_array = [[i for i in range(20)],locals(), sys.modules]
+        try:
+            iqldb.sendto_json(query_array, filename)
+        except Exception as exc:
+            print('Error: {0}'.format(exc))
+
     def test_get_csv(self):
         pass
     def test_convert_invoices(self):

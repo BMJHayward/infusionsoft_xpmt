@@ -81,12 +81,12 @@ class LocalDB:
         conn.close()
 
     @staticmethod
-    def sendto_json(query_array):
+    def sendto_json(query_array, filename):
         '''Use json to store entire query as json file.'''
 
-        with open('dataserv.json') as file:
-            for item in diclist:
-                json.dump(item, file)
+        with open(filename, 'x') as file:
+            for item in query_array:
+                json.dumps(item, file)
 
     @staticmethod
     def get_db_table(db_name, db_table):
