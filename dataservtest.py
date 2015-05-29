@@ -159,17 +159,6 @@ class TestExtract(unittest.TestCase):
         inv_list = iqext.invoices(targ_id, **inv_arg)
         self.assertIs(type(inv_list), list)
 
-    def test_cost_sale_leadsource(self):
-
-        pass
-
-    def test_average_transaction_value(self):
-
-        pass
-
-    def test_customer_lifetime_value(self):
-
-        pass
 
 class TestLeadtimeToSale(unittest.TestCase):
 
