@@ -246,12 +246,41 @@ class TestLeadtime(unittest.TestCase):
             except AssertionError as ass_err:
                 print('AssertionError: {0}: '.format(ass_err), 'Wrong key: ', wrong, ' , key type: ',type(wrong))
 
-    def test_get_db_table(self):
-        pass
     def test_list_convert(self):
-        pass
+        testdata = iqlt2.get_db_table('dataserv.db', 'contactsales')
+        try:
+            conv_testdata = iqlt2.list_convert(testdata)
+        except Exception as exc:
+            print('Something really, really wrong here: ', exc)
+        row = conv_testdata[0]
+        date1 = row[1]
+        date4 = row[4]
+        try:
+            self.assertIsInstance(date1, datetime.date)
+            self.assertIsInstance(date4, datetime.date)
+            print('date1, date4 are correct type! ', 'Date1 type: ', type(date1), ' Date4 type: ', type(date4))
+        except TypeError as t_err:
+            print('TypeError: {0}'.format(t_err))
+
     def test_leadtime_from_db(self):
-        pass
+        testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
+        testlist = iqlt2.list_convert(testlist)
+        troll_list = [x for x in range(1000)]
+        gnome_list = {x for x in range(1000)}
+        try:
+            lt_list = iqlt2.leadtime_from_db(testlist)
+        except Exception as exc:
+            print('Error in test_leadtime_from_db: {0}'.format(exc))
+
+        try:
+            lt_list2 = iqlt2.leadtime_from_db(troll_list)
+        except Exception as exc:
+            print('Error in test_leadtime_from_db: {0}'.format(exc))
+
+        try:
+            lt_list3 = iqlt2.leadtime_from_db(gnome_list)
+        except Exception as exc:
+            print('Error in test_leadtime_from_db: {0}'.format(exc))
 
     def test_convert_datestring(self):
         now = datetime.now()
