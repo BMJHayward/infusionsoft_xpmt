@@ -219,7 +219,33 @@ class TestLeadtime(unittest.TestCase):
     def test_get_leadtime(self):
         pass
     def test_get_data(self):
-        pass
+        contactsales = iqlt2.get_data()
+        require_keys = ['invdates', 'entrydate', 'leadtime']
+        wrong_keys = ['data', 123, r'invdates', u'invdates']
+
+        try:
+            self.assertIsInstance(contactsales, dict)
+        except TypeError as t_err:
+            print('TypeError: {0}'.format(t_err))
+
+        for key in contactsales:
+            try:
+                self.assertIsInstance(contactsales[key], dict)
+            except TypeError as t_err:
+                print('TypeError: {0}'.format(t_err))
+            except Exception as exc:
+                print('Exception: {0}'.format(exc))
+            try:
+                for required in require_keys:
+                    self.assertTrue(required in contactsales[key].keys())
+            except AssertionError as ass_err:
+                print('AssertionError: {0}'.format(ass_err), required)
+            try:
+                for wrong in wrong_keys:
+                    self.assertTrue(wrong in contactsales[key].keys())
+            except AssertionError as ass_err:
+                print('AssertionError: {0}: '.format(ass_err), 'Wrong key: ', wrong, ' , key type: ',type(wrong))
+
     def test_get_db_table(self):
         pass
     def test_list_convert(self):
@@ -245,9 +271,6 @@ class TestLeadtime(unittest.TestCase):
                 print('AttributeError: {0}'.format(att_err))
             except Exception as exc:
                 print('AttributeError: {0}'.format(exc))
-
-
-
 
 
 if __name__ == '__main__':
