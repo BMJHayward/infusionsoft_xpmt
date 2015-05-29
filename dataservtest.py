@@ -8,6 +8,7 @@ cgi.test() to test script with HTTP headers and HTML.
 import unittest, sys, os
 from datetime import datetime
 import sqlite3
+import xmlrpc.client as client
 import dataserv as iq
 
 iqcxn = iq.Query()
@@ -212,6 +213,7 @@ class TestOutput(unittest.TestCase):
 
 class TestLeadtime(unittest.TestCase):
 
+
     def test_stats_leadtime(self):
         pass
     def test_get_leadtime(self):
@@ -224,8 +226,28 @@ class TestLeadtime(unittest.TestCase):
         pass
     def test_leadtime_from_db(self):
         pass
+
     def test_convert_datestring(self):
-        pass
+        now = datetime.now()
+        now = client.DateTime(now)
+        td_a = '19/6/2009'
+        td_b = '19/06/2009'
+        td_c = '20080627T14:40:14'
+        td_d = now
+        trgdates = [td_a, td_b, td_c, td_d]
+
+        for date in trgdates:
+            try:
+                iqlt2().convert_datestring(date)
+            except TypeError as t_err:
+                print('AttributeError: {0}'.format(t_err))
+            except AttributeError as att_err:
+                print('AttributeError: {0}'.format(att_err))
+            except Exception as exc:
+                print('AttributeError: {0}'.format(exc))
+
+
+
 
 
 if __name__ == '__main__':
