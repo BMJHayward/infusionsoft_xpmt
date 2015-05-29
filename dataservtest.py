@@ -238,7 +238,7 @@ class TestLeadtime(unittest.TestCase):
 
         for date in trgdates:
             try:
-                iqlt2().convert_datestring(date)
+                iqlt2.convert_datestring(date)
             except TypeError as t_err:
                 print('AttributeError: {0}'.format(t_err))
             except AttributeError as att_err:

@@ -23,6 +23,7 @@ TODO:
 
 + LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
 + Update tests - remove duplication
++ Tests: output line number, caller, input data with exceptions
 + refactor class LocalDB db connection, cursor, commit and close into a single function
 + possible Report() class for inidividual reports to inherit from
 + possible Transform() class for things common to each report
