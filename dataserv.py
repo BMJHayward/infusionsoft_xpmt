@@ -501,8 +501,7 @@ class CostSaleLeadsource(LocalDB):
         return CSL
 
     def destring_leadsourceROI_table(self, row):
-        ''' This probably belongs in class CostSaleLeadsource.
-        Might also want to use named constants in to_float and to_int, but
+        ''' Might want to use named constants in to_float and to_int, but
         I will probably only use this here and nowhere else.
         '''
         to_float = {4,5,6,8,10,13,14}  # Uses set because I hardly ever use them and they are cool
@@ -534,14 +533,6 @@ class CostSaleLeadsource(LocalDB):
         revenue        = leadsource_row[5]
         expenses       = leadsource_row[4]
 
-        # stat_dict = dict(
-            # percent_profit = percent_profit,
-            # dollar_profit  = dollar_profit,
-            # revenue        = revenue,
-            # expenses       = expenses
-            # )
-#
-        # return stat_dict
         stat_list = [percent_profit, dollar_profit, revenue, expenses]
         return stat_list
 
