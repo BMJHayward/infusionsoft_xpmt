@@ -18,6 +18,7 @@ iqprc = iq.Process()
 iqlts = iq.LeadtimetoSale()
 iqlt2 = iq.Leadtime()
 iqldb = iq.LocalDB()
+iqcsl = iq.CostSaleLeadsource()
 
 
 class TestLocalDB(unittest.TestCase):
@@ -160,6 +161,20 @@ class TestExtract(unittest.TestCase):
         inv_list = iqext.invoices(targ_id, **inv_arg)
         self.assertIs(type(inv_list), list)
 
+class TestCostSaleLeadsource(unittest.TestCase):
+    def test_stats_CSL(self):
+        row_hdrs = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
+        try:
+            CSL = iqcsl.stats_CSL()
+            self.assertIs(CSL['Leadsource'], row_hdrs)
+        except Exception as exc:
+            print('Something wrong here: {0}'.format(exc))
+
+    def test_destring_leadsourceROI_table(self):
+        pass
+    def test_ROI_stats(self):
+        pass
+
 
 class TestLeadtimeToSale(unittest.TestCase):
 
@@ -226,7 +241,6 @@ class TestLeadtime(unittest.TestCase):
             return
 
         require_keys = ['invdates', 'entrydate', 'leadtime']
-        wrong_keys = ['data', 123, r'invdates', u'invdates']
 
         try:
             self.assertIsInstance(contactsales, dict)
@@ -240,16 +254,8 @@ class TestLeadtime(unittest.TestCase):
                 print('TypeError: {0}'.format(t_err))
             except Exception as exc:
                 print('Exception: {0}'.format(exc))
-            try:
-                for required in require_keys:
-                    self.assertTrue(required in contactsales[key].keys())
-            except AssertionError as ass_err:
-                print('AssertionError: {0}'.format(ass_err), required)
-            try:
-                for wrong in wrong_keys:
-                    self.assertTrue(wrong in contactsales[key].keys())
-            except AssertionError as ass_err:
-                print('AssertionError: {0}: '.format(ass_err), 'Wrong key: ', wrong, ' , key type: ',type(wrong))
+            for required in require_keys:
+                self.assertTrue(required in contactsales[key].keys())
 
     def test_list_convert(self):
         try:
@@ -276,7 +282,6 @@ class TestLeadtime(unittest.TestCase):
             testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
-            return
 
         testlist = iqlt2.list_convert(testlist)
         troll_list = [x for x in range(1000)]
