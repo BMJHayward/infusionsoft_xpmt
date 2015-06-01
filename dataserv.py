@@ -47,6 +47,7 @@ from infusionsoft.library import Infusionsoft
 import json
 import locale
 import pickle
+from collections import OrderedDict
 
 
 class LocalDB:
@@ -492,7 +493,8 @@ class CostSaleLeadsource(LocalDB):
         +run leadsource ROI report
         '''
         self.leadsource_ROI = self.get_db_table('dataserv.db', 'leadsource_ROI')
-        CSL = {'Leadsource': ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')}
+        CSL = OrderedDict()
+        CSL['Leadsource'] = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
         for entry in self.leadsource_ROI:
             entry = list(entry)
             self.destring_leadsourceROI_table(entry)
