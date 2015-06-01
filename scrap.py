@@ -8,13 +8,13 @@ from datetime import date
 import time
 
 
-def importer():
+def importer(dbname):
     importer = dataserv.LocalDB()
-    db = 'IS_all_data.db'
+
     for csvfile in glob.glob('*.csv'):
         tblname = csvfile.split()[0]
         tbldata = importer.get_csv(csvfile)
-        importer.sendto_sqlite(tbldata, tblname, db=db)
+        importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
 def histogram():
     '''
