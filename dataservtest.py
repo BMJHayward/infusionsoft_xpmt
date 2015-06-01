@@ -223,6 +223,7 @@ class TestLeadtime(unittest.TestCase):
             contactsales = iqlt2.get_data()
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
+            return
 
         require_keys = ['invdates', 'entrydate', 'leadtime']
         wrong_keys = ['data', 123, r'invdates', u'invdates']
@@ -255,7 +256,7 @@ class TestLeadtime(unittest.TestCase):
             testdata = iqlt2.get_db_table('dataserv.db', 'contactsales')
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
-
+            return
         try:
             conv_testdata = iqlt2.list_convert(testdata)
         except Exception as exc:
@@ -275,6 +276,7 @@ class TestLeadtime(unittest.TestCase):
             testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
+            return
 
         testlist = iqlt2.list_convert(testlist)
         troll_list = [x for x in range(1000)]
