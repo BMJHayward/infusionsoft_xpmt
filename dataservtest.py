@@ -163,6 +163,9 @@ class TestExtract(unittest.TestCase):
 
 
 class TestCostSaleLeadsource(unittest.TestCase):
+
+
+
     def test_stats_CSL(self):
         row_hdrs = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
         try:
@@ -184,7 +187,13 @@ class TestCostSaleLeadsource(unittest.TestCase):
             self.assertIsInstance(testrow[intgr], int)
 
     def test_ROI_stats(self):
-        pass
+        testrow = ["1","","A - CIC","","3619.00","12228.94","2.38","","0","655","5.53","0.00","21","172.33","0.03","","",""]
+        try:
+            newtestrow = iqcsl.ROI_stats(testrow)
+            self.assertIsInstance(newtestrow, list)
+
+        except Exception as exc:
+            pass
 
 
 class TestLeadtimeToSale(unittest.TestCase):
