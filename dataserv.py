@@ -523,21 +523,27 @@ class CostSaleLeadsource(LocalDB):
     def ROI_stats(self, leadsource_row):
         ''' Used to create a dict of dicts with stats for each leadsource. '''
         try:
-            percent_profit = (1 - (leadsource_row[4] / leadsource_row[5])) * 100,
+            expns = leadsource_row[4]
+            revn = leadsource_row[5]
+            percent_profit = (1 - (expns / revn)) * 100
+            if hasattr(percent_profit, 'index'):
+                percent_profit = percent_profit[0]
         except ZeroDivisionError:
             percent_profit = 0
-        dollar_profit  = leadsource_row[5] - leadsource_row[4],
-        revenue        = leadsource_row[5],
+        dollar_profit  = leadsource_row[5] - leadsource_row[4]
+        revenue        = leadsource_row[5]
         expenses       = leadsource_row[4]
 
-        stat_dict = dict(
-            percent_profit = percent_profit,
-            dollar_profit  = dollar_profit,
-            revenue        = revenue,
-            expenses       = expenses
-            )
-
-        return stat_dict
+        # stat_dict = dict(
+            # percent_profit = percent_profit,
+            # dollar_profit  = dollar_profit,
+            # revenue        = revenue,
+            # expenses       = expenses
+            # )
+#
+        # return stat_dict
+        stat_list = [percent_profit, dollar_profit, revenue, expenses]
+        return stat_list
 
 
 class AverageTransactionValue:
