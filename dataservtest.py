@@ -303,6 +303,7 @@ class TestLeadtime(unittest.TestCase):
             testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
+            return
 
         testlist = iqlt2.list_convert(testlist)
         troll_list = [x for x in range(1000)]
