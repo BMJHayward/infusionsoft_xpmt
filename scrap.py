@@ -1,3 +1,4 @@
+import glob
 import os
 import csv
 import dataserv
@@ -6,6 +7,14 @@ import sqlite3
 from datetime import date
 import time
 
+
+def importer():
+    importer = dataserv.LocalDB()
+    db = 'IS_all_data.db'
+    for csvfile in glob.glob('*.csv'):
+        tblname = csvfile.split()[0]
+        tbldata = importer.get_csv(csvfile)
+        importer.sendto_sqlite(tbldata, tblname, db=db)
 
 def histogram():
     '''
