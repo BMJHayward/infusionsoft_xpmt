@@ -164,13 +164,14 @@ class TestExtract(unittest.TestCase):
 
 class TestCostSaleLeadsource(unittest.TestCase):
 
-
-
     def test_stats_CSL(self):
         row_hdrs = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
         try:
             CSL = iqcsl.stats_CSL()
             self.assertIs(CSL['Leadsource'], row_hdrs)
+        except sqlite3.OperationalError as sqlerror:
+            print('Database not available on this machine. Error: {0}'.format(sqlerror))
+            return
         except Exception as exc:
             print('Something wrong here: {0}'.format(exc))
 
