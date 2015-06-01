@@ -492,11 +492,13 @@ class CostSaleLeadsource(LocalDB):
         +run leadsource ROI report
         '''
         self.leadsource_ROI = self.get_db_table('dataserv.db', 'leadsource_ROI')
-        CSL = {}
+        CSL = {'Leadsource': ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')}
         for entry in self.leadsource_ROI:
             entry = list(entry)
             self.destring_leadsourceROI_table(entry)
-            CSL[entry[2]] = self.ROI_stats(entry)
+            self.leadsrc = entry[2]
+            self.leadsrc_stats = self.ROI_stats(entry)
+            CSL[self.leadsrc] = self.leadsrc_stats
 
         return CSL
 
@@ -731,7 +733,7 @@ class Output:
         or to several similar functions contained in Output class.
         '''
         with open(outfile, 'w', newline='') as datafile:
-            writer=csv.writer(datafile)
+            writer = csv.writer(datafile)
             for item in targlist:
                 for key, value in item.items():
                     writer.writerow([key, value])
