@@ -527,8 +527,8 @@ class CostSaleLeadsource(LocalDB):
         ''' Used to create a dict of dicts with stats for each leadsource. '''
         try:
             expns = leadsource_row[4]
-            revn = leadsource_row[5]
-            percent_profit = (1 - (expns / revn)) * 100
+            revnu = leadsource_row[5]
+            percent_profit = (1 - (expns / revnu)) * 100
             if hasattr(percent_profit, 'index'):
                 percent_profit = percent_profit[0]
         except ZeroDivisionError:

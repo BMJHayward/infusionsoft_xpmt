@@ -161,6 +161,7 @@ class TestExtract(unittest.TestCase):
         inv_list = iqext.invoices(targ_id, **inv_arg)
         self.assertIs(type(inv_list), list)
 
+
 class TestCostSaleLeadsource(unittest.TestCase):
     def test_stats_CSL(self):
         row_hdrs = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
@@ -171,7 +172,17 @@ class TestCostSaleLeadsource(unittest.TestCase):
             print('Something wrong here: {0}'.format(exc))
 
     def test_destring_leadsourceROI_table(self):
-        pass
+        testrow = ["1","","A - CIC","","3619.00","12228.94","2.38","","0","655","5.53","0.00","21","172.33","0.03","","",""]
+        to_float = {4,5,6,8,10,13,14}
+        to_int = {0,1,7,9,12}
+
+        iqcsl.destring_leadsourceROI_table(testrow)
+
+        for flt in to_float:
+            self.assertIsInstance(testrow[flt], float)
+        for intgr in to_int:
+            self.assertIsInstance(testrow[intgr], int)
+
     def test_ROI_stats(self):
         pass
 
