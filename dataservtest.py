@@ -219,7 +219,11 @@ class TestLeadtime(unittest.TestCase):
     def test_get_leadtime(self):
         pass
     def test_get_data(self):
-        contactsales = iqlt2.get_data()
+        try:
+            contactsales = iqlt2.get_data()
+        except sqlite3.OperationalError as sqlerror:
+            print('Database not available on this machine. Error: {0}'.format(sqlerror))
+
         require_keys = ['invdates', 'entrydate', 'leadtime']
         wrong_keys = ['data', 123, r'invdates', u'invdates']
 
@@ -247,7 +251,11 @@ class TestLeadtime(unittest.TestCase):
                 print('AssertionError: {0}: '.format(ass_err), 'Wrong key: ', wrong, ' , key type: ',type(wrong))
 
     def test_list_convert(self):
-        testdata = iqlt2.get_db_table('dataserv.db', 'contactsales')
+        try:
+            testdata = iqlt2.get_db_table('dataserv.db', 'contactsales')
+        except sqlite3.OperationalError as sqlerror:
+            print('Database not available on this machine. Error: {0}'.format(sqlerror))
+
         try:
             conv_testdata = iqlt2.list_convert(testdata)
         except Exception as exc:
@@ -263,7 +271,11 @@ class TestLeadtime(unittest.TestCase):
             print('TypeError: {0}'.format(t_err))
 
     def test_leadtime_from_db(self):
-        testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
+        try:
+            testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
+        except sqlite3.OperationalError as sqlerror:
+            print('Database not available on this machine. Error: {0}'.format(sqlerror))
+
         testlist = iqlt2.list_convert(testlist)
         troll_list = [x for x in range(1000)]
         gnome_list = {x for x in range(1000)}
