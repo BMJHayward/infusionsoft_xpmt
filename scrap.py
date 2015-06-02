@@ -13,10 +13,19 @@ def importer(dbname, csvarray):
     for csvfile in csvarray:
         importer = dataserv.LocalDB()
         tbldata = importer.get_csv(csvfile)
+
         tblname = csvfile.split('.')[0]
+        new_headerrow = tbldata[0]
+        remove_duplicates(new_headerrow)
+        tbldata[0] = new_headerrow
+
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
 def remove_duplicates(headerrow):
+    ''' Infusionsoft csv files often have duplicate strings as header row.
+    When importing to sql, this raises sqlite3.OperationalError. Pass in the
+    first row of your csv file to fix this. importer() calls this for you as well.
+    '''
     for item in headerrow:  #  this is horrible but works for now
         if headerrow.count(item) > 1:
             idx = headerrow.index(item)
