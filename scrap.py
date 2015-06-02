@@ -17,13 +17,17 @@ def importer(dbname, csvarray):
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
 def remove_duplicates(headerrow):
-    for item in headerrow:
+    for item in headerrow:  #  this is horrible but works for now
         if headerrow.count(item) > 1:
+            idx = headerrow.index(item)
+            for col in range(idx + 1, len(headerrow)):
+                if headerrow[col] == item:
+                    headerrow[col] = '_' + headerrow[col]
             #get index of each occurrence
             #for 2nd occurrence, remove vowels
             #for 3rd, remove vowels, prepend with '_'
             #for more, append with number?
-            print(item, ':', headerrow.count(item)
+            print(item, ':', headerrow.count(item))
 
 def histogram():
     '''
