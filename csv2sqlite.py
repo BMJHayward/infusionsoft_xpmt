@@ -13,11 +13,11 @@ conn.text_factory = str  # allows utf-8 data to be stored
 c = conn.cursor()
 
 # traverse the directory and process each .csv file
-for csvfile in glob.glob('*.csv')):
+for csvfile in glob.glob('*.csv'):
     # remove the path and extension and use what's left as a table name
     tablename = os.path.splitext(os.path.basename(csvfile))[0]
 
-    with open(csvfile, "rb") as f:
+    with open(csvfile, "w") as f:
         reader = csv.reader(f)
 
         header = True
