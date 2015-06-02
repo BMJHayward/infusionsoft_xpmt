@@ -16,6 +16,15 @@ def importer(dbname, csvarray):
         tblname = csvfile.split('.')[0]
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
+def remove_duplicates(headerrow):
+    for item in headerrow:
+        if headerrow.count(item) > 1:
+            #get index of each occurrence
+            #for 2nd occurrence, remove vowels
+            #for 3rd, remove vowels, prepend with '_'
+            #for more, append with number?
+            print(item, ':', headerrow.count(item)
+
 def histogram():
     '''
     using bokeh to visualise:
