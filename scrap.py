@@ -13,7 +13,7 @@ def importer():
     dbname = input('please enter database name: ')
     datafiles = make_tablename()
     importer = dataserv.LocalDB()
-    for table, filename in datafiles:
+    for table, filename in datafiles.items():
         tblname = table
         tbldata = importer.get_csv(filename)
         new_headerrow = tbldata[0]
