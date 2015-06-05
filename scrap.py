@@ -37,16 +37,13 @@ def remove_duplicates(headerrow):
             print(item, ':', headerrow.count(item))
 
 def make_tablename():
-    '''choose your file. include the .csv extension'''  # use input() for this?
-    '''LocalDB.get_csv(chosen_file)'''
-    '''tablename is contacts, sales, products as chosen by user'''
-    '''return filename, tablename'''
-    filetype = None
-
+    '''takes user input at command line for csv files exported from IS'''
     filetypes = {'contacts': '', 'sales': '', 'products': ''}
 
-    for filetype in filetypes:
+    for filetype in filetypes.keys():
         filetypes[filetype] = input('please enter filename for {0} data: '.format(filetype))
+        if not os.path.isfile(filetypes[filetype]):
+            raise FileNotFoundError('File not in this directory. Please check and rerun the program.')
 
     return filetypes
 
@@ -56,7 +53,10 @@ def test_make_tablename():
     '''check file exists'''
     '''assert filetype is chosen'''
     '''assert filetype is (sales|contacts|products)'''
-
+    import os
+    files = make_tablename()
+    for filename in files:
+        self.assertTrue(os.path.isfile(filename))
 # this is straigh out of the docs for cmd module:
 def parse(arg):
     'Convert a series of zero or more numbers to an argument tuple'
