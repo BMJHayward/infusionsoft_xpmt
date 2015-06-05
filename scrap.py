@@ -40,6 +40,15 @@ def make_tablename():
     '''LocalDB.get_csv(chosen_file)'''
     '''tablename is contacts, sales, products as chosen by user'''
     '''return filename, tablename'''
+    filetype = None
+
+    filetypes = ('contacts', 'sales', 'products')
+    filestables = []
+    for filetype in filetypes:
+        filename = input('please enter filename for {0} data: '.format(filetype))
+        tablename = filetype
+        filestables.append((filename, tablename))
+    return filestables
 
 def test_make_tablename():
     '''this belongs in testfile when done'''
