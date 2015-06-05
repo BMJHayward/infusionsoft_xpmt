@@ -41,6 +41,12 @@ def make_tablename():
     '''tablename is contacts, sales, products as chosen by user'''
     '''return filename, tablename'''
 
+def test_make_tablename():
+    '''choose file'''
+    '''check file exists'''
+    '''assert filetype is chosen'''
+    '''assert filetype is sales|contacts|products'''
+
 def histogram():
     '''
     using bokeh to visualise:
