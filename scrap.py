@@ -8,8 +8,9 @@ from datetime import date
 import time
 
 
-def importer(dbname, csvarray):
+def importer():
     ''' csvarray should be string including .csv extension in local folder '''
+    dbname = input('please enter database name: ')
     datafiles = make_tablename()
     importer = dataserv.LocalDB()
     for table, filename in datafiles:
