@@ -36,7 +36,7 @@ def remove_duplicates(headerrow):
             print(item, ':', headerrow.count(item))
 
 def make_tablename():
-    '''choose your file'''
+    '''choose your file. include the .csv extension'''  # use input() for this?
     '''LocalDB.get_csv(chosen_file)'''
     '''tablename is contacts, sales, products as chosen by user'''
     '''return filename, tablename'''
@@ -50,13 +50,13 @@ def test_make_tablename():
 def histogram():
     '''
     using bokeh to visualise:
-    from bokeh.plotting import figure, output_file, show
-    output_file('histogram.html')
-    p = figure(title = 'insert title')
-    x = datescount.keys()
-    y = datescount.values()
-    p.line(x,y)
-    show(p)
+    >>> from bokeh.plotting import figure, output_file, show
+    >>> output_file('histogram.html')
+    >>> p = figure(title = 'insert title')
+    >>> x = datescount.keys()
+    >>> y = datescount.values()
+    >>> p.line(x,y)
+    >>> show(p)
     '''
 
     dates = eval(open('dates.txt', 'r+').read())
