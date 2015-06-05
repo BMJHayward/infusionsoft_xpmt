@@ -10,11 +10,11 @@ import time
 
 def importer(dbname, csvarray):
     ''' csvarray should be string including .csv extension in local folder '''
-    for csvfile in csvarray:
-        importer = dataserv.LocalDB()
-        tbldata = importer.get_csv(csvfile)
-
-        tblname = csvfile.split('.')[0]  # replace this with func to return tblname based on what user says the file is
+    datafiles = make_tablename()
+    importer = dataserv.LocalDB()
+    for table, filename in datafiles:
+        tblname = table
+        tbldata = importer.get_csv(filename)
         new_headerrow = tbldata[0]
         remove_duplicates(new_headerrow)
         tbldata[0] = new_headerrow
@@ -26,7 +26,7 @@ def remove_duplicates(headerrow):
     When importing to sql, this raises sqlite3.OperationalError. Pass in the
     first row of your csv file to fix this. importer() calls this for you as well.
     '''
-    for item in headerrow:  #  this is horrible but works for now
+    for item in headerrow:  # this is horrible but works for now
         if headerrow.count(item) > 1:
             idx = headerrow.index(item)
             for col in range(idx + 1, len(headerrow)):
@@ -42,13 +42,12 @@ def make_tablename():
     '''return filename, tablename'''
     filetype = None
 
-    filetypes = ('contacts', 'sales', 'products')
-    filestables = []
+    filetypes = {'contacts': '', 'sales': '', 'products': ''}
+
     for filetype in filetypes:
-        filename = input('please enter filename for {0} data: '.format(filetype))
-        tablename = filetype
-        filestables.append((filename, tablename))
-    return filestables
+        filetypes[filetype] = input('please enter filename for {0} data: '.format(filetype))
+
+    return filetypes
 
 def test_make_tablename():
     '''this belongs in testfile when done'''
