@@ -10,6 +10,7 @@ import cmd, sys
 
 class dataservShell(cmd.Cmd):
     '''user interface to do everything in a few steps. PyQt suggested for GUI.
+    will keep this as separate branch to come back to later.
     1: user puts in csv files
     2: this class creates DB using dataserv.LocalDB
     3: creates reports for each: ATV, CLV, LTS and CLS
