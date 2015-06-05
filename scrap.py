@@ -14,7 +14,7 @@ def importer(dbname, csvarray):
         importer = dataserv.LocalDB()
         tbldata = importer.get_csv(csvfile)
 
-        tblname = csvfile.split('.')[0]
+        tblname = csvfile.split('.')[0]  # replace this with func to return tblname based on what user says the file is
         new_headerrow = tbldata[0]
         remove_duplicates(new_headerrow)
         tbldata[0] = new_headerrow
@@ -34,6 +34,12 @@ def remove_duplicates(headerrow):
                     headerrow[col] = '_' + headerrow[col]
 
             print(item, ':', headerrow.count(item))
+
+def make_tablename():
+    '''choose your file'''
+    '''LocalDB.get_csv(chosen_file)'''
+    '''tablename is contacts, sales, products as chosen by user'''
+    '''return filename, tablename'''
 
 def histogram():
     '''
