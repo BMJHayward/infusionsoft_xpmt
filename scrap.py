@@ -32,10 +32,7 @@ def remove_duplicates(headerrow):
             for col in range(idx + 1, len(headerrow)):
                 if headerrow[col] == item:
                     headerrow[col] = '_' + headerrow[col]
-            #get index of each occurrence
-            #for 2nd occurrence, remove vowels
-            #for 3rd, remove vowels, prepend with '_'
-            #for more, append with number?
+
             print(item, ':', headerrow.count(item))
 
 def histogram():
