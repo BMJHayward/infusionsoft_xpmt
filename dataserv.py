@@ -818,5 +818,9 @@ def make_tablename():
 
     return filetypes
 
-if __name__ == "__main__":
+def main():
     importer()
+
+
+if __name__ == "__main__":
+    main()
