@@ -778,3 +778,45 @@ class Output:
             name = str(name)
         with open(name, 'wb') as picklejar:
             pickle.dump(data_to_save, picklejar)
+
+def importer():
+    ''' csvarray should be string including .csv extension in local folder '''
+    dbname = input('please enter database name: ')
+    datafiles = make_tablename()
+    importer = LocalDB()
+    for table, filename in datafiles.items():
+        tblname = table
+        tbldata = importer.get_csv(filename)
+        new_headerrow = tbldata[0]
+        remove_duplicates(new_headerrow)
+        tbldata[0] = new_headerrow
+
+        importer.sendto_sqlite(tbldata, tblname, db=dbname)
+
+def remove_duplicates(headerrow):
+    ''' Infusionsoft csv files often have duplicate strings as header row.
+    When importing to sql, this raises sqlite3.OperationalError. Pass in the
+    first row of your csv file to fix this. importer() calls this for you as well.
+    '''
+    for item in headerrow:  # this is horrible but works for now
+        if headerrow.count(item) > 1:
+            idx = headerrow.index(item)
+            for col in range(idx + 1, len(headerrow)):
+                if headerrow[col] == item:
+                    headerrow[col] = '_' + headerrow[col]
+
+            print(item, ':', headerrow.count(item))
+
+def make_tablename():
+    '''takes user input at command line for csv files exported from IS'''
+    filetypes = {'contacts': '', 'sales': '', 'products': ''}
+
+    for filetype in filetypes.keys():
+        filetypes[filetype] = input('please enter filename for {0} data: '.format(filetype))
+        if not os.path.isfile(filetypes[filetype]):
+            raise FileNotFoundError('File not in this directory. Please check and rerun the program.')
+
+    return filetypes
+
+if __name__ == "__main__":
+    importer()
