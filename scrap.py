@@ -7,7 +7,6 @@ import sqlite3
 from datetime import date
 import time
 
-
 def importer():
     ''' csvarray should be string including .csv extension in local folder '''
     dbname = input('please enter database name: ')
