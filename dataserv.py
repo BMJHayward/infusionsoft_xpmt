@@ -124,7 +124,11 @@ class LocalDB:
         for invoice in invoices:
             invoice[0] = invoice[0].strip('AUD')
             invoice[0] = invoice[0].strip('-AUD')
-            invoice[0] = locale.atof(invoice[0])
+            invoice[0] = invoice[0].strip('N/')
+            try:
+                invoice[0] = locale.atof(invoice[0])
+            except ValueError:
+                invoice[0] = 0  # Because some contacts have orders with no total recorded in IS. Not sure why.
         for row in invoices:
             invoices[invoices.index(row)] = tuple(row)
         c.executemany('UPDATE sales set [Order Total]=? where rowid=?;', invoices)
