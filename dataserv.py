@@ -812,6 +812,8 @@ def importer():
 
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
+    return dbname
+
 def remove_duplicates(headerrow):
     ''' Infusionsoft csv files often have duplicate strings as header row.
     When importing to sql, this raises sqlite3.OperationalError. Pass in the
@@ -838,8 +840,8 @@ def make_tablename():
     return filetypes
 
 def main():
-    importer()
-    # Output.stats_outputall()
+    dbname = importer()
+    # Output.stats_outputall(db=dbname)
 
 if __name__ == "__main__":
     main()
