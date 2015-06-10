@@ -22,19 +22,18 @@ dataserv.py is the main file of interest for the moment. this may be broken up i
 TODO:
 ========
 
-+ LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
 + Update tests - remove duplication
-+ Tests: output line number, caller, input data with exceptions
-+ refactor class LocalDB db connection, cursor, commit and close into a single function
-+ possible Report() class for inidividual reports to inherit from
-+ possible Transform() class for things common to each report
-+ complete methods to compare datetime objects
++ Remove hardcoded database names, e.g. dataserv.db
+    + 7 places: 117, 142, 165, 358, 498, 560, 578
 + use pandas or matplotlib for dataviz
 + base method for common statistics
 + base method to return dict of common statistics
 + base method to connect to DB, do query, fetchall(), return and close DB
-+ create file of functions to call _basequery() with different args
-+ refactor CostSaleLeadource to return table-like object with column names as headers
++ DONE: possible Report() class for inidividual reports to inherit from
++ DONE: complete methods to compare datetime objects
++ DONE: LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
++ DONE: create file of functions to call _basequery() with different args
++ DONE:refactor CostSaleLeadource to return table-like object with column names as headers
 '''
 import glob
 import os
@@ -824,7 +823,7 @@ def make_tablename():
 
 def main():
     importer()
-
+    # Output.stats_outputall()
 
 if __name__ == "__main__":
     main()
