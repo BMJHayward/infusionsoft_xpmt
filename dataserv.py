@@ -61,23 +61,24 @@ class LocalDB:
 
         conn = sqlite3.connect(db)
         c = conn.cursor()
+
         if isinstance(query_array, dict):
             create_table = 'CREATE TABLE ' + newtable + ' (key text, value integer);'
             c.execute(create_table)
             insert_into_table = 'INSERT INTO ' + newtable + ' values (?,?);'
             for item in query_array:
-                # insert item into db. think about datatypes here
-                # could possibly just write item as one whole string.
-                # read it back in as dict later
                 c.executemany(insert_into_table, item.iteritems())
+
         elif isinstance(query_array, list):
             create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
             c.execute(create_table)
             questionmarks = '('+''.join(['?,' for i in range(len(query_array[0])-1)])+'?)'
             insert_into_table = 'INSERT INTO ' + newtable + ' values ' + questionmarks + ';'
             c.executemany(insert_into_table, query_array)
+
         else:
             raise TypeError('Need to pass list or dict')
+
         conn.commit()
         conn.close()
 
@@ -107,6 +108,7 @@ class LocalDB:
         with open(filename, newline = '') as csvfile:
             reader = csv.reader(csvfile, delimiter = ',')
             csvdata.extend([entry for entry in reader])
+
         return csvdata
 
     @staticmethod
@@ -118,8 +120,10 @@ class LocalDB:
         c = conn.cursor()
         c.execute('SELECT [Order Total], rowid from sales;')
         invoices = c.fetchall()
+
         for row in invoices:
             invoices[invoices.index(row)] = list(row)
+
         for invoice in invoices:
             invoice[0] = invoice[0].strip('AUD')
             invoice[0] = invoice[0].strip('-AUD')
@@ -128,8 +132,10 @@ class LocalDB:
                 invoice[0] = locale.atof(invoice[0])
             except ValueError:
                 invoice[0] = 0  # Because some contacts have orders with no total recorded in IS. Not sure why.
+
         for row in invoices:
             invoices[invoices.index(row)] = tuple(row)
+
         c.executemany('UPDATE sales set [Order Total]=? where rowid=?;', invoices)
         conn.commit()
         conn.close()
@@ -166,13 +172,17 @@ class LocalDB:
         c = conn.cursor()
         conn.text_factory = int
         c.execute('SELECT Id FROM contacts;')
+
         contact_idlist = c.fetchall()
         contact_invlist = dict()
         conn.text_factory = str
+
         for cid in contact_idlist:
             c.execute('SELECT Date FROM sales where sales.ContactId = (?);', cid)
             contact_invlist[cid] = c.fetchall()
+
         conn.close()
+
         return contact_invlist
 
 
@@ -412,8 +422,6 @@ class LeadtimetoSale(Extract):
             i['Invoices'] = (self.get_inv(idarg))
             self.first_inv_date(i)
             self.get_daystosale(i)
-            # Process().procdict(i)  # Process class should be used last I think
-            # self.created_minus_sale(i)
 
         return self.idd
 
@@ -437,6 +445,7 @@ class LeadtimetoSale(Extract):
             inv_dates = dct['Invoices']
             for date in range(0, len(inv_dates)):
                 inv_dates[date] = inv_dates[date]['DateCreated']
+
             if len(inv_dates) == 0:
                 first_sale = 0
             elif len(inv_dates) != 0:
@@ -498,6 +507,7 @@ class CostSaleLeadsource(LocalDB):
         self.leadsource_ROI = self.get_db_table('dataserv.db', 'leadsource_ROI')
         CSL = OrderedDict()
         CSL['Leadsource'] = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
+
         for entry in self.leadsource_ROI:
             entry = list(entry)
             self.destring_leadsourceROI_table(entry)
@@ -536,11 +546,13 @@ class CostSaleLeadsource(LocalDB):
                 percent_profit = percent_profit[0]
         except ZeroDivisionError:
             percent_profit = 0
+
         dollar_profit  = leadsource_row[5] - leadsource_row[4]
         revenue        = leadsource_row[5]
         expenses       = leadsource_row[4]
 
         stat_list = [percent_profit, dollar_profit, revenue, expenses]
+
         return stat_list
 
 
@@ -577,6 +589,7 @@ class CustomerLifetimeValue(LocalDB):
              ORDER BY ContactId;'
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
+
         c.execute(SQL_QUERY)
         CLV_DATA = c.fetchall()
         self.spend = [row[1] for row in CLV_DATA]
@@ -686,6 +699,7 @@ class Output:
             (f_short_name, f_extension) = os.path.splitext(f_name)
             ws = wb.add_sheet(f_short_name)
             spamReader = csv.reader(open(filename, 'r'))
+
             for rowx, row in enumerate(spamReader):
                 for colx, value in enumerate(row):
                     ws.write(rowx, colx, value)
@@ -747,6 +761,7 @@ class Output:
     def ascsvdict(item, outfile):
         '''Item arg is list of dicts. Like ascsv but with DictWriter class.'''
         names = item[0].keys()
+
         with open(outfile,'w', newline='') as data:
             writer = csv.DictWriter(data, fieldnames=names)
             writer.writeheader()
@@ -787,6 +802,7 @@ def importer():
     dbname = input('please enter database name: ')
     datafiles = make_tablename()
     importer = LocalDB()
+
     for table, filename in datafiles.items():
         tblname = table
         tbldata = importer.get_csv(filename)
