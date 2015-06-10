@@ -92,7 +92,7 @@ class LocalDB:
 
     @staticmethod
     def get_db_table(db_name, db_table):
-
+        # c.execute("SELECT name FROM sqlite_master WHERE type='table';")  # gives you available tables
         conn = sqlite3.connect(db_name)
         c = conn.cursor()
         c.execute('SELECT * FROM {}'.format(db_table))
@@ -117,7 +117,7 @@ class LocalDB:
         locale.setlocale(locale.LC_ALL, '')
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
-        c.execute('SELECT [Inv Total], rowid from sales;')
+        c.execute('SELECT [Order Total], rowid from sales;')
         invoices = c.fetchall()
         for row in invoices:
             invoices[invoices.index(row)] = list(row)
@@ -127,7 +127,7 @@ class LocalDB:
             invoice[0] = locale.atof(invoice[0])
         for row in invoices:
             invoices[invoices.index(row)] = tuple(row)
-        c.executemany('UPDATE sales set [Inv Total]=? where rowid=?;', invoices)
+        c.executemany('UPDATE sales set [Order Total]=? where rowid=?;', invoices)
         conn.commit()
         conn.close()
 
@@ -141,7 +141,7 @@ class LocalDB:
 
         join_contacts_invoices = '''\
         SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],\
-        sales.[Inv Total], sales.Date \
+        sales.[Order Total], sales.Date \
         FROM contacts INNER JOIN sales \
         ON contacts.Id = sales.ContactId;\
         '''
@@ -551,12 +551,12 @@ class AverageTransactionValue:
         +get all sales
         +get number of sales
         +do arithmetic mean
-        + e.g: in SQL: SELECT AVG([Inv Total]) FROM sales;
+        + e.g: in SQL: SELECT AVG([Order Total]) FROM sales;
         '''
 
         conn = sqlite3.connect('dataserv.db')
         c = conn.cursor()
-        c.execute('SELECT [Inv Total] FROM sales;')
+        c.execute('SELECT [Order Total] FROM sales;')
         atv = c.fetchall()
         atv = [float(i[0]) for i in atv]
         atv = statistics.mean(atv)
@@ -569,7 +569,7 @@ class CustomerLifetimeValue(LocalDB):
     '''Calculate how much any given customer spends on average long term.'''
 
     def __init__(self):
-        SQL_QUERY = 'SELECT ContactId, SUM([Inv Total]), [Lead Source] FROM sales \
+        SQL_QUERY = 'SELECT ContactId, SUM([Order Total]), [Lead Source] FROM sales \
              GROUP BY ContactId \
              ORDER BY ContactId;'
         conn = sqlite3.connect('dataserv.db')
