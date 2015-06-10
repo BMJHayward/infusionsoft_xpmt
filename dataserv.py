@@ -23,12 +23,12 @@ TODO:
 ========
 
 + Update tests - remove duplication
-+ Remove hardcoded database names, e.g. dataserv.db
-    + 7 places: 117, 142, 165, 358, 498, 560, 578
 + use pandas or matplotlib for dataviz
 + base method for common statistics
 + base method to return dict of common statistics
 + base method to connect to DB, do query, fetchall(), return and close DB
++ DONE: Remove hardcoded database names, e.g. dataserv.db
+    + 7 places: 117, 142, 165, 358, 498, 560, 578
 + DONE: possible Report() class for inidividual reports to inherit from
 + DONE: complete methods to compare datetime objects
 + DONE: LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
@@ -112,11 +112,11 @@ class LocalDB:
         return csvdata
 
     @staticmethod
-    def convert_invoice():
+    def convert_invoice(dbname):
         '''Converts currency column in AUD to float.'''
 
         locale.setlocale(locale.LC_ALL, '')
-        conn = sqlite3.connect('dataserv.db')
+        conn = sqlite3.connect(dbname)
         c = conn.cursor()
         c.execute('SELECT [Order Total], rowid from sales;')
         invoices = c.fetchall()
@@ -141,16 +141,16 @@ class LocalDB:
         conn.close()
 
     @staticmethod
-    def create_joinlisttable():
+    def create_joinlisttable(dbname):
         ''' Creates join of two tables. Currently on uses sales and contacts table.
             Might open this to other tables later.
         '''
-        conn = sqlite3.connect('dataserv.db')
+        conn = sqlite3.connect(dbname)
         c = conn.cursor()
 
         join_contacts_invoices = '''\
         SELECT contacts.Id, contacts.[Date Created], contacts.[Lead Source],\
-        sales.[Order Total], sales.Date \
+        sales.[Order Total], sales.[Order Date] \
         FROM contacts INNER JOIN sales \
         ON contacts.Id = sales.ContactId;\
         '''
@@ -166,9 +166,9 @@ class LocalDB:
         conn.close()
 
     @staticmethod
-    def get_invoicedates():
+    def get_invoicedates(dbname):
         ''' Returns list of purchase dates for each contact. '''
-        conn = sqlite3.connect('dataserv.db')
+        conn = sqlite3.connect(dbname)
         c = conn.cursor()
         conn.text_factory = int
         c.execute('SELECT Id FROM contacts;')
@@ -331,12 +331,12 @@ class Leadtime(LocalDB):
     '''
 
 
-    def stats_LT(self, INCLUDE_LIST = False):
+    def stats_LT(self, dbname, INCLUDE_LIST = False):
         ''' Main entry point for database form of Leadtime class.
            Pass it nothing, get back dictionary mean, median, quintile and
            std deviation. Component functions listed below in order of appearance.
         '''
-        lt = self.get_leadtime()
+        lt = self.get_leadtime(dbname)
         average_leadtime = statistics.mean(lt)
         std_dev = statistics.pstdev(lt)
         quintile_5 = int(0.8 * len(lt))
@@ -357,15 +357,15 @@ class Leadtime(LocalDB):
 
         return stats
 
-    def get_leadtime(self):
-        leadtime = [row['leadtime'] for row in self.get_data().values()]
+    def get_leadtime(self, dbname):
+        leadtime = [row['leadtime'] for row in self.get_data(dbname).values()]
         leadtime = [i for i in leadtime if i >= 0]
 
         return leadtime
 
 
-    def get_data(self):
-        data = self.get_db_table('dataserv.db', 'contactsales')
+    def get_data(self,dbname):
+        data = self.get_db_table(dbname, 'contactsales')
         data = self.list_convert(data)
         data = self.leadtime_from_db(data)
 
@@ -495,7 +495,7 @@ class LeadtimetoSale(Extract):
 
 class CostSaleLeadsource(LocalDB):
     '''Return a cost per sale per leadsource dictionary.'''
-    def stats_CSL(self):
+    def stats_CSL(self, dbname):
 
         '''
         +get expenses per leadsource via API
@@ -504,7 +504,7 @@ class CostSaleLeadsource(LocalDB):
         ^OR^
         +run leadsource ROI report
         '''
-        self.leadsource_ROI = self.get_db_table('dataserv.db', 'leadsource_ROI')
+        self.leadsource_ROI = self.get_db_table(dbname, 'leadsource_ROI')
         CSL = OrderedDict()
         CSL['Leadsource'] = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
 
@@ -561,7 +561,7 @@ class AverageTransactionValue:
     TODO: segment by time period, leadsource, product etc.
     +Wouldn't mind breaking this down for each leadsource
     '''
-    def stats_ATV(self):
+    def stats_ATV(self, dbname):
         '''
         +get all sales
         +get number of sales
@@ -569,7 +569,7 @@ class AverageTransactionValue:
         + e.g: in SQL: SELECT AVG([Order Total]) FROM sales;
         '''
 
-        conn = sqlite3.connect('dataserv.db')
+        conn = sqlite3.connect(dbname)
         c = conn.cursor()
         c.execute('SELECT [Order Total] FROM sales;')
         atv = c.fetchall()
@@ -583,11 +583,11 @@ class AverageTransactionValue:
 class CustomerLifetimeValue(LocalDB):
     '''Calculate how much any given customer spends on average long term.'''
 
-    def __init__(self):
+    def __init__(self, dbname):
         SQL_QUERY = 'SELECT ContactId, SUM([Order Total]), [Lead Source] FROM sales \
              GROUP BY ContactId \
              ORDER BY ContactId;'
-        conn = sqlite3.connect('dataserv.db')
+        conn = sqlite3.connect(dbname)
         c = conn.cursor()
 
         c.execute(SQL_QUERY)
@@ -676,8 +676,8 @@ class Process:
 class Output:
     '''Take data ready for output. Methods to write to file.'''
     @staticmethod
-    def stats_outputall():
-        allstats = Output().stats_getall()
+    def stats_outputall(dbname):
+        allstats = Output().stats_getall(dbname)
         for report in allstats:
             Output().ascsv([allstats[report]], report + '.csv')
 
@@ -708,15 +708,15 @@ class Output:
         print('All done! Your file is named \"allstats.xls\".')
 
     @staticmethod
-    def stats_getall():
+    def stats_getall(dbname):
         ''' Get return data from all report classes,
         return dict of reportname:data pairs.
         '''
         allstats = {
-            'LT': Leadtime().stats_LT(),
-            'CSL': CostSaleLeadsource().stats_CSL(),
-            'ATV': AverageTransactionValue().stats_ATV(),
-            'CLV': CustomerLifetimeValue().stats_CLV()
+            'LT': Leadtime().stats_LT(dbname),
+            'CSL': CostSaleLeadsource().stats_CSL(dbname),
+            'ATV': AverageTransactionValue().stats_ATV(dbname),
+            'CLV': CustomerLifetimeValue(dbname).stats_CLV()
             }
 
         return allstats
@@ -812,6 +812,8 @@ def importer():
 
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
+    importer.create_joinlisttable(dbname)
+
     return dbname
 
 def remove_duplicates(headerrow):
@@ -841,7 +843,7 @@ def make_tablename():
 
 def main():
     dbname = importer()
-    # Output.stats_outputall(db=dbname)
+    Output.stats_outputall(dbname)
 
 if __name__ == "__main__":
     main()

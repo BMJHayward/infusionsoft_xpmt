@@ -20,6 +20,7 @@ iqlt2 = iq.Leadtime()
 iqldb = iq.LocalDB()
 iqcsl = iq.CostSaleLeadsource()
 
+dbname = 'dataserv.db'
 
 class TestLocalDB(unittest.TestCase):
 
@@ -167,7 +168,7 @@ class TestCostSaleLeadsource(unittest.TestCase):
     def test_stats_CSL(self):
         row_hdrs = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
         try:
-            CSL = iqcsl.stats_CSL()
+            CSL = iqcsl.stats_CSL(dbname)
             self.assertIs(CSL['Leadsource'], row_hdrs)
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
@@ -256,7 +257,7 @@ class TestLeadtime(unittest.TestCase):
         pass
     def test_get_data(self):
         try:
-            contactsales = iqlt2.get_data()
+            contactsales = iqlt2.get_data(dbname)
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
             return
@@ -280,7 +281,7 @@ class TestLeadtime(unittest.TestCase):
 
     def test_list_convert(self):
         try:
-            testdata = iqlt2.get_db_table('dataserv.db', 'contactsales')
+            testdata = iqlt2.get_db_table(dbname, 'contactsales')
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
             return
@@ -300,7 +301,7 @@ class TestLeadtime(unittest.TestCase):
 
     def test_leadtime_from_db(self):
         try:
-            testlist = iqlt2.get_db_table('dataserv.db', 'contactsales')
+            testlist = iqlt2.get_db_table(dbname, 'contactsales')
         except sqlite3.OperationalError as sqlerror:
             print('Database not available on this machine. Error: {0}'.format(sqlerror))
             return
