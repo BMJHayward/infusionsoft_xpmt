@@ -112,31 +112,32 @@ class LocalDB:
         return csvdata
 
     @staticmethod
-    def convert_invoice(dbname):
+    def convert_currencystring(dbname, dbtbl, dbcol):
         '''Converts currency column in AUD to float.'''
 
         locale.setlocale(locale.LC_ALL, '')
         conn = sqlite3.connect(dbname)
         c = conn.cursor()
-        c.execute('SELECT [Order Total], rowid from sales;')
-        invoices = c.fetchall()
+        getdata = 'SELECT [' + dbcol + '], rowid FROM ' + dbtbl + ';'
+        c.execute(getdata)
+        transactions = c.fetchall()
 
-        for row in invoices:
-            invoices[invoices.index(row)] = list(row)
+        for row in transactions:
+            transactions[transactions.index(row)] = list(row)
 
-        for invoice in invoices:
-            invoice[0] = invoice[0].strip('AUD')
-            invoice[0] = invoice[0].strip('-AUD')
-            invoice[0] = invoice[0].strip('N/')
+        for trxn in transactions:
+            trxn[0] = trxn[0].strip('AUD')
+            trxn[0] = trxn[0].strip('-AUD')
+            trxn[0] = trxn[0].strip('N/')
             try:
-                invoice[0] = locale.atof(invoice[0])
+                trxn[0] = locale.atof(trxn[0])
             except ValueError:
-                invoice[0] = 0  # Because some contacts have orders with no total recorded in IS. Not sure why.
+                trxn[0] = 0  # Because some contacts have orders with no total recorded in IS. Not sure why.
 
-        for row in invoices:
-            invoices[invoices.index(row)] = tuple(row)
-
-        c.executemany('UPDATE sales set [Order Total]=? where rowid=?;', invoices)
+        for row in transactions:
+            transactions[transactions.index(row)] = tuple(row)
+        updatedata = 'UPDATE ' + dbtbl + ' SET [' + dbcol + ']=? WHERE rowid=?;'
+        c.executemany(updatedata, transactions)
         conn.commit()
         conn.close()
 
@@ -568,7 +569,7 @@ class AverageTransactionValue:
         +do arithmetic mean
         + e.g: in SQL: SELECT AVG([Order Total]) FROM sales;
         '''
-
+        LocalDB.convert_currencystring(dbname, 'sales', 'Order Total')
         conn = sqlite3.connect(dbname)
         c = conn.cursor()
         c.execute('SELECT [Order Total] FROM sales;')
@@ -584,7 +585,7 @@ class CustomerLifetimeValue(LocalDB):
     '''Calculate how much any given customer spends on average long term.'''
 
     def __init__(self, dbname):
-        SQL_QUERY = 'SELECT ContactId, SUM([Order Total]), [Lead Source] FROM sales \
+        SQL_QUERY = 'SELECT ContactId, SUM([Order Total]) FROM sales \
              GROUP BY ContactId \
              ORDER BY ContactId;'
         conn = sqlite3.connect(dbname)
