@@ -832,7 +832,7 @@ def remove_duplicates(headerrow):
 
 def make_tablename():
     '''takes user input at command line for csv files exported from IS'''
-    filetypes = {'contacts': '', 'sales': '', 'products': ''}
+    filetypes = {'contacts': '', 'sales': '', 'products': '', 'leadsource_ROI': ''}
 
     for filetype in filetypes.keys():
         filetypes[filetype] = input('please enter filename for {0} data: '.format(filetype))
