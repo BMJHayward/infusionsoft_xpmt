@@ -16,24 +16,60 @@ Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, n
 This project will keep to the stdlib where ever possible to minimise dependencies, simplify deployment in several environme
 
 
-dataserv.py is the main file of interest for the moment. this may be broken up in futuremore classes are ad
+dataserv.py is the main file of interest for the moment. this may be broken up in future.
+
+HOW TO USE
+============
+
+1. Run and export 4 reports in your Infusionsoft account:
+   1a. When you export these reports, ensure all the boxes are ticked under 'Choose fields to export'
+   1b. Also, leave the date created fields blank to get the 'all time' results for your account
+   1c. Save as CSV:
+     + contacts (CRM -> Contacts -> Search -> Actions:Export -> Save as csv)
+     + sales/orders (E-Commerce -> Orders -> Search -> Actions:Export -> Save as csv)
+     + leadsource ROI (Marketing -> Reports -> Leadsource ROI -> Search ->Actions:Export-> Save as csv)
+     + products (E-Commerce -> Products -> Actions:Export -> Save as csv)
+
+2. Place the downloaded csv files in the same directory as dataserv.py
+
+3. Do: '>>> python3 dataserv.py'. The terminal will ask a few questions:
+    3a. Enter your preferred database name. A new database will be created. This allows you to have a few databases with different time frames if needed.
+    3b. When asked the name of the contacts, sales, products and leadsource ROI files, enter the names of your downloaded CSV files from Infusionsoft
+    3c. dataserv will do its thing, and will print an 'All done' when your report is ready.
+    3.d You'll have a spreadsheet file named allstats.xls as the main output, with separate CSV for the 4 main reports.
+
+4. The final 2 things are in Microsoft excel itself. When you open allstats.xls, go to the CSL tab to edit it. Select the 2nd column with (Percent profit, Dollar profit, expenses, revenue) as the header. Choose the excel function 'text to columns' from the Data tab in the ribbon. Choose the comma delimiter and then excel should split the data into 4 nice columns.
+
+5. Use search and replace on '[', ']' to get rid of these, allowing you to make your charts and things.
+
+6. For more data manipulation, simply create instances of each report class and send to Pandas, Numpy etc. E.g:
+
+```
+from dataserv import CostSaleLeadsource
+import pandas as pd
+newdata = CostSaleLeadsource().stats_CSL()
+newdata_df = pd.DataFrame(newdata)
+
+print('Do all your data things as you please')
+```
 
 TODO:
 ========
 
-+ LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
-+ Update tests - remove duplication
-+ Tests: output line number, caller, input data with exceptions
-+ refactor class LocalDB db connection, cursor, commit and close into a single function
-+ possible Report() class for inidividual reports to inherit from
-+ possible Transform() class for things common to each report
-+ complete methods to compare datetime objects
++ Remove duplication
++ Break down data by month and leadsource (other time periods, day, week and quarter would be great too
++ Update tests
 + use pandas or matplotlib for dataviz
 + base method for common statistics
 + base method to return dict of common statistics
 + base method to connect to DB, do query, fetchall(), return and close DB
-+ create file of functions to call _basequery() with different args
-+ refactor CostSaleLeadource to return table-like object with column names as headers
++ DONE: Remove hardcoded database names, e.g. dataserv.db
+    + 7 places: 117, 142, 165, 358, 498, 560, 578
++ DONE: possible Report() class for inidividual reports to inherit from
++ DONE: complete methods to compare datetime objects
++ DONE: LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
++ DONE: create file of functions to call _basequery() with different args
++ DONE:refactor CostSaleLeadource to return table-like object with column names as headers
 
 CLASSES:
 =========
@@ -304,11 +340,3 @@ builtins.object
    __init__(self)
        Instantiate Infusionsoft object and create connection to
        account app.
-
-
-
-
-
-
-
-
