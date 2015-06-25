@@ -68,11 +68,11 @@ class LocalDB:
             insert_into_table = 'INSERT INTO ' + newtable + ' values (?,?);'
             for item in query_array:
                 c.executemany(insert_into_table, item.iteritems())
-# types = tuple[type(column) for column in query_array[1]])
-# col_names = str(tuple(query_array.pop(0)))
-# headerrow = tuple(zip(col_names, types))
-# create_table = 'CREATE TABLE ' + newtable + headerrow + ' ;'
         elif isinstance(query_array, list):
+            # types = tuple([type(column) for column in query_array[1]])
+            # col_names = str(tuple(query_array.pop(0)))
+            # headerrow = str(tuple(zip(col_names, types)))
+            # create_table = 'CREATE TABLE ' + newtable + headerrow + ' ;'
             create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
             c.execute(create_table)
             questionmarks = '('+''.join(['?,' for i in range(len(query_array[0])-1)])+'?)'
@@ -109,7 +109,9 @@ class LocalDB:
 
         csvdata = []
         with open(filename, newline = '') as csvfile:
-            reader = csv.reader(csvfile, delimiter = ',')
+            dialect = csv.Sniffer().sniff(csvfile.read(1024))  # not on master
+            csvfile.seek(0)  # not on master
+            reader = csv.reader(csvfile, dialect, delimiter = ',')  # dialect arg not on master
             csvdata.extend([entry for entry in reader])
 
         return csvdata
@@ -732,7 +734,9 @@ class Output:
 
     @staticmethod
     def asfile(target=None, query=None, filename='dataserv.csv'):
-        ''' primarily to send to spreadsheet. TODO: use csv module '''
+        ''' primarily to send to spreadsheet. Target and query do same thing, was useful
+        to make more sense interacting with Infusionsoft API.
+        '''
 
         data = None
         if target is not None:

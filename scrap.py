@@ -1,5 +1,6 @@
 import glob
 import os
+import sys
 import csv
 import dataserv
 import statistics
@@ -56,7 +57,15 @@ def linecount():
 
     return sum(numlines)
 
+def quickdbtest():
+    salesdata = dataserv.LocalDB().get_csv('sales.csv')
+    try:
+        dataserv.LocalDB().sendto_sqlite(salesdata, 'sales', db='salesdatatest.sqlite')
+    except sqlite3.OperationalError as e:
+        print('Please delete table and try again:\n', e, e.__class__, sys.exc_info()[2])
 
 if __name__ == "__main__":
     x = linecount()
     print(x)
+    quickdbtest()
+
