@@ -70,7 +70,8 @@ class LocalDB:
                 c.executemany(insert_into_table, item.iteritems())
 # types = tuple[type(column) for column in query_array[1]])
 # col_names = str(tuple(query_array.pop(0)))
-# headerrow = list(zip(col_names, types))
+# headerrow = tuple(zip(col_names, types))
+# create_table = 'CREATE TABLE ' + newtable + headerrow + ' ;'
         elif isinstance(query_array, list):
             create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
             c.execute(create_table)
