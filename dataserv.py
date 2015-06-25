@@ -59,7 +59,7 @@ class LocalDB:
         in tables to avoid type conversion for datetime objects.
         '''
 
-        conn = sqlite3.connect(db)
+        conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
         c = conn.cursor()
 
         if isinstance(query_array, dict):
@@ -68,7 +68,9 @@ class LocalDB:
             insert_into_table = 'INSERT INTO ' + newtable + ' values (?,?);'
             for item in query_array:
                 c.executemany(insert_into_table, item.iteritems())
-
+# types = tuple[type(column) for column in query_array[1]])
+# col_names = str(tuple(query_array.pop(0)))
+# headerrow = list(zip(col_names, types))
         elif isinstance(query_array, list):
             create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
             c.execute(create_table)
