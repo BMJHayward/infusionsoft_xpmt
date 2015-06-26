@@ -1,5 +1,5 @@
 import glob
-import os
+import os, os.path
 import sys
 import csv
 import dataserv
@@ -64,8 +64,15 @@ def quickdbtest():
     except sqlite3.OperationalError as e:
         print('Please delete table and try again:\n', e, e.__class__, sys.exc_info()[2])
 
+def stripcurrencycodes():
+    datafile = dataserv.LocalDB()
+    for file in os.listdir():
+        ext = os.path.splitext(file)[1]
+        if ext == '.db' or '.sqlite':
+            datafile.convert_currencystring(file)
+
 if __name__ == "__main__":
     x = linecount()
     print(x)
-    quickdbtest()
+
 
