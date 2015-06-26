@@ -130,14 +130,16 @@ class LocalDB:
         for row in transactions:
             transactions[transactions.index(row)] = list(row)
 
-        for trxn in transactions:
-            trxn[0] = trxn[0].strip('AUD')
-            trxn[0] = trxn[0].strip('-AUD')
-            trxn[0] = trxn[0].strip('N/')
-            try:
+        try:
+            for trxn in transactions:
+                trxn[0] = trxn[0].strip('AUD')
+                trxn[0] = trxn[0].strip('-AUD')
+                trxn[0] = trxn[0].strip('N/')
                 trxn[0] = locale.atof(trxn[0])
-            except ValueError:
-                trxn[0] = 0  # Because some contacts have orders with no total recorded in IS. Not sure why.
+        except AttributeError:
+            pass
+        except ValueError:
+            trxn[0] = 0  # Because some contacts have orders with no total recorded in IS. Not sure why.
 
         for row in transactions:
             transactions[transactions.index(row)] = tuple(row)
