@@ -69,11 +69,8 @@ class LocalDB:
             insert_into_table = 'INSERT INTO ' + newtable + ' values (?,?);'
             for item in query_array:
                 c.executemany(insert_into_table, item.iteritems())
+
         elif isinstance(query_array, list):
-            # types = tuple([type(column) for column in query_array[1]])
-            # col_names = str(tuple(query_array.pop(0)))
-            # headerrow = str(tuple(zip(col_names, types)))
-            # create_table = 'CREATE TABLE ' + newtable + headerrow + ' ;'
             create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
             c.execute(create_table)
             questionmarks = '('+''.join(['?,' for i in range(len(query_array[0])-1)])+'?)'
@@ -96,7 +93,6 @@ class LocalDB:
 
     @staticmethod
     def get_db_table(db_name, db_table):
-        # c.execute("SELECT name FROM sqlite_master WHERE type='table';")  # gives you available tables
         conn = sqlite3.connect(db_name)
         c = conn.cursor()
         c.execute('SELECT * FROM {}'.format(db_table))
@@ -107,7 +103,6 @@ class LocalDB:
     @staticmethod
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
-
         csvdata = []
         with open(filename, newline = '') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(1024))  # not on master
@@ -120,7 +115,6 @@ class LocalDB:
     @staticmethod
     def convert_currencystring(dbname, dbtbl, dbcol):
         '''Converts currency column in AUD to float.'''
-
         locale.setlocale(locale.LC_ALL, '')
         conn = sqlite3.connect(dbname)
         c = conn.cursor()
@@ -130,7 +124,6 @@ class LocalDB:
 
         for row in transactions:
             transactions[transactions.index(row)] = list(row)
-
         try:
             for trxn in transactions:
                 trxn[0] = trxn[0].strip('AUD')
@@ -401,7 +394,6 @@ class Leadtime(LocalDB):
 
         return leadtime
 
-
     def get_data(self,dbname):
         data = self.get_db_table(dbname, 'contactsales')
         data = self.list_convert(data)
@@ -416,7 +408,6 @@ class Leadtime(LocalDB):
             newrow[4] = self.convert_datestring(newrow[4])
 
         return newlist
-
 
     def leadtime_from_db(self, targetlist):
         newlist = dict()
@@ -517,7 +508,6 @@ class LeadtimetoSale(Extract):
         xmlrpclib.DateTime if python2.x. Can also use DateTime-like
         objects which have the timetuple() method.
         '''
-
         # need to handle int values of 0 for dates here
         self.date1 = xmlrpcDateCreated.timetuple()
         if type(xmlrpcFirstSale) != int:
@@ -534,7 +524,6 @@ class LeadtimetoSale(Extract):
 class CostSaleLeadsource(LocalDB):
     '''Return a cost per sale per leadsource dictionary.'''
     def stats_CSL(self, dbname):
-
         '''
         +get expenses per leadsource via API
         +get number of sales per leadsource via API
@@ -572,7 +561,6 @@ class CostSaleLeadsource(LocalDB):
                 row[x] = float(row[x])
             except:
                 row[x] = 0
-
         for y in to_int:
             try:
                 row[y] = int(row[y])
@@ -673,7 +661,6 @@ class Process:
 
             if type(array[dictionary]) is list:
                 self.procarray(array[dictionary])
-
             elif type(array[dictionary]) is dict:
                 self.procdict(array[dictionary])
 
@@ -682,10 +669,8 @@ class Process:
 
             if key == 'DateCreated':
                 self.procdate(key, dictionary)
-
             elif key == 'FirstSale' and type(dictionary[key]) != int:
                 self.procdate(key,dictionary)
-
             elif key == 'Invoices':
                 # self.procarray(dictionary[key])
                 invlist = dictionary[key]
@@ -706,6 +691,7 @@ class Process:
             convdate = datetime(convdate.tm_year, convdate.tm_mon, convdate.tm_mday)
 
             return convdate
+
         except TypeError as te:
             print("wrong type ", te)
 
@@ -736,7 +722,6 @@ class Output:
 
         wb = xlwt.Workbook()
         reportfiles = ['ATV.csv', 'LT.csv', 'CLV.csv', 'CSL.csv']
-        # for filename in glob.glob('*.csv'):  #  TODO: change this to report fies LT,CLV,CSL,ATV
         for filename in reportfiles:
             (f_path, f_name) = os.path.split(filename)
             (f_short_name, f_extension) = os.path.splitext(f_name)
@@ -769,7 +754,6 @@ class Output:
         ''' primarily to send to spreadsheet. Target and query do same thing, was useful
         to make more sense interacting with Infusionsoft API.
         '''
-
         data = None
         if target is not None:
             data = target
@@ -854,7 +838,6 @@ def importer():
         new_headerrow = tbldata[0]
         remove_duplicates(new_headerrow)
         tbldata[0] = new_headerrow
-
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
 
     importer.create_joinlisttable(dbname)
