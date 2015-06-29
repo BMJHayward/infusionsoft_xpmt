@@ -64,6 +64,12 @@ def quickdbtest():
     except sqlite3.OperationalError as e:
         print('Please delete table and try again:\n', e, e.__class__, sys.exc_info()[2])
 
+def datestringtotuple(datestring):
+    datstr = datestring.split('/')
+    datstr = ''.join(datstr)
+    datstr = time.strptime(datstr, '%d%m%Y')
+    return datstr
+
 
 if __name__ == "__main__":
     x = linecount()
