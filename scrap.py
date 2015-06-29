@@ -56,6 +56,7 @@ def linecount():
             except: pass
 
     return sum(numlines)
+
 def quickdbtest():
     salesdata = dataserv.LocalDB().get_csv('sales.csv')
     try:
@@ -67,4 +68,3 @@ def quickdbtest():
 if __name__ == "__main__":
     x = linecount()
     print(x)
-    stripcurrencycodes()

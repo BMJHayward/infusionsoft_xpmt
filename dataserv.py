@@ -36,7 +36,8 @@ TODO:
 + DONE:refactor CostSaleLeadource to return table-like object with column names as headers
 '''
 import glob
-import os
+import sys
+import os, os.path
 import sqlite3
 import csv
 import time
@@ -148,24 +149,22 @@ class LocalDB:
         conn.commit()
         conn.close()
 
-    @staticmethod
-    def db_iterate(dbname):
+    def db_iterate(self, dbname):
         currencycolumns = {
             'sales': ['Order Total'],
             'contactsales': ['invamount'],
             'leadsource_ROI':
                 ('Expenses','Revenue','Cost Per Visitor','Cost Per Contact','Cost Per Customer'),
-            'products':['price']}
-
-        datafile = self.LocalDB()
+            'products':['price']
+            }
 
         for dbtbl in currencycolumns.keys():
             print('Going through ', dbtbl, ' table.')
             for dbcol in currencycolumns[dbtbl]:
                 print('Going through ', dbcol, ' in ', dbtbl, '.')
-                datafile.convert_currencystring(dbname, dbtbl, dbcol)
-    @staticmethod
-    def stripcurrencycodes():
+                self.convert_currencystring(dbname, dbtbl, dbcol)
+
+    def stripcurrencycodes(self):
         ''' Iterates through databases is local directory, removes currency code,
             converts column to float.
         '''
@@ -174,9 +173,9 @@ class LocalDB:
             if (ext == '.db') or (ext == '.sqlite'):
                 print('Going through: ', file)
                 try:
-                    db_iterate(file)
+                    self.db_iterate(file)
                 except Exception as e:
-                    print(e, sys.exc_info())
+                    print(e, sys.exc_info()[2])
                 print('Done with: ', file)
 
     @staticmethod
