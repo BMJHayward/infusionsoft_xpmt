@@ -63,30 +63,6 @@ def quickdbtest():
     except sqlite3.OperationalError as e:
         print('Please delete table and try again:\n', e, e.__class__, sys.exc_info()[2])
 
-def db_iterate(dbname):
-    currencycolumns = {
-        'sales': ['Order Total'],
-        'contactsales': ['invamount'],
-        'leadsource_ROI':
-            ('Expenses','Revenue','Cost Per Visitor','Cost Per Contact','Cost Per Customer'),
-        'products':['price']}
-
-    datafile = dataserv.LocalDB()
-
-    for dbtbl in currencycolumns.keys():
-        print('Going through ', dbtbl, ' table.')
-        for dbcol in currencycolumns[dbtbl]:
-            print('Going through ', dbcol, ' in ', dbtbl, '.')
-            datafile.convert_currencystring(dbname, dbtbl, dbcol)
-
-def stripcurrencycodes():
-    for file in os.listdir():
-        ext = os.path.splitext(file)[1]
-
-        if ext != ('.yml' or '.git') and (ext == '.db' or '.sqlite'):
-            print('Going through: ', file)
-            db_iterate(file)
-            print('Done with: ', file)
 
 if __name__ == "__main__":
     x = linecount()

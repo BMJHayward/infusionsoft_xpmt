@@ -149,6 +149,37 @@ class LocalDB:
         conn.close()
 
     @staticmethod
+    def db_iterate(dbname):
+        currencycolumns = {
+            'sales': ['Order Total'],
+            'contactsales': ['invamount'],
+            'leadsource_ROI':
+                ('Expenses','Revenue','Cost Per Visitor','Cost Per Contact','Cost Per Customer'),
+            'products':['price']}
+
+        datafile = self.LocalDB()
+
+        for dbtbl in currencycolumns.keys():
+            print('Going through ', dbtbl, ' table.')
+            for dbcol in currencycolumns[dbtbl]:
+                print('Going through ', dbcol, ' in ', dbtbl, '.')
+                datafile.convert_currencystring(dbname, dbtbl, dbcol)
+    @staticmethod
+    def stripcurrencycodes():
+        ''' Iterates through databases is local directory, removes currency code,
+            converts column to float.
+        '''
+        for file in os.listdir():
+            ext = os.path.splitext(file)[1]
+            if (ext == '.db') or (ext == '.sqlite'):
+                print('Going through: ', file)
+                try:
+                    db_iterate(file)
+                except Exception as e:
+                    print(e, sys.exc_info())
+                print('Done with: ', file)
+
+    @staticmethod
     def create_joinlisttable(dbname):
         ''' Creates join of two tables. Currently on uses sales and contacts table.
             Might open this to other tables later.
