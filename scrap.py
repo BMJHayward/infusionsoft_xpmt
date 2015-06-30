@@ -28,13 +28,6 @@ def linecount():
 
     return sum(numlines)
 
-def get_db_column(dbname, dbtbl, dbcol):
-    conn=sqlite3.connect(dbname)
-    cur=conn.cursor()
-    cur.execute('SELECT {0} FROM {1}'.format(dbcol, dbtbl))
-    returncolumn = cur.fetchall()
-    return returncolumn
-
 def plotdates(datelist, valuelist):
     from matplotlib import pyplot as plt  # probably want this in separate file to dataserv when ready
     from matplotlib import dates as pltdates
