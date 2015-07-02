@@ -6,7 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-dates = eval(open('dates.txt','r+').read())
+datefile = input('please enter datefile name: ')
+dates = eval(open(datefile,'r+').read())
 datescount = Counter(dates)
 datescount[20080627] = 500
 # this value skews the graph too much, original value is approx 23K
