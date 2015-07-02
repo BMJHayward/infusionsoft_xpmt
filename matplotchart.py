@@ -6,12 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import dates as pltdates
 import pandas as pd
+import sqlite3
 
-datefile = input('please enter datefile name: ')
-dates = eval(open(datefile,'r+').read())
-datescount = Counter(dates)
-datescount[20080627] = 500
-# this value skews the graph too much, original value is approx 23K
+def getdatesfromfile():
+    datefile = input('please enter datefile name: ')
+    dates = eval(open(datefile,'r+').read())
+    datescount = Counter(dates)
+    datescount[20080627] = 500
 
 def matplot_bar(datescount):
     labels, values = zip(*datescount.items())
@@ -30,8 +31,6 @@ def pandas_histogram(dates):
     plt.show()
 
 def plotdates(datelist, valuelist):
-
-
     yerp=dataserv.Leadtime()
     newdatelist = []
     for i in datelist:
@@ -41,3 +40,11 @@ def plotdates(datelist, valuelist):
         newdatelist.append(j)
     dates = pltdates.date2num(newdatelist)
     plt.plot_date(dates, valuelist)
+
+def sqltopandas():
+    db = input('please enter DB name: ')
+    sqlquery = input('please enter SQL query to execute: ')
+    with sqlite3.connect(db) as con:
+        dbquery = pd.read_sql(sqlquery, con)
+
+    return dbquery
