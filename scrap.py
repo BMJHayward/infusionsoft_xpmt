@@ -28,18 +28,7 @@ def linecount():
 
     return sum(numlines)
 
-def plotdates(datelist, valuelist):
-    from matplotlib import pyplot as plt  # probably want this in separate file to dataserv when ready
-    from matplotlib import dates as pltdates
-    yerp=dataserv.Leadtime()
-    newdatelist = []
-    for i in datelist:
-        if not isinstance(i, str):
-            i=i[0]
-        j = yerp.convert_datestring(i)
-        newdatelist.append(j)
-    dates = pltdates.date2num(newdatelist)
-    plt.plot_date(dates, valuelist)
+
 
 if __name__ == "__main__":
     x = linecount()
