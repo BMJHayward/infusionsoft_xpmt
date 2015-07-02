@@ -4,6 +4,7 @@ using matplotlib to viz dates.txt
 from collections import Counter
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import dates as pltdates
 import pandas as pd
 
 datefile = input('please enter datefile name: ')
@@ -29,8 +30,8 @@ def pandas_histogram(dates):
     plt.show()
 
 def plotdates(datelist, valuelist):
-    from matplotlib import pyplot as plt  # probably want this in separate file to dataserv when ready
-    from matplotlib import dates as pltdates
+
+
     yerp=dataserv.Leadtime()
     newdatelist = []
     for i in datelist:
