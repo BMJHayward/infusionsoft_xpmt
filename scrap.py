@@ -3,6 +3,7 @@ import os, os.path
 import sys
 import csv
 import dataserv
+import matplotchart as mpc
 import statistics
 import sqlite3
 from datetime import date
@@ -27,7 +28,6 @@ def linecount():
             except: pass
 
     return sum(numlines)
-
 
 
 if __name__ == "__main__":
