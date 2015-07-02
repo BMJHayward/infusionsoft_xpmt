@@ -29,6 +29,13 @@ def linecount():
 
     return sum(numlines)
 
+def plottest():
+    import matplotchart as mpc
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    qdata = mpc.sqltopandas()
+    dates, values = qdata['Order Date'], qdata['Order Total']
+    mpc.plotdates(dates, values)
 
 if __name__ == "__main__":
     x = linecount()

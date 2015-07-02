@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib import dates as pltdates
 import pandas as pd
 import sqlite3
+import dataserv
 
 def getdatesfromfile():
     datefile = input('please enter datefile name: ')
@@ -27,7 +28,7 @@ def matplot_bar(datescount):
 def pandas_histogram(dates):
     datesdf = pd.DataFrame(dates)
     plt.figure()
-    datesdf.plot(kind='hist', alpha=0.5)
+    datesdf.plot(kind='bar', alpha=0.5)
     plt.show()
 
 def plotdates(datelist, valuelist):
