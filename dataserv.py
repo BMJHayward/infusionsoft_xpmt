@@ -100,13 +100,13 @@ class LocalDB:
 
         return db_tbl
 
-def get_db_column(dbname, dbtbl, dbcol):
-    conn=sqlite3.connect(dbname)
-    cur=conn.cursor()
-    cur.execute('SELECT {0} FROM {1}'.format(dbcol, dbtbl))
-    returncolumn = cur.fetchall()
-    
-    return returncolumn
+    def get_db_column(dbname, dbtbl, dbcol):
+        conn=sqlite3.connect(dbname)
+        cur=conn.cursor()
+        cur.execute('SELECT {0} FROM {1}'.format(dbcol, dbtbl))
+        returncolumn = cur.fetchall()
+
+        return returncolumn
 
     @staticmethod
     def get_csv(filename):
