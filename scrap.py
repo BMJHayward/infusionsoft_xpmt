@@ -37,6 +37,18 @@ def plottest():
     dates, values = qdata['Order Date'], qdata['Order Total']
     mpc.plotdates(dates, values)
 
+def column2datetype(db, table, column):
+    dateconvert = dataserv.Leadtime()
+    conn=sqlite3.connect(db)
+    c=conn.cursor()
+    querystmt = ('SELECT ? FROM ?;', (column, table))
+    alterstmt = ('ALTER table ? ADD COLUMN ? date', (table, column))
+    c.execute(querystmt)
+    doi = c.fetchall()
+    for date in doi:
+        datepoint = dateconvert.convert_datestring(date)
+
+
 if __name__ == "__main__":
     x = linecount()
     print(x)
