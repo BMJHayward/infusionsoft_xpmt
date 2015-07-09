@@ -49,8 +49,9 @@ def column2datetype(db, table, column):
     doi = [list(i) for i in doi]
     for date in doi:
         date[1] = dateconvert.convert_datestring(date[1])
-        c.execute('UPDATE ? SET ? = ? WHERE rowid=?;',(table, column, date[1], date[0]))
-
+        c.execute('UPDATE {0} SET {1} = {2} WHERE rowid={3};'.format(table, column, date[1], date[0]))
+    conn.commit()
+    conn.close()
 
 if __name__ == "__main__":
     x = linecount()
