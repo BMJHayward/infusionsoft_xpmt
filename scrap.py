@@ -41,12 +41,15 @@ def column2datetype(db, table, column):
     dateconvert = dataserv.Leadtime()
     conn=sqlite3.connect(db)
     c=conn.cursor()
-    querystmt = ('SELECT ? FROM ?;', (column, table))
-    alterstmt = ('ALTER table ? ADD COLUMN ? date', (table, column))
+    querystmt = ('SELECT rowid, ? FROM ?;', (column, table))
+    # updatestmt = ()
+    # alterstmt = ('ALTER table ? ADD COLUMN ? date', (table, column))
     c.execute(querystmt)
     doi = c.fetchall()
+    doi = [list(i) for i in doi]
     for date in doi:
-        datepoint = dateconvert.convert_datestring(date)
+        date[1] = dateconvert.convert_datestring(date[1])
+        c.execute('UPDATE ? SET ? = ? WHERE rowid=?;'(table, column, date[1], date[0]))
 
 
 if __name__ == "__main__":
