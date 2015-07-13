@@ -59,6 +59,14 @@ def column2datetype(db, table, column):
     conn.commit()
     conn.close()
 
+def reversedatestr(self, targetdate):
+    newdate = targetdate.split()[0]
+    newdate = newdate.split('/')
+    newdate = [int(n) for n in newdate]
+    newdate.reverse()
+
+    return newdate
+
 if __name__ == "__main__":
     x = linecount()
     print(x)
