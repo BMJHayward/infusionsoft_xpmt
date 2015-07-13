@@ -39,15 +39,16 @@ def plottest():
 
 def column2datetype(db, table, column):
     dateconvert = dataserv.Leadtime()
-    conn=sqlite3.connect(db)
+    conn=sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
     c=conn.cursor()
-    querystmt = ('SELECT rowid, ? FROM ?;', (column, table))
 
     newcolumn = 'py_' + column.strip('[]')
     if ' ' in newcolumn:
         newcolumn = newcolumn.replace(' ','_')
+    alterstmt = 'ALTER table {0} ADD COLUMN {1} DATETIME'.format(table, newcolumn)
+    c.execute(alterstmt)
 
-    alterstmt = ('ALTER table ? ADD COLUMN ? date', (table, newcolumn))
+    querystmt = 'SELECT rowid, {0} FROM {1};'.format(column, table)
     c.execute(querystmt)
     doi = c.fetchall()
     doi = [list(i) for i in doi]
