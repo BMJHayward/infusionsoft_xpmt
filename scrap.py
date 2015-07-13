@@ -45,7 +45,7 @@ def column2datetype(db, table, column):
     newcolumn = 'py_' + column.strip('[]')
     if ' ' in newcolumn:
         newcolumn = newcolumn.replace(' ','_')
-    alterstmt = 'ALTER table {0} ADD COLUMN {1} DATETIME'.format(table, newcolumn)
+    alterstmt = 'ALTER table {0} ADD COLUMN {1} DATE'.format(table, newcolumn)
     c.execute(alterstmt)
 
     querystmt = 'SELECT rowid, {0} FROM {1};'.format(column, table)
@@ -54,8 +54,8 @@ def column2datetype(db, table, column):
     doi = [list(i) for i in doi]
 
     for date in doi:
-        date[1] = dateconvert.convert_datestring(date[1])
-        c.execute('UPDATE {0} SET {1} = {2} WHERE rowid={3};'.format(table, newcolumn, date[1], date[0]))
+        newdate = dateconvert.convert_datestring(date[1])
+        c.execute('INSERT INTO {0}.{1}({2}) WHERE rowid={3};'.format(table, newcolumn, newdate, date[0]))
     conn.commit()
     conn.close()
 
