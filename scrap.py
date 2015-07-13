@@ -67,7 +67,7 @@ def reversedatestr(self, targetdate):
 
     return newdate
 
-def db_updatestrdates():
+def db_updatestrdates(db, table, column):
     updatestmt = 'UPDATE {0} SET {1} = {2} WHERE rowid = {3};'.format(table, datecolumn, newdate, rowid)
 
 
