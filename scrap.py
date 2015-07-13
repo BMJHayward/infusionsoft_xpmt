@@ -45,7 +45,7 @@ def column2datetype(db, table, column):
     newcolumn = 'py_' + column.strip('[]')
     if ' ' in newcolumn:
         newcolumn = newcolumn.replace(' ','_')
-    alterstmt = 'ALTER table {0} ADD COLUMN {1} DATE'.format(table, newcolumn)
+    alterstmt = 'ALTER table {0} ADD COLUMN {1} TEXT'.format(table, newcolumn)
     c.execute(alterstmt)
 
     querystmt = 'SELECT rowid, {0} FROM {1};'.format(column, table)
@@ -55,20 +55,20 @@ def column2datetype(db, table, column):
 
     for date in doi:
         newdate = dateconvert.convert_datestring(date[1])
-        c.execute('INSERT INTO {0}.{1}({2}) WHERE rowid={3};'.format(table, newcolumn, newdate, date[0]))
+        newdate = newdate.isoformat()
+        c.execute('UPDATE {0} SET {1} = {2} WHERE rowid={3};'.format(table, newcolumn, newdate, date[0]))
     conn.commit()
     conn.close()
 
-def reversedatestr(self, targetdate):
-    newdate = targetdate.split()[0]
-    newdate = newdate.split('/')
-    newdate = [int(n) for n in newdate]
-    newdate.reverse()
-
-    return newdate
-
 def db_updatestrdates(db, table, column):
-    updatestmt = 'UPDATE {0} SET {1} = {2} WHERE rowid = {3};'.format(table, datecolumn, newdate, rowid)
+    datedelta = dataserv.Leadtime()
+    conn = sqlite3.connect(db)
+    cur = conn.cursor()
+    cur.execute('SELECT rowid, {0} FROM {1};'.format(column, table))
+    datelist = cur.fetchall()
+    for dat in datelist:
+        newdate = datedelta.convert_datestring(dat[1])
+        isodate = newdate.isoformat()
 
 
 if __name__ == "__main__":
