@@ -67,6 +67,10 @@ def reversedatestr(self, targetdate):
 
     return newdate
 
+def db_updatestrdates():
+    updatestmt = 'UPDATE {0} SET {1} = {2} WHERE rowid = {3};'.format(table, datecolumn, newdate, rowid)
+
+
 if __name__ == "__main__":
     x = linecount()
     print(x)
