@@ -6,8 +6,9 @@ import dataserv
 import matplotchart as mpc
 import statistics
 import sqlite3
-from datetime import date
+from datetime import date, datetime
 import time
+from dateutil import parser
 
 def filelinecount(filename):
     if type(filename) != str:
@@ -48,6 +49,12 @@ def datefromcsv():
         print 'Date: {}'.format(date)        #SLA display
         print 'Result: {}'.format(result)
 
+def dateconv(datept):
+    # datetime.strptime(datept, '%d %m %Y')
+    # datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
+    datepoint = parser.parser(datept)
+
+    return datepoint
 
 if __name__ == "__main__":
     x = linecount()
