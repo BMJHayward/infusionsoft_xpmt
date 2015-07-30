@@ -224,7 +224,11 @@ class LocalDB:
 
         return contact_invlist
 
-    def getdatesfromstring(columnname):
+    def datecolumncheck(columnname):
+    ''' Columns below contain dates in infusionsoft.
+        Some of these are app specific. You will need to update
+        to match your infusionsoft account.
+    '''
 	datecolumns = \
 	    {'Date Created',
 	    'Last Updated',
@@ -243,13 +247,23 @@ class LocalDB:
 	if columnname in datecolumns:
 	    return True
 
-    def dateconv(datept):
-
+    def strtodatetime(datept):
+    '''When querying a database, convert dates using this
+       before working in with them in python.
+    '''
 	# datetime.strptime(datept, '%d %m %Y')
 	# datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
 	datepoint = parser.parser(datept)
 
 	return datepoint
+
+    def datetimetostr(datept):
+    '''When writing back to sqlite database, use to put this
+       to str. Saves as YYYY-MM-DDTHH:MM:SS
+    '''
+	strdate = datetime.isoformat(datept)
+
+	return strdate
 
 
 class Query:
