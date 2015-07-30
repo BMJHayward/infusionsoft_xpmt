@@ -224,6 +224,33 @@ class LocalDB:
 
         return contact_invlist
 
+    def getdatesfromstring(columnname):
+	datecolumns = \
+	    {'Date Created',
+	    'Last Updated',
+	    'Program Started date',
+	    'Assessment Booked Date',
+	    'Date Sent',
+	    'Initial Enquiry Date',
+	    'Date Equipment was received',
+	    'PlusThis New lead date',
+	    'Referred date',
+	    'Order Date',
+	    'entrydate',
+	    'invdate'    
+	    }
+
+	if columnname in datecolumns:
+	    return True
+
+    def dateconv(datept):
+
+	# datetime.strptime(datept, '%d %m %Y')
+	# datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
+	datepoint = parser.parser(datept)
+
+	return datepoint
+
 
 class Query:
     '''Create connection to API and run basic queries.'''

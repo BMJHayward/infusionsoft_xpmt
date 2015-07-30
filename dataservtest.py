@@ -92,17 +92,20 @@ class TestLocalDB(unittest.TestCase):
     def test_get_db_column(db_name, db_table, db_column):
 	pass
 
-def test_convert_currencystring(dbname, dbtbl, dbcol):
-    pass
+    def test_convert_currencystring(dbname, dbtbl, dbcol):
+	pass
 
-def test_stripcurrencycodes():
-    pass
+    def test_stripcurrencycodes():
+	pass
 
-def test_create_joinlisttable(dbname):
-    pass
+    def test_create_joinlisttable(dbname):
+	pass
 
-def test_get_invoicedates(dbname):
-    pass
+    def test_get_invoicedates(dbname):
+	pass
+
+    def test_dateconv(datept):
+	pass
 
 
 class TestQuery(unittest.TestCase):
