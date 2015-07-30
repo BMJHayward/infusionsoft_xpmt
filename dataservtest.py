@@ -86,6 +86,24 @@ class TestLocalDB(unittest.TestCase):
         # except Exception as exc:
             # print('Error: {0}'.format(exc))
 
+    def test_get_db_table(db_name, db_table):
+	pass
+
+    def test_get_db_column(db_name, db_table, db_column):
+	pass
+
+def test_convert_currencystring(dbname, dbtbl, dbcol):
+    pass
+
+def test_stripcurrencycodes():
+    pass
+
+def test_create_joinlisttable(dbname):
+    pass
+
+def test_get_invoicedates(dbname):
+    pass
+
 
 class TestQuery(unittest.TestCase):
     ''' this class may be just to test InfusionQuery() class, with new test
