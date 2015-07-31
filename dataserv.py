@@ -225,11 +225,11 @@ class LocalDB:
         return contact_invlist
 
     def datecolumncheck(columnname):
-    ''' Columns below contain dates in infusionsoft.
-        Some of these are app specific. You will need to update
-        to match your infusionsoft account.
-    '''
-	datecolumns = \
+	''' Columns below contain dates in infusionsoft.
+	    Some of these are app specific. You will need to update
+	    to match your infusionsoft account.
+	'''
+        datecolumns = \
 	    {'Date Created',
 	    'Last Updated',
 	    'Program Started date',

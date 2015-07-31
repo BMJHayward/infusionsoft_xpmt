@@ -23,6 +23,18 @@ iqcsl = iq.CostSaleLeadsource()
 dbname = 'dataserv.db'
 
 class TestLocalDB(unittest.TestCase):
+    testdb = sqlite3.connect(':memory:')
+    testcursor = testdb.cursor()
+    testcursor.execute('''CREATE TABLE segagames(title text, year real)''')
+    testdb.commit()
+    games = [('Sonic CD', '1989'),
+    ('Sonic the Hedgehog', '1990'),
+    ('Sonic the Hedgehog 2', '1991'),
+    ('Sonic the Hedgehog 3', '1992'),
+    ('Sonic & Knuckles', '1993'),
+    ('Sonic Spinball', '1994')]
+    testcursor.executemany('''INSERT INTO segagames VALUES(?,?)''', games)
+    testdb.commit()
 
     def test_sendto_sqlite(self):
         db = ":memory:"
@@ -86,11 +98,18 @@ class TestLocalDB(unittest.TestCase):
         # except Exception as exc:
             # print('Error: {0}'.format(exc))
 
-    def test_get_db_table(db_name, db_table):
-	pass
+    def test_get_db_table(self):
+        db_name = testdb
+        db_table = segagames
+        dbtbl = iqldb.get_db_table(db_name, db_table)
+        self.assertIsInstance(dbtbl, list)	
 
-    def test_get_db_column(db_name, db_table, db_column):
-	pass
+    def test_get_db_column(self):
+        db_name = testdb
+        db_table = 'segagames'
+        db_column = 'title'
+        dbcol = iqldb.get_db_column(db_name, db_table, db_column)
+        self.assertIsInstance(dbcol, list)
 
     def test_convert_currencystring(dbname, dbtbl, dbcol):
 	pass
