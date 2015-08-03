@@ -225,45 +225,45 @@ class LocalDB:
         return contact_invlist
 
     def datecolumncheck(columnname):
-	''' Columns below contain dates in infusionsoft.
-	    Some of these are app specific. You will need to update
-	    to match your infusionsoft account.
-	'''
+        ''' Columns below contain dates in infusionsoft.
+            Some of these are app specific. You will need to update
+            to match your infusionsoft account.
+        '''
         datecolumns = \
-	    {'Date Created',
-	    'Last Updated',
-	    'Program Started date',
-	    'Assessment Booked Date',
-	    'Date Sent',
-	    'Initial Enquiry Date',
-	    'Date Equipment was received',
-	    'PlusThis New lead date',
-	    'Referred date',
-	    'Order Date',
-	    'entrydate',
-	    'invdate'    
-	    }
+        {'Date Created',
+        'Last Updated',
+        'Program Started date',
+        'Assessment Booked Date',
+        'Date Sent',
+        'Initial Enquiry Date',
+        'Date Equipment was received',
+        'PlusThis New lead date',
+        'Referred date',
+        'Order Date',
+        'entrydate',
+        'invdate'    
+        }
 
-	if columnname in datecolumns:
-	    return True
+        if columnname in datecolumns:
+            return True
 
     def strtodatetime(datept):
-    '''When querying a database, convert dates using this
-       before working in with them in python.
-    '''
-	# datetime.strptime(datept, '%d %m %Y')
-	# datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
-	datepoint = parser.parser(datept)
+        '''When querying a database, convert dates using this
+           before working in with them in python.
+        '''
+        # datetime.strptime(datept, '%d %m %Y')
+        # datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
+        datepoint = parser.parser(datept)
 
-	return datepoint
+        return datepoint
 
     def datetimetostr(datept):
-    '''When writing back to sqlite database, use to put this
-       to str. Saves as YYYY-MM-DDTHH:MM:SS
-    '''
-	strdate = datetime.isoformat(datept)
+        '''When writing back to sqlite database, use to put this
+           to str. Saves as YYYY-MM-DDTHH:MM:SS
+        '''
+        strdate = datetime.isoformat(datept)
 
-	return strdate
+        return strdate
 
 
 class Query:
