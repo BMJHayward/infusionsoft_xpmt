@@ -112,25 +112,25 @@ class TestLocalDB(unittest.TestCase):
         self.assertIsInstance(dbcol, list)
 
     def test_convert_currencystring(dbname, dbtbl, dbcol):
-	pass
+	    pass
 
     def test_stripcurrencycodes():
-	pass
+	    pass
 
     def test_create_joinlisttable(dbname):
-	pass
+	    pass
 
     def test_get_invoicedates(dbname):
-	pass
+	    pass
 
-def test_str2dateconv(datept):
-    pass
+    def test_str2dateconv(datept):
+        pass
 
-def test_date2strconv(datept):
-    pass
+    def test_date2strconv(datept):
+        pass
 
-def test_datecolumncheck(columnname):
-    pass
+    def test_datecolumncheck(columnname):
+        pass
 
 
 class TestQuery(unittest.TestCase):
