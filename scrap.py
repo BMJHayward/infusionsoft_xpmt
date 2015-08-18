@@ -62,7 +62,7 @@ def getdatesfromstring(columnname):
         'Referred date',
         'Order Date',
         'entrydate',
-        'invdate'    
+        'invdate'
         }
 
     if columnname in datecolumns:
@@ -73,7 +73,7 @@ def dateconv(datept):
 
     # datetime.strptime(datept, '%d %m %Y')
     # datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
-    datepoint = parser.parser(datept)
+    datepoint = parser.parse(datept)
 
     return datepoint
 
