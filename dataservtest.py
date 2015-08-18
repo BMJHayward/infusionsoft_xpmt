@@ -91,18 +91,18 @@ class TestLocalDB(unittest.TestCase):
         except Exception as exc:
             print('Error: {0}'.format(exc))
 
-    # def test_get_invoicedates(self):
-        # try:
-            # invlist = iqldb.get_invoicedates()
-            # self.assertIsInstance(invlist, dict)
-        # except Exception as exc:
-            # print('Error: {0}'.format(exc))
+    def test_get_invoicedates(self):
+        try:
+            invlist = iqldb.get_invoicedates()
+            self.assertIsInstance(invlist, dict)
+        except Exception as exc:
+            print('Error: {0}'.format(exc))
 
     def test_get_db_table(self):
         db_name = testdb
         db_table = segagames
         dbtbl = iqldb.get_db_table(db_name, db_table)
-        self.assertIsInstance(dbtbl, list)	
+        self.assertIsInstance(dbtbl, list)
 
     def test_get_db_column(self):
         db_name = testdb
