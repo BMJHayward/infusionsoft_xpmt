@@ -69,14 +69,14 @@ def getdatesfromstring(columnname):
         return True
 
 
-def dateconv(datept):
-
-    # datetime.strptime(datept, '%d %m %Y')
-    # datetime.strptime(datept, '%d/%m/%Y %H:%M %p')
-    datepoint = parser.parse(datept)
-
+def str2dateconv(datept):
+    '''Use to take date columns from db to create datetime objects.'''
+    datepoint = parser.parse(datept,dayfirst=True)
     return datepoint
 
+def date2strconv(datept):
+    '''Use to write datetime objects back to db in format dd/mm/yyyy.'''
+    return datept.strftime('%d/%m/%Y')
 
 
 if __name__ == "__main__":
