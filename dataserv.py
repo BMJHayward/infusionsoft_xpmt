@@ -224,14 +224,40 @@ class LocalDB:
 
         return contact_invlist
 
+    @staticmethod
     def str2dateconv(datept):
         '''Use to take date columns from db to create datetime objects.'''
         datepoint = parser.parse(datept,dayfirst=True)
         return datepoint
 
+    @staticmethod
     def date2strconv(datept):
         '''Use to write datetime objects back to db in format dd/mm/yyyy.'''
         return datept.strftime('%d/%m/%Y')
+
+    @staticmethod
+    def datecolumncheck(columnname):
+        ''' Columns below contain dates in infusionsoft.
+            Some of these are app specific. You will need to update
+            to match your infusionsoft account.
+        '''
+        datecolumns = \
+        {'Date Created',
+        'Last Updated',
+        'Program Started date',
+        'Assessment Booked Date',
+        'Date Sent',
+        'Initial Enquiry Date',
+        'Date Equipment was received',
+        'PlusThis New lead date',
+        'Referred date',
+        'Order Date',
+        'entrydate',
+        'invdate'
+        }
+
+        if columnname in datecolumns:
+            return True
 
 
 class Query:

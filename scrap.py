@@ -49,28 +49,6 @@ def datefromcsv():
         print 'Date: {}'.format(date)        #SLA display
         print 'Result: {}'.format(result)
 
-def getdatesfromstring(columnname):
-    datecolumns = \
-        {'Date Created',
-        'Last Updated',
-        'Program Started date',
-        'Assessment Booked Date',
-        'Date Sent',
-        'Initial Enquiry Date',
-        'Date Equipment was received',
-        'PlusThis New lead date',
-        'Referred date',
-        'Order Date',
-        'entrydate',
-        'invdate'
-        }
-
-    if columnname in datecolumns:
-        return True
-
-
-
-
 
 if __name__ == "__main__":
     x = linecount()
