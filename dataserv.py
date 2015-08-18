@@ -224,6 +224,15 @@ class LocalDB:
 
         return contact_invlist
 
+    def str2dateconv(datept):
+        '''Use to take date columns from db to create datetime objects.'''
+        datepoint = parser.parse(datept,dayfirst=True)
+        return datepoint
+
+    def date2strconv(datept):
+        '''Use to write datetime objects back to db in format dd/mm/yyyy.'''
+        return datept.strftime('%d/%m/%Y')
+
 
 class Query:
     '''Create connection to API and run basic queries.'''
