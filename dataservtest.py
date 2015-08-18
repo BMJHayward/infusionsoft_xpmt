@@ -123,11 +123,14 @@ class TestLocalDB(unittest.TestCase):
     def test_get_invoicedates(dbname):
 	pass
 
-    def test_strtodatetime(datept):
-	pass
+def test_str2dateconv(datept):
+    pass
 
-    def test_datetimetostr(datept):
-        pass
+def test_date2strconv(datept):
+    pass
+
+def test_datecolumncheck(columnname):
+    pass
 
 
 class TestQuery(unittest.TestCase):
