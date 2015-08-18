@@ -99,37 +99,37 @@ class TestLocalDB(unittest.TestCase):
             print('Error: {0}'.format(exc))
 
     def test_get_db_table(self):
-        db_name = testdb
-        db_table = segagames
+        db_name = TestLocalDB.testdb
+        db_table = TestLocalDB.games
         dbtbl = iqldb.get_db_table(db_name, db_table)
         self.assertIsInstance(dbtbl, list)
 
     def test_get_db_column(self):
-        db_name = testdb
-        db_table = 'segagames'
+        db_name = TestLocalDB.testdb
+        db_table = 'games'
         db_column = 'title'
         dbcol = iqldb.get_db_column(db_name, db_table, db_column)
         self.assertIsInstance(dbcol, list)
 
-    def test_convert_currencystring(dbname, dbtbl, dbcol):
+    def test_convert_currencystring(self, dbname, dbtbl, dbcol):
 	    pass
 
-    def test_stripcurrencycodes():
+    def test_stripcurrencycodes(self):
 	    pass
 
-    def test_create_joinlisttable(dbname):
+    def test_create_joinlisttable(self, dbname):
 	    pass
 
-    def test_get_invoicedates(dbname):
+    def test_get_invoicedates(self, dbname):
 	    pass
 
-    def test_str2dateconv(datept):
+    def test_str2dateconv(self, datept):
         pass
 
-    def test_date2strconv(datept):
+    def test_date2strconv(self, datept):
         pass
 
-    def test_datecolumncheck(columnname):
+    def test_datecolumncheck(self, columnname):
         pass
 
 

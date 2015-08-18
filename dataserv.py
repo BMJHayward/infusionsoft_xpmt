@@ -100,6 +100,7 @@ class LocalDB:
 
         return db_tbl
 
+    @staticmethod
     def get_db_column(dbname, dbtbl, dbcol):
         conn=sqlite3.connect(dbname)
         cur=conn.cursor()
