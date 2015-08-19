@@ -24,28 +24,23 @@ dbname = 'dataserv.db'
 
 class TestLocalDB(unittest.TestCase):
 
-    # db_name = 'test.db'
-    # testdb = sqlite3.connect(db_name)
-    # testcursor = testdb.cursor()
-    # testcursor.execute('''CREATE TABLE segagames(title text, year real)''')
-    # testdb.commit()
-    # games = [('Sonic CD', '1989'),
-    # ('Sonic the Hedgehog', '1990'),
-    # ('Sonic the Hedgehog 2', '1991'),
-    # ('Sonic the Hedgehog 3', '1992'),
-    # ('Sonic & Knuckles', '1993'),
-    # ('Sonic Spinball', '1994')]
-    # testcursor.executemany('''INSERT INTO segagames VALUES(?,?)''', games)
-    # testdb.commit()
-
-    def test_sendto_sqlite(self):
+    def make_test_db(self):
         db = ":memory:"
-        queryarray1 = {a:b for a,b in vars().items()}
+        queryarray1 = {a: b for a, b in globals().items()}
         queryarray2 = [x for x in range(99)]
         error_args1 = dict(query_array = queryarray1, newtable = [], db = db)
-        error_args2  =  dict(query_array = {'derp', 1,54.54}, newtable = 'mixedset', db = db)
-        args1  =  dict(db = db, query_array = queryarray1, newtable = 'queryarray1')
-        args2  =  dict(db = db, query_array = queryarray2, newtable = 'queryarray2')
+        error_args2 = dict(query_array = {'derp', 1,54.54}, newtable = 'mixedset', db = db)
+        args1       = dict(db = db, query_array = queryarray1, newtable = 'queryarray1')
+        args2       = dict(db = db, query_array = queryarray2, newtable = 'queryarray2')
+        test_args   = (db, queryarray1, queryarray2, error_args1, error_args2, args1, args2)
+        for datum in test_args:
+            print(datum, type(datum))
+            print('\n')
+        return test_args
+
+    def test_sendto_sqlite(self):
+        db, queryarray1, queryarray2, error_args1, error_args2, args1, args2 = TestLocalDB().make_test_db()
+
         try:
             self.assertRaises(Exception, iqldb.sendto_sqlite, **error_args1)
         except TypeError as t_err:
@@ -100,18 +95,18 @@ class TestLocalDB(unittest.TestCase):
         except Exception as exc:
             print('Error: {0}'.format(exc))
 
-    # def test_get_db_table(self):
-        # db_name = TestLocalDB.db_name
-        # db_table = 'segagames'
-        # dbtbl = iqldb.get_db_table(db_name, db_table)
-        # self.assertIsInstance(dbtbl, list)
-#
-    # def test_get_db_column(self):
-        # db_name = TestLocalDB.db_name
-        # db_table = 'segagames'
-        # db_column = 'title'
-        # dbcol = iqldb.get_db_column(db_name, db_table, db_column)
-        # self.assertIsInstance(dbcol, list)
+    def test_get_db_table(self):
+        db_name = 'dataserv.db'
+        db_table = 'sales'
+        dbtbl = iqldb.get_db_table(db_name, db_table)
+        self.assertIsInstance(dbtbl, list)
+
+    def test_get_db_column(self):
+        db_name = 'dataserv.db'
+        db_table = 'sales'
+        db_column = 'Date'
+        dbcol = iqldb.get_db_column(db_name, db_table, db_column)
+        self.assertIsInstance(dbcol, list)
 
     def test_convert_currencystring(self):
 	    pass
