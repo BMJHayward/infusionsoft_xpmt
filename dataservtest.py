@@ -23,18 +23,20 @@ iqcsl = iq.CostSaleLeadsource()
 dbname = 'dataserv.db'
 
 class TestLocalDB(unittest.TestCase):
-    testdb = sqlite3.connect(':memory:')
-    testcursor = testdb.cursor()
-    testcursor.execute('''CREATE TABLE segagames(title text, year real)''')
-    testdb.commit()
-    games = [('Sonic CD', '1989'),
-    ('Sonic the Hedgehog', '1990'),
-    ('Sonic the Hedgehog 2', '1991'),
-    ('Sonic the Hedgehog 3', '1992'),
-    ('Sonic & Knuckles', '1993'),
-    ('Sonic Spinball', '1994')]
-    testcursor.executemany('''INSERT INTO segagames VALUES(?,?)''', games)
-    testdb.commit()
+
+    # db_name = 'test.db'
+    # testdb = sqlite3.connect(db_name)
+    # testcursor = testdb.cursor()
+    # testcursor.execute('''CREATE TABLE segagames(title text, year real)''')
+    # testdb.commit()
+    # games = [('Sonic CD', '1989'),
+    # ('Sonic the Hedgehog', '1990'),
+    # ('Sonic the Hedgehog 2', '1991'),
+    # ('Sonic the Hedgehog 3', '1992'),
+    # ('Sonic & Knuckles', '1993'),
+    # ('Sonic Spinball', '1994')]
+    # testcursor.executemany('''INSERT INTO segagames VALUES(?,?)''', games)
+    # testdb.commit()
 
     def test_sendto_sqlite(self):
         db = ":memory:"
@@ -98,38 +100,38 @@ class TestLocalDB(unittest.TestCase):
         except Exception as exc:
             print('Error: {0}'.format(exc))
 
-    def test_get_db_table(self):
-        db_name = TestLocalDB.testdb
-        db_table = TestLocalDB.games
-        dbtbl = iqldb.get_db_table(db_name, db_table)
-        self.assertIsInstance(dbtbl, list)
+    # def test_get_db_table(self):
+        # db_name = TestLocalDB.db_name
+        # db_table = 'segagames'
+        # dbtbl = iqldb.get_db_table(db_name, db_table)
+        # self.assertIsInstance(dbtbl, list)
+#
+    # def test_get_db_column(self):
+        # db_name = TestLocalDB.db_name
+        # db_table = 'segagames'
+        # db_column = 'title'
+        # dbcol = iqldb.get_db_column(db_name, db_table, db_column)
+        # self.assertIsInstance(dbcol, list)
 
-    def test_get_db_column(self):
-        db_name = TestLocalDB.testdb
-        db_table = 'games'
-        db_column = 'title'
-        dbcol = iqldb.get_db_column(db_name, db_table, db_column)
-        self.assertIsInstance(dbcol, list)
-
-    def test_convert_currencystring(self, dbname, dbtbl, dbcol):
+    def test_convert_currencystring(self):
 	    pass
 
     def test_stripcurrencycodes(self):
 	    pass
 
-    def test_create_joinlisttable(self, dbname):
+    def test_create_joinlisttable(self):
 	    pass
 
-    def test_get_invoicedates(self, dbname):
+    def test_get_invoicedates(self):
 	    pass
 
-    def test_str2dateconv(self, datept):
+    def test_str2dateconv(self):
         pass
 
-    def test_date2strconv(self, datept):
+    def test_date2strconv(self):
         pass
 
-    def test_datecolumncheck(self, columnname):
+    def test_datecolumncheck(self):
         pass
 
 
@@ -391,4 +393,8 @@ class TestLeadtime(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    # try:
+        # os.remove('test.db')
+    # except:
+        # print('DB file: "test.db" not found.')
     unittest.main()
