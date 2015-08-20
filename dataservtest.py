@@ -25,7 +25,11 @@ dbname = 'dataserv.db'
 class TestLocalDB(unittest.TestCase):
 
     def make_test_db(self):
-        db = ":memory:"
+        db = 'test.db'
+        try:
+            os.remove(db)
+        except OSError:
+            pass
         queryarray1 = {a: b for a, b in globals().items()}
         queryarray2 = [x for x in range(99)]
         error_args1 = dict(query_array = queryarray1, newtable = [], db = db)
@@ -96,15 +100,27 @@ class TestLocalDB(unittest.TestCase):
             print('Error: {0}'.format(exc))
 
     def test_get_db_table(self):
-        db_name = 'dataserv.db'
-        db_table = 'sales'
+        # db_name = 'dataserv.db'
+        # db_table = 'sales'
+        test_args = self.make_test_db()
+        db_name = db = test_args[5]['db']
+        query_array = test_args[5]['query_array']
+        db_table = newtable = test_args[5]['newtable']
+
+        iqldb.sendto_sqlite(query_array, newtable, db=db)
         dbtbl = iqldb.get_db_table(db_name, db_table)
         self.assertIsInstance(dbtbl, list)
 
     def test_get_db_column(self):
-        db_name = 'dataserv.db'
-        db_table = 'sales'
-        db_column = 'Date'
+        # db_name = 'dataserv.db'
+        # db_table = 'sales'
+        db_column = 'key'
+        test_args = self.make_test_db()
+        db_name = db = test_args[5]['db']
+        query_array = test_args[5]['query_array']
+        db_table = newtable = test_args[5]['newtable']
+
+        iqldb.sendto_sqlite(query_array, newtable, db=db)
         dbcol = iqldb.get_db_column(db_name, db_table, db_column)
         self.assertIsInstance(dbcol, list)
 

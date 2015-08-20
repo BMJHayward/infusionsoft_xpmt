@@ -64,11 +64,11 @@ class LocalDB:
         c = conn.cursor()
 
         if isinstance(query_array, dict):
-            create_table = 'CREATE TABLE ' + newtable + ' (key text, value integer);'
+            create_table = 'CREATE TABLE ' + newtable + ' (key, value);'
             c.execute(create_table)
             insert_into_table = 'INSERT INTO ' + newtable + ' values (?,?);'
-            for item in query_array:
-                c.executemany(insert_into_table, item.iteritems())
+            for item in query_array.items():
+                c.execute(insert_into_table, (item[0], str(item[1])))
 
         elif isinstance(query_array, list):
             create_table = 'CREATE TABLE ' + newtable + str(tuple(query_array.pop(0))) + ' ;'
