@@ -125,18 +125,24 @@ class TestLocalDB(unittest.TestCase):
         self.assertIsInstance(dbcol, list)
 
     def test_convert_currencystring(self):
+        self.make_test_db()
         currencies = ['AUD', '-AUD', 'N/']
-	    test_args = self.make_test_db()
-        currency_array = ['AUD' + '999', '-AUD' + '999', 'N/' + '999']
+        currency_array = ['AUD999', '-AUD999', 'N/999']
+        db = 'test.db'
         currency_table = 'sales'
-        db = test_args[5]['db']
-        iqldb.sendto_sqlite(currency_array, currency_table, db=db)
-        iqldb.convert_currencystring(db, currency_table, currency_array)
-        dbcol = iqldb.get_db_column(db, currency_table, currency_array)
+        db_column = 'inv_amount'
+        conn = sqlite3.connect(db)
+        c = conn.cursor()
+        c.execute('CREATE TABLE sales (inv_amount text);')
+        for item in currency_array:
+            c.execute('INSERT INTO sales VALUES (?)', (item,))
+        iqldb.convert_currencystring(db, currency_table, db_column)
+        dbcol = iqldb.get_db_column(db, currency_table, db_column)
         for currency in currencies:
             for row in dbcol:
                 self.assertNotIn(currency, row)
-
+        conn.commit()
+        conn.close()
 
     def test_stripcurrencycodes(self):
 	    pass
