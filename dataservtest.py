@@ -125,7 +125,18 @@ class TestLocalDB(unittest.TestCase):
         self.assertIsInstance(dbcol, list)
 
     def test_convert_currencystring(self):
-	    pass
+        currencies = ['AUD', '-AUD', 'N/']
+	    test_args = self.make_test_db()
+        currency_array = ['AUD' + '999', '-AUD' + '999', 'N/' + '999']
+        currency_table = 'sales'
+        db = test_args[5]['db']
+        iqldb.sendto_sqlite(currency_array, currency_table, db=db)
+        iqldb.convert_currencystring(db, currency_table, currency_array)
+        dbcol = iqldb.get_db_column(db, currency_table, currency_array)
+        for currency in currencies:
+            for row in dbcol:
+                self.assertNotIn(currency, row)
+
 
     def test_stripcurrencycodes(self):
 	    pass
