@@ -100,8 +100,6 @@ class TestLocalDB(unittest.TestCase):
             print('Error: {0}'.format(exc))
 
     def test_get_db_table(self):
-        # db_name = 'dataserv.db'
-        # db_table = 'sales'
         test_args = self.make_test_db()
         db_name = db = test_args[5]['db']
         query_array = test_args[5]['query_array']
@@ -112,8 +110,6 @@ class TestLocalDB(unittest.TestCase):
         self.assertIsInstance(dbtbl, list)
 
     def test_get_db_column(self):
-        # db_name = 'dataserv.db'
-        # db_table = 'sales'
         db_column = 'key'
         test_args = self.make_test_db()
         db_name = db = test_args[5]['db']
@@ -145,7 +141,10 @@ class TestLocalDB(unittest.TestCase):
         conn.close()
 
     def test_stripcurrencycodes(self):
-	    pass
+	    try:
+            iqldb.LocalDB().stripcurrencycodes()
+        except Exception as e:
+            print(e, sys.exc_info()[2])
 
     def test_create_joinlisttable(self):
 	    pass
