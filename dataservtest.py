@@ -28,8 +28,8 @@ class TestLocalDB(unittest.TestCase):
         db = 'test.db'
         try:
             os.remove(db)
-        except OSError:
-            pass
+        except OSError as OSE:
+            print('Tried to remove test.db file.', OSE, sys.exc_info()[2])
         queryarray1 = {a: b for a, b in globals().items()}
         queryarray2 = [x for x in range(99)]
         error_args1 = dict(query_array = queryarray1, newtable = [], db = db)
@@ -141,13 +141,32 @@ class TestLocalDB(unittest.TestCase):
         conn.close()
 
     def test_stripcurrencycodes(self):
-	    try:
-            iqldb.LocalDB().stripcurrencycodes()
+        try:
+            iqldb.stripcurrencycodes()
         except Exception as e:
             print(e, sys.exc_info()[2])
 
     def test_create_joinlisttable(self):
-	    pass
+        self.make_test_db()
+        contacts_tbl = '''CREATE TABLE contacts(\
+            Id, [Date Created], [Lead Source])
+            '''
+        sales_tbl = '''CREATE TABLE sales(\
+            [Order Total], [Order Date], ContactId)
+            '''
+        conn = sqlite3.connect('test.db')
+        c = conn.cursor()
+        c.execute(contacts_tbl)
+        c.execute(sales_tbl)
+        conn.commit()
+
+        iqldb.create_joinlisttable('test.db')
+        get_jointable = '''SELECT contactid, entrydate, leadsource, invamount,\
+                        invdate FROM contactsales;'''
+        try:
+            c.execute(get_jointable)
+        except sqlite3.OperationalError as Op_err:
+            print(Op_err, sys.exc_info()[2])
 
     def test_get_invoicedates(self):
 	    pass
