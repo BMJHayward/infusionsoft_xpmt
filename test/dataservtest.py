@@ -9,7 +9,7 @@ import unittest, sys, os
 from datetime import datetime
 import sqlite3
 import xmlrpc.client as client
-import dataserv as iq
+import src.dataserv as iq
 
 iqcxn = iq.Query()
 iqout = iq.Output()
