@@ -8,5 +8,5 @@ install:
 - pip install git+https://github.com/BMJHayward/Official-API-Python-Library.git
 
 script:
-- python -m test.dataservtest.py
+- python -m test.dataservtest
 
