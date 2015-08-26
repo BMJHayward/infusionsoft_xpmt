@@ -48,6 +48,14 @@ import json
 import locale
 import pickle
 from collections import OrderedDict
+from shutil import move
+
+RAW_DATA_DIR = 'rawdata'
+RESULT_DATA_DIR = 'resultdata'
+DB_DIR = 'databases'
+os.mkdir( RAW_DATA_DIR )
+os.mkdir( RESULT_DATA_DIR )
+os.mkdir( DB_DIR )
 
 
 class LocalDB:
@@ -776,8 +784,11 @@ class Output:
                 for colx, value in enumerate(row):
                     ws.write(rowx, colx, value)
         wb.save('allstats.xls')
+        move('allstats.xls', RESULT_DATA_DIR)
+        for filename in reportfiles:
+            move(filename, RESULT_DATA_DIR)
 
-        print('All done! Your file is named \"allstats.xls\".')
+        print('All done! Your file is named \"allstats.xls\", in: ' + RESULT_DATA_DIR)
 
     @staticmethod
     def stats_getall(dbname):
@@ -873,6 +884,7 @@ class Output:
 def importer():
     ''' csvarray should be string including .csv extension in local folder '''
     dbname = input('please enter database name: ')
+    dbname = DB_DIR + dbname
     datafiles = make_tablename()
     importer = LocalDB()
 
@@ -883,6 +895,7 @@ def importer():
         remove_duplicates(new_headerrow)
         tbldata[0] = new_headerrow
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
+        move(filename, RAW_DATA_DIR)
 
     importer.create_joinlisttable(dbname)
 
