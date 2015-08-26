@@ -124,7 +124,7 @@ class LocalDB:
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
         csvdata = []
-        with open(filename, newline = '') as csvfile:
+        with open(filename, newline = '', encoding='utf-8') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(1024))  # not on master
             csvfile.seek(0)  # not on master
             reader = csv.reader(csvfile, dialect, delimiter = ',')  # dialect arg not on master

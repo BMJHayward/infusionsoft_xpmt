@@ -26,6 +26,7 @@
 *.log
 *.db
 *.pdb
+*.sqlite
 
 # OS generated files #
 ######################
@@ -63,5 +64,14 @@ Thumbs.db
 *.bmp
 *.gif
 
+# Spreadsheets & data #
+########################
+
+*.csv
+*.xls
+*.xlsx
+*.json
+
 # Misc #
 *.txt
+*.BAK
