@@ -53,13 +53,21 @@ from shutil import move
 RAW_DATA_DIR = 'rawdata'
 RESULT_DATA_DIR = 'resultdata'
 DB_DIR = 'databases'
+
 try:
     os.mkdir( RAW_DATA_DIR )
-    os.mkdir( RESULT_DATA_DIR )
-    os.mkdir( DB_DIR )
 except FileExistsError as fee:
     print('using existing folder: ', fee)
 
+try:
+    os.mkdir( RESULT_DATA_DIR )
+except FileExistsError as fee:
+    print('using existing folder: ', fee)
+
+try:
+    os.mkdir( DB_DIR )
+except FileExistsError as fee:
+    print('using existing folder: ', fee)
 
 class LocalDB:
     ''' Methods for operating on local sqlite database.
