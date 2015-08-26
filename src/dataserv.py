@@ -121,8 +121,8 @@ class LocalDB:
 
     @staticmethod
     def get_db_column(dbname, dbtbl, dbcol):
-        conn=sqlite3.connect(dbname)
-        cur=conn.cursor()
+        conn = sqlite3.connect(dbname)
+        cur = conn.cursor()
         cur.execute('SELECT {0} FROM {1}'.format(dbcol, dbtbl))
         returncolumn = cur.fetchall()
 
@@ -133,10 +133,14 @@ class LocalDB:
         ''' Give local csv file as string, returns a list of lists of that file. '''
         csvdata = []
         with open(filename, newline = '', encoding='utf-8') as csvfile:
-            dialect = csv.Sniffer().sniff(csvfile.read(1024))  # not on master
-            csvfile.seek(0)  # not on master
-            reader = csv.reader(csvfile, dialect, delimiter = ',')  # dialect arg not on master
-            csvdata.extend([entry for entry in reader])
+            dialect = csv.Sniffer().sniff(csvfile.read(1024))
+            csvfile.seek(0)
+            reader = csv.reader(csvfile, dialect, delimiter = ',')
+            try:
+                csvdata.extend([entry for entry in reader])
+            except UnicodeDecodeError as UDE:
+                print('Unicode error: {0}'.format(UDE))
+                print(sys.exc_info()[2])
 
         return csvdata
 
@@ -895,7 +899,7 @@ class Output:
 def importer():
     ''' csvarray should be string including .csv extension in local folder '''
     dbname = input('please enter database name: ')
-    dbname = DB_DIR + dbname
+    dbname = os.path.join(DB_DIR, dbname)
     datafiles = make_tablename()
     importer = LocalDB()
 
@@ -917,7 +921,7 @@ def remove_duplicates(headerrow):
     When importing to sql, this raises sqlite3.OperationalError. Pass in the
     first row of your csv file to fix this. importer() calls this for you as well.
     '''
-    for item in headerrow:  # this is horrible but works for now
+    for item in headerrow:
         if headerrow.count(item) > 1:
             idx = headerrow.index(item)
             for col in range(idx + 1, len(headerrow)):
