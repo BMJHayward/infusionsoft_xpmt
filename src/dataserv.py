@@ -134,7 +134,7 @@ class LocalDB:
         csvdata = []
         with open(filename, newline = '', encoding='utf-8') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(1024))
-            csvfile.seek(0)
+            # csvfile.seek(0)
             reader = csv.reader(csvfile, dialect, delimiter = ',')
             try:
                 csvdata.extend([entry for entry in reader])
