@@ -112,6 +112,7 @@ class LocalDB:
 
     @staticmethod
     def get_db_table(db_name, db_table):
+        ''' Pass in database name and table as string, get back the table.'''
         conn = sqlite3.connect(db_name)
         c = conn.cursor()
         c.execute('SELECT * FROM {}'.format(db_table))
@@ -121,6 +122,7 @@ class LocalDB:
 
     @staticmethod
     def get_db_column(dbname, dbtbl, dbcol):
+        ''' Pass in name, table and column as string, get back the column.'''
         conn = sqlite3.connect(dbname)
         cur = conn.cursor()
         cur.execute('SELECT {0} FROM {1}'.format(dbcol, dbtbl))
@@ -132,12 +134,14 @@ class LocalDB:
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
         csvdata = []
-        with open(filename, newline = '', encoding='utf-8') as csvfile:
-            dialect = csv.Sniffer().sniff(csvfile.read(1024))
+        with open(filename) as csvfile:
+            # dialect = csv.Sniffer().sniff(csvfile.read(4096))
             # csvfile.seek(0)
-            reader = csv.reader(csvfile, dialect, delimiter = ',')
+            # reader = csvfile.read()
+            reader = csv.reader(csvfile, dialect='excel')
             try:
-                csvdata.extend([entry for entry in reader])
+                for row in reader:
+                    csvdata.extend(row)
             except UnicodeDecodeError as UDE:
                 print('Unicode error: {0}'.format(UDE))
                 print(sys.exc_info()[2])
