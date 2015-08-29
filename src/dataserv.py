@@ -134,10 +134,10 @@ class LocalDB:
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
         csvdata = []
-        datafile = open(filename)
-        csvfile = csv.reader(datafile)
-        csvdata = [row for row in csvfile]
-        datafile.close()
+        csvfile = csv.reader(open(filename))
+        for row in csvfile:
+            csvdata.extend(row)
+        csvfile.close()
 
         return csvdata
 
