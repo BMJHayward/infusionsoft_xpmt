@@ -134,17 +134,10 @@ class LocalDB:
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
         csvdata = []
-        with open(filename) as csvfile:
-            # dialect = csv.Sniffer().sniff(csvfile.read(4096))
-            # csvfile.seek(0)
-            # reader = csvfile.read()
-            reader = csv.reader(csvfile, dialect='excel')
-            try:
-                for row in reader:
-                    csvdata.extend(row)
-            except UnicodeDecodeError as UDE:
-                print('Unicode error: {0}'.format(UDE))
-                print(sys.exc_info()[2])
+        datafile = open(filename)
+        csvfile = csv.reader(datafile)
+        csvdata = [row for row in csvfile]
+        datafile.close()
 
         return csvdata
 
