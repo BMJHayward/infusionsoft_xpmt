@@ -48,7 +48,26 @@ import json
 import locale
 import pickle
 from collections import OrderedDict
+from shutil import move
 
+RAW_DATA_DIR = 'rawdata'
+RESULT_DATA_DIR = 'resultdata'
+DB_DIR = 'databases'
+
+try:
+    os.mkdir( RAW_DATA_DIR )
+except FileExistsError as fee:
+    print('using existing folder: ', fee)
+
+try:
+    os.mkdir( RESULT_DATA_DIR )
+except FileExistsError as fee:
+    print('using existing folder: ', fee)
+
+try:
+    os.mkdir( DB_DIR )
+except FileExistsError as fee:
+    print('using existing folder: ', fee)
 
 class LocalDB:
     ''' Methods for operating on local sqlite database.
@@ -93,6 +112,7 @@ class LocalDB:
 
     @staticmethod
     def get_db_table(db_name, db_table):
+        ''' Pass in database name and table as string, get back the table.'''
         conn = sqlite3.connect(db_name)
         c = conn.cursor()
         c.execute('SELECT * FROM {}'.format(db_table))
@@ -102,8 +122,9 @@ class LocalDB:
 
     @staticmethod
     def get_db_column(dbname, dbtbl, dbcol):
-        conn=sqlite3.connect(dbname)
-        cur=conn.cursor()
+        ''' Pass in name, table and column as string, get back the column.'''
+        conn = sqlite3.connect(dbname)
+        cur = conn.cursor()
         cur.execute('SELECT {0} FROM {1}'.format(dbcol, dbtbl))
         returncolumn = cur.fetchall()
 
@@ -113,11 +134,10 @@ class LocalDB:
     def get_csv(filename):
         ''' Give local csv file as string, returns a list of lists of that file. '''
         csvdata = []
-        with open(filename, newline = '') as csvfile:
-            dialect = csv.Sniffer().sniff(csvfile.read(1024))  # not on master
-            csvfile.seek(0)  # not on master
-            reader = csv.reader(csvfile, dialect, delimiter = ',')  # dialect arg not on master
-            csvdata.extend([entry for entry in reader])
+        csvfile = csv.reader(open(filename))
+        for row in csvfile:
+            csvdata.extend(row)
+        csvfile.close()
 
         return csvdata
 
@@ -776,8 +796,11 @@ class Output:
                 for colx, value in enumerate(row):
                     ws.write(rowx, colx, value)
         wb.save('allstats.xls')
+        move('allstats.xls', RESULT_DATA_DIR)
+        for filename in reportfiles:
+            move(filename, RESULT_DATA_DIR)
 
-        print('All done! Your file is named \"allstats.xls\".')
+        print('All done! Your file is named \"allstats.xls\", in: ' + RESULT_DATA_DIR)
 
     @staticmethod
     def stats_getall(dbname):
@@ -873,6 +896,7 @@ class Output:
 def importer():
     ''' csvarray should be string including .csv extension in local folder '''
     dbname = input('please enter database name: ')
+    dbname = os.path.join(DB_DIR, dbname)
     datafiles = make_tablename()
     importer = LocalDB()
 
@@ -883,6 +907,7 @@ def importer():
         remove_duplicates(new_headerrow)
         tbldata[0] = new_headerrow
         importer.sendto_sqlite(tbldata, tblname, db=dbname)
+        move(filename, RAW_DATA_DIR)
 
     importer.create_joinlisttable(dbname)
 
@@ -893,7 +918,7 @@ def remove_duplicates(headerrow):
     When importing to sql, this raises sqlite3.OperationalError. Pass in the
     first row of your csv file to fix this. importer() calls this for you as well.
     '''
-    for item in headerrow:  # this is horrible but works for now
+    for item in headerrow:
         if headerrow.count(item) > 1:
             idx = headerrow.index(item)
             for col in range(idx + 1, len(headerrow)):
