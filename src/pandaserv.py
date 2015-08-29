@@ -12,7 +12,7 @@ raw_data = os.listdir( RAW_DATA_FILE )
 
 data_sheets = []
 try:
-data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
+    data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
 except UnicodeDecodeError:
-for encs in encodings:
-    data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
+    for encs in encodings:
+        data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
