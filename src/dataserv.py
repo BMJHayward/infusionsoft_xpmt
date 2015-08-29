@@ -598,8 +598,8 @@ class CostSaleLeadsource(LocalDB):
         try:
             self.convert_currencystring(dbname, 'leadsource_ROI', 'Expenses')
             self.convert_currencystring(dbname, 'leadsource_ROI', 'Revenue')
-        except AttributeError:
-            pass
+        except AttributeError as att_e:
+            print(att_e)
         self.leadsource_ROI = self.get_db_table(dbname, 'leadsource_ROI')
         CSL = OrderedDict()
         CSL['Leadsource'] = ('Percent profit', 'Dollar profit', 'Revenue', 'Expenses')
