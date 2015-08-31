@@ -49,6 +49,7 @@ import locale
 import pickle
 from collections import OrderedDict
 from shutil import move
+from dateutil import parser
 
 RAW_DATA_DIR = 'rawdata'
 RESULT_DATA_DIR = 'resultdata'
@@ -278,6 +279,25 @@ class LocalDB:
         }
 
         if columnname in datecolumns:
+            return True
+
+    @staticmethod
+    def currencycolumncheck(columnname):
+       ''' Columns below contain currency transactions in infusionsoft.
+            Some of these are app specific. You will need to update
+            to match your infusionsoft account.
+        '''
+        currencycolumns = \
+        {'Price',
+        'Expenses',
+        'Revenue',
+        'Cost Per Visitor',
+        'Cost Per Contact',
+        'Cost Per Customer',
+        'Order Total',
+        }
+
+        if columnname in currencycolumns:
             return True
 
 
