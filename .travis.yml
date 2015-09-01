@@ -5,7 +5,7 @@ python:
 - '3.4'
 
 install:
-- pip install pandas dateutil git+https://github.com/BMJHayward/Official-API-Python-Library.git
+- pip install pandas py-dateutil git+https://github.com/BMJHayward/Official-API-Python-Library.git
 
 script:
 - python -m test.dataservtest
