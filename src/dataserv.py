@@ -283,7 +283,7 @@ class LocalDB:
 
     @staticmethod
     def currencycolumncheck(columnname):
-       ''' Columns below contain currency transactions in infusionsoft.
+        ''' Columns below contain currency transactions in infusionsoft.
             Some of these are app specific. You will need to update
             to match your infusionsoft account.
         '''
