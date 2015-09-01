@@ -19,7 +19,7 @@ except UnicodeDecodeError:
 
 how_to_stripcurrency = '''\
                 lsroi = pd.read_csv('lsroi.csv')
-                lsroi.loc[:, 'Expenses'] = float(lsroi['Expenses'].str.strip('AUD'))
-                lsroi.loc[:, 'Expenses'] = float(lsroi['Expenses'].str.replace(',', ''))
+                lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].str.strip('AUD')
+                lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].str.replace(',', '')
                 lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].astype(float)\
                 '''
