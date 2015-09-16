@@ -23,3 +23,13 @@ how_to_stripcurrency = '''\
                 lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].str.replace(',', '')
                 lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].astype(float)\
                 '''
+
+def dframe_currencystrip(dframe, col, code):
+    '''Iterate through a pandas dataframe stripping off currency codes and
+    recast to float type.
+    '''
+    dframe.loc[:, col] = dframe[col].str.strip(code)
+    dframe.loc[:, col] = dframe[col].str.strip('-' + code)
+    dframe.loc[:, col] = dframe[col].str.replace(',', '')
+    dframe.loc[:, col] = dframe[col].astype(float)
+    return dframe
