@@ -1,14 +1,22 @@
 import pandas as pd
 import os
-from dataserv import RAW_DATA_FILE
+from dataserv import RAW_DATA_DIR, LocalDB
 
+raw_data = os.listdir( RAW_DATA_FILE )
+currency_columns = LocalDB.currencycolumncheck
+date_columns = LocalDB.datecolumncheck
 encodings = {
             'iso' : 'ISO-8859-1',
             'utf' : 'utf-8',
             'win' : 'cp1252',
             }
 
-raw_data = os.listdir( RAW_DATA_FILE )
+def clean_sheets():
+    data_sheets = make_sheets()
+    for dframe in data_sheets:
+        for col in dframe.keys():
+            if currency_columns(col) == True:
+                dframe_currencystrip(dframe, col)
 
 def make_sheets():
     data_sheets = []
