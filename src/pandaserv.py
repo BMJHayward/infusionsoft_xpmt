@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from dataserv import RAW_DATA_DIR, LocalDB
 
-raw_data = os.listdir( RAW_DATA_FILE )
+raw_data = os.listdir( RAW_DATA_DIR )
 currency_columns = LocalDB.currencycolumncheck
 date_columns = LocalDB.datecolumncheck
 conv_str2date = LocalDB.str2dateconv
@@ -15,6 +15,7 @@ currency = 'AUD'
 
 def dframe_dateconv(dframe, col):
     ''' Go through date columns and convert to date format.
+        dframe is a pandas dataframe object, col is target column of type string.
     '''
     for row in range(0, len(dframe[col])):
         dframe[col][row] = conv_str2date(dframe[col][row])
@@ -31,15 +32,22 @@ def dframe_currencystrip(dframe, col, currency=currency):
     return dframe
 
 def make_sheets():
-    data_sheets = []
+    ''' Goes through files in RAW_DATA_DIR and returns a dict of
+        {filename: pandas.DataFrame(filename)}
+    '''
+    data_sheets = {}
     try:
-        data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
+        data_sheets = {datafile.split()[0]: pd.read_csv(datafile) for datafile in raw_data}
     except UnicodeDecodeError:
-        for encs in encodings:
-            data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
+        for enc in encodings:
+            data_sheets = {datafile.split()[0]: pd.read_csv(datafile, encoding=enc) for datafile in raw_data}
     return data_sheets
 
 def clean_sheets(currency = currency):
+    ''' Uses make_sheets(), and then processes to convert money from string to float,
+        and datetime strings into datetime objects.
+        Returns a dict of {filename: pandas.DataFrame(filename)}
+    '''
     data_sheets = make_sheets()
     for dframe in data_sheets:
         for col in dframe.keys():
@@ -47,4 +55,4 @@ def clean_sheets(currency = currency):
                 dframe_currencystrip(dframe, col, currency=currency)
             if date_columns(col) == True:
                 dframe_dateconv(dframe, col)
-
+    return data_sheets
