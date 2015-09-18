@@ -13,24 +13,6 @@ encodings = {
             }
 currency = 'AUD'
 
-def clean_sheets(currency = currency):
-    data_sheets = make_sheets()
-    for dframe in data_sheets:
-        for col in dframe.keys():
-            if currency_columns(col) == True:
-                dframe_currencystrip(dframe, col, currency=currency)
-            if date_columns(col) == True:
-                dframe_dateconv(dframe, col)
-
-def make_sheets():
-    data_sheets = []
-    try:
-        data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
-    except UnicodeDecodeError:
-        for encs in encodings:
-            data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
-    return data_sheets
-
 def dframe_dateconv(dframe, col):
     ''' Go through date columns and convert to date format.
     '''
@@ -47,3 +29,22 @@ def dframe_currencystrip(dframe, col, currency=currency):
     dframe.loc[:, col] = dframe[col].str.replace(',', '')
     dframe.loc[:, col] = dframe[col].astype(float)
     return dframe
+
+def make_sheets():
+    data_sheets = []
+    try:
+        data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
+    except UnicodeDecodeError:
+        for encs in encodings:
+            data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
+    return data_sheets
+
+def clean_sheets(currency = currency):
+    data_sheets = make_sheets()
+    for dframe in data_sheets:
+        for col in dframe.keys():
+            if currency_columns(col) == True:
+                dframe_currencystrip(dframe, col, currency=currency)
+            if date_columns(col) == True:
+                dframe_dateconv(dframe, col)
+
