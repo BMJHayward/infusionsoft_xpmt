@@ -10,24 +10,20 @@ encodings = {
 
 raw_data = os.listdir( RAW_DATA_FILE )
 
-data_sheets = []
-try:
-    data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
-except UnicodeDecodeError:
-    for encs in encodings:
-        data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
+def make_sheets():
+    data_sheets = []
+    try:
+        data_sheets = [pd.read_csv(datafile) for datafile in raw_data]
+    except UnicodeDecodeError:
+        for encs in encodings:
+            data_sheets = [pd.read_csv(datafile, encoding=enc) for datafile in raw_data]
+    return data_sheets
 
-how_to_stripcurrency = '''\
-                lsroi = pd.read_csv('lsroi.csv')
-                lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].str.strip('AUD')
-                lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].str.replace(',', '')
-                lsroi.loc[:, 'Expenses'] = lsroi['Expenses'].astype(float)\
-                '''
-
-def dframe_currencystrip(dframe, col, code):
+def dframe_currencystrip(dframe, col, code='AUD'):
     '''Iterate through a pandas dataframe stripping off currency codes and
-    recast to float type.
+    recast to float type. Pass in col and code as strings.
     '''
+
     dframe.loc[:, col] = dframe[col].str.strip(code)
     dframe.loc[:, col] = dframe[col].str.strip('-' + code)
     dframe.loc[:, col] = dframe[col].str.replace(',', '')
