@@ -6,6 +6,7 @@ import numpy as np
 
 
 class Testpandaserv(unittest.TestCase):
+
     def setUp(self):
         self.dates = pd.date_range('20130101', periods=6)
         self.df = pd.DataFrame(
@@ -16,15 +17,19 @@ class Testpandaserv(unittest.TestCase):
                                   'D' : np.array([3] * 4,dtype='int32'),
                                   'E' : pd.Categorical(["test","train","test","train"]),
                                   'F' : 'foo' })
+
     def test_dframe_dateconv(self):
         print('Unfinished test, PASS.')
         pandaserv.dframe_dateconv(self.df2, 'B')
         for singledate in df['B']:
             self.assertIsInstance(singledate, datetime)
+
     def test_dframe_currencystrip(self):
         print('Unfinished test, PASS.')
+
     def test_make_sheets(self):
         print('Unfinished test, PASS.')
+
     def test_clean_sheets(self):
         print('Unfinished test, PASS.')
 

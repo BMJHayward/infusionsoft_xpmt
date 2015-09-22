@@ -9,4 +9,4 @@ install:
 
 script:
 - python -m test.dataservtest
-
+- python -m test.pandaservtest
