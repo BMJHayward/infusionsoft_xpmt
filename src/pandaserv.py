@@ -5,6 +5,7 @@ try:
 except ImportError:
     from dataserv import RAW_DATA_DIR, LocalDB
 
+
 raw_data = os.listdir( RAW_DATA_DIR )
 currency_columns = LocalDB.currencycolumncheck
 date_columns = LocalDB.datecolumncheck
@@ -42,14 +43,14 @@ def make_sheets():
     data_sheets = {}
     for enc in encodings:
         try:
-            data_sheets = {datafile.split()[0]: pd.read_csv(datafile) for datafile in raw_data}
+            data_sheets = {datafile.split('.')[0]: pd.read_csv(datafile) for datafile in raw_data}
             break
         except UnicodeDecodeError:
-            data_sheets = {datafile.split()[0]: pd.read_csv(datafile, encoding=encodings[enc]) for datafile in raw_data}
+            data_sheets = {datafile.split('.')[0]: pd.read_table(datafile, encoding=encodings[enc]) for datafile in raw_data}
             break
         except UnicodeDecodeError:
             continue  # looks silly but allows attempt at next encoding in dict
-    return data_sheets
+        return data_sheets
 
 def clean_sheets(currency = currency):
     ''' Uses make_sheets(), and then processes to convert money from string to float,

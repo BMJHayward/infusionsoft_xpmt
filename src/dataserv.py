@@ -3,37 +3,20 @@
 Infusionsoft Experiment
 =========================
 
-
 [![Build Status](https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master)](https://travis-ci.org/BMJHayward/infusionsoft_xpmt)
-
-API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended usespecific reporting not found in
-
-For target reports see classes inheriting from LocalDB, Query and Extract in dataserv.py.
 
 DESCRIPTION
 =============
 
+API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended usespecific reporting not found in
 Extract, transform, load data from IS, send to excel, csv, pandas, matplotlib, numpy etc.
-This project will keep to the stdlib where ever possible to minimise dependencies, simplify deployment in several environme
-
-
-dataserv.py is the main file of interest for the moment. this may be broken up in futuremore classes are ad
+dataserv and pandaserv are main files of interest for the moment.
+For target reports see classes inheriting from LocalDB, Query and Extract in dataserv.py.
 
 TODO:
 ========
 
-+ Update tests - remove duplication
-+ use pandas or matplotlib for dataviz
-+ base method for common statistics
-+ base method to return dict of common statistics
-+ base method to connect to DB, do query, fetchall(), return and close DB
-+ DONE: Remove hardcoded database names, e.g. dataserv.db
-    + 7 places: 117, 142, 165, 358, 498, 560, 578
-+ DONE: possible Report() class for inidividual reports to inherit from
-+ DONE: complete methods to compare datetime objects
-+ DONE: LeadtimeToSale() to output useful table of date(1stpurchase-1stcontact)
-+ DONE: create file of functions to call _basequery() with different args
-+ DONE:refactor CostSaleLeadource to return table-like object with column names as headers
++ use pandas or matplotlib for IO/dataviz
 '''
 import glob
 import sys
@@ -57,18 +40,18 @@ DB_DIR = 'databases'
 
 try:
     os.mkdir( RAW_DATA_DIR )
-except FileExistsError as fee:
-    print('using existing folder: ', fee)
+except FileExistsError as fexe:
+    print('using existing data folder: ', RAW_DATA_DIR)
 
 try:
     os.mkdir( RESULT_DATA_DIR )
-except FileExistsError as fee:
-    print('using existing folder: ', fee)
+except FileExistsError as fexe:
+    print('using existing results folder: ', RESULT_DATA_DIR)
 
 try:
     os.mkdir( DB_DIR )
-except FileExistsError as fee:
-    print('using existing folder: ', fee)
+except FileExistsError as fexe:
+    print('using existing database folder: ', DB_DIR)
 
 class LocalDB:
     ''' Methods for operating on local sqlite database.
