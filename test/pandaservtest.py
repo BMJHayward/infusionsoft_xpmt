@@ -18,8 +18,9 @@ class Testpandaserv(unittest.TestCase):
                                   'F' : 'foo' })
     def test_dframe_dateconv(self):
         print('Unfinished test, PASS.')
-        pandaserv.dframe_dateconv(self.df, 'D')
-        self.assertIsInstance(self.df['D'], datetime)
+        pandaserv.dframe_dateconv(self.df2, 'B')
+        for singledate in df['B']:
+            self.assertIsInstance(singledate, datetime)
     def test_dframe_currencystrip(self):
         print('Unfinished test, PASS.')
     def test_make_sheets(self):
