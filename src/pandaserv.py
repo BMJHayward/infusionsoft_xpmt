@@ -28,8 +28,8 @@ def dframe_currencystrip(dframe, col, currency=currency):
     recast to float type. Pass in col and code as strings.
     '''
 
-    dframe.loc[:, col] = dframe[col].str.strip(code)
-    dframe.loc[:, col] = dframe[col].str.strip('-' + code)
+    dframe.loc[:, col] = dframe[col].str.strip(currency)
+    dframe.loc[:, col] = dframe[col].str.strip('-' + currency)
     dframe.loc[:, col] = dframe[col].str.replace(',', '')
     dframe.loc[:, col] = dframe[col].astype(float)
     return dframe
