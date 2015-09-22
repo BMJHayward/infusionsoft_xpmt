@@ -1,6 +1,9 @@
 import pandas as pd
 import os
-from dataserv import RAW_DATA_DIR, LocalDB
+try:
+    from .dataserv import RAW_DATA_DIR, LocalDB
+except ImportError:
+    from dataserv import RAW_DATA_DIR, LocalDB
 
 raw_data = os.listdir( RAW_DATA_DIR )
 currency_columns = LocalDB.currencycolumncheck

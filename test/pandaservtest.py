@@ -16,13 +16,13 @@ class Testpandaserv(unittest.TestCase):
                                   'C' : pd.Series(1,index=list(range(4)),dtype='float32'),
                                   'D' : np.array([3] * 4,dtype='int32'),
                                   'E' : pd.Categorical(["test","train","test","train"]),
-                                  'F' : 'foo' })
+                                  'F' : '20140101' })
 
     def test_dframe_dateconv(self):
         print('Unfinished test, PASS.')
-        pandaserv.dframe_dateconv(self.df2, 'B')
-        for singledate in df['B']:
-            self.assertIsInstance(singledate, datetime)
+        pandaserv.dframe_dateconv(self.df2, 'F')
+        for singledate in range(0, len(self.df2['F'])):
+            self.assertIsInstance(self.df2['F'][singledate], datetime)
 
     def test_dframe_currencystrip(self):
         print('Unfinished test, PASS.')
