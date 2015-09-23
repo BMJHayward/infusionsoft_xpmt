@@ -48,7 +48,7 @@ class Testpandaserv(unittest.TestCase):
         pandaserv.dframe_currencystrip(self.moneydf, 'transactions')
         for trxn in self.moneydf['transactions']:
             self.assertIsNot(type(trxn), str)
-            self.assertIs(type(trxn), float)
+            self.assertIs(type(trxn), np.float64)
 
     def test_make_sheets(self):
         self.made_sheets = pandaserv.make_sheets()
