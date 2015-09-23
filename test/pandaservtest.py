@@ -45,6 +45,11 @@ class Testpandaserv(unittest.TestCase):
 
     def test_make_sheets(self):
         print('Unfinished test, PASS.')
+        self.test_sheets = pandaserv.make_sheets()
+        self.assertIsInstance(self.test_sheets, dict)
+        for sheet in self.test_sheets:
+            self.assertIsInstance(sheet, str)
+            self.assertIsInstance(self.test_sheets[sheet], pd.DataFrame)
 
     def test_clean_sheets(self):
         print('Unfinished test, PASS.')
