@@ -35,22 +35,34 @@ def dframe_currencystrip(dframe, col, currency=currency):
     dframe.loc[:, col] = dframe[col].astype(float)
     return dframe
 
+def get_raw_data(raw_data):
+    fullpaths = [os.path.join(RAW_DATA_DIR, sheet) for sheet in raw_data]
+    sheetpaths = [os.path.abspath(path) for path in fullpaths]
+    return sheetpaths
+
+def make_onesheet(filepath):
+    ''' Pass an array of file paths,
+        returns a pandas dataframe of that file
+    '''
+    for enc in encodings:
+        try:
+            sheet = pd.read_csv(filepath)
+            return sheet
+        except UnicodeDecodeError:
+            sheet = pd.read_csv(dfile, encoding=encodings[enc]) for dfile in filepath}
+            return sheet
+        except UnicodeDecodeError:
+            continue  # looks silly but allows attempt at next encoding in dict
+
 def make_sheets():
     ''' Goes through files in RAW_DATA_DIR and returns
         a dict of:
         {filename: pandas.DataFrame(filename)}
     '''
-    data_sheets = {}
-    for enc in encodings:
-        try:
-            data_sheets = {datafile.split('.')[0]: pd.read_csv(datafile) for datafile in raw_data}
-            break
-        except UnicodeDecodeError:
-            data_sheets = {datafile.split('.')[0]: pd.read_table(datafile, encoding=encodings[enc]) for datafile in raw_data}
-            break
-        except UnicodeDecodeError:
-            continue  # looks silly but allows attempt at next encoding in dict
-        return data_sheets
+    fullpaths = get_raw_data(raw_data)
+    data_sheets = {}  # fix this with os.path, raw_data only gives file name, not abs or rel path
+
+    return data_sheets
 
 def clean_sheets(currency = currency):
     ''' Uses make_sheets(), and then processes to convert money from string to float,
