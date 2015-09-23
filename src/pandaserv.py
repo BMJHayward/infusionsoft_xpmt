@@ -36,6 +36,7 @@ def dframe_currencystrip(dframe, col, currency=currency):
     return dframe
 
 def get_raw_data(raw_data):
+    ''' Pass an array of file names, returns absolute paths of those files. '''
     fullpaths = [os.path.join(RAW_DATA_DIR, sheet) for sheet in raw_data]
     sheetpaths = [os.path.abspath(path) for path in fullpaths]
     return sheetpaths
@@ -49,7 +50,7 @@ def make_onesheet(filepath):
             sheet = pd.read_csv(filepath)
             return sheet
         except UnicodeDecodeError:
-            sheet = pd.read_csv(dfile, encoding=encodings[enc]) for dfile in filepath}
+            sheet = pd.read_csv(filepath, encoding=encodings[enc])
             return sheet
         except UnicodeDecodeError:
             continue  # looks silly but allows attempt at next encoding in dict
@@ -60,8 +61,10 @@ def make_sheets():
         {filename: pandas.DataFrame(filename)}
     '''
     fullpaths = get_raw_data(raw_data)
-    data_sheets = {}  # fix this with os.path, raw_data only gives file name, not abs or rel path
-
+    data_sheets = {}
+    for fpath in fullpaths:
+        key = os.path.split(fpath)[1]
+        data_sheets[key] = make_onesheet(fpath)
     return data_sheets
 
 def clean_sheets(currency = currency):

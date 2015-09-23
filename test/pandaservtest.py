@@ -23,7 +23,10 @@ class Testpandaserv(unittest.TestCase):
                                     '-AUD1,234.01',
                                     'AUD234.01',
                                     'AUD1,234',]})
-        os.mkdir('rawdata')
+        try:
+            os.mkdir('rawdata')
+        except FileExistsError:
+            print('rawdata folder already exists')
         self.df.to_csv(path_or_buf='rawdata/df.csv')
         self.df2.to_csv(path_or_buf='rawdata/df2.csv')
         self.moneydf.to_csv(path_or_buf='rawdata/moneydf.csv')
