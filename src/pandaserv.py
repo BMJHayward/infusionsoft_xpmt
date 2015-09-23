@@ -36,7 +36,7 @@ def dframe_currencystrip(dframe, col, currency=currency):
     return dframe
 
 def get_raw_data(raw_data):
-    ''' Pass an array of file names, returns absolute paths of those files. '''
+    ''' Pass an array of file names, returns absolute paths of those'''
     fullpaths = [os.path.join(RAW_DATA_DIR, sheet) for sheet in raw_data]
     sheetpaths = [os.path.abspath(path) for path in fullpaths]
     return sheetpaths
@@ -74,8 +74,8 @@ def clean_sheets(currency = currency):
         {filename: pandas.DataFrame(filename)}
     '''
     data_sheets = make_sheets()
-    for dframe in data_sheets:
-        for col in dframe.keys():
+    for filename, dframe in data_sheets.items():
+        for col in dframe.columns:
             if currency_columns(col) == True:
                 dframe_currencystrip(dframe, col, currency=currency)
             if date_columns(col) == True:
