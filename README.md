@@ -7,10 +7,10 @@ Infusionsoft Experiment
 DESCRIPTION
 =============
 
-API wrapper for Inonsoft CRM. Infusoft a.k.a. 'IS' frome Intended usespecifeporting not foun
-Extract, transformad data from IS, send to excel, csv, pandmatplotlib, numpy 
-dataserv and pandaserv are main files of interest for the mom
-For target reports see classes inheriting from LocalDB, Query and Extrin dataserv.py.
+API wrapper for Infusionsoft CRM. Infusionsoft a.k.a. 'IS' from here on. Intended use is specific reporting not found in IS itself.
+Extract, transformad data from IS, send to excel, csv, pandmatplotlib, numpy etc.
+dataserv and pandaserv are main files of interest for the momment.
+For target reports see classes inheriting from LocalDB, Query and Extract in dataserv.py.
 
 TODO:
 ========
