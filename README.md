@@ -2,7 +2,7 @@
 Infusionsoft Experiment
 =========================
 
-[![Build Status](https://travis-ci.org/BMJHayward/infusionsoft_xsvg?branch=master)](https://travis-ci.org/BMJHayward/infusionsoft_xpmt)
+[![Build Status](https://travis-ci.org/BMJHayward/infusionsoft_xpmt.svg?branch=master)](https://travis-ci.org/BMJHayward/infusionsoft_xpmt)
 
 DESCRIPTION
 =============
@@ -86,14 +86,7 @@ CLASSES:
      |      +do arithmetic mean
      |      + e.g: in SQL: SELECT AVG([Order Total]) FROM sales;
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors defined here:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class CostSaleLeadsource(LocalDB)
      |  Return a cost per sale per leadsource dictionary.
@@ -173,14 +166,7 @@ CLASSES:
      |  str2dateconv(datept)
      |      Use to take date columns from db to create datetime objects.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from LocalDB:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class CustomerLifetimeValue(LocalDB)
      |  Calculate how much any given customer spends on average long term.
@@ -255,14 +241,7 @@ CLASSES:
      |  str2dateconv(datept)
      |      Use to take date columns from db to create datetime objects.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from LocalDB:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class Extract(Query)
      |  Pull mass data for analysis using Query() as base. Intended as layer
@@ -292,14 +271,7 @@ CLASSES:
      |  tags(self, **kwargs)
      |      Return tags for target contact.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from Query:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class Leadtime(LocalDB)
      |  Use local database to calculate leadtime instead of API.
@@ -381,14 +353,7 @@ CLASSES:
      |  str2dateconv(datept)
      |      Use to take date columns from db to create datetime objects.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from LocalDB:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class LeadtimetoSale(Extract)
      |  Return length of time from gaining a lead to making first sale.
@@ -450,14 +415,7 @@ CLASSES:
      |  tags(self, **kwargs)
      |      Return tags for target contact.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from Query:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class LocalDB(builtins.object)
      |  Methods for operating on local sqlite database.
@@ -516,14 +474,7 @@ CLASSES:
      |  str2dateconv(datept)
      |      Use to take date columns from db to create datetime objects.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors defined here:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class Output(builtins.object)
      |  Take data ready for output. Methods to write to file.
@@ -564,14 +515,7 @@ CLASSES:
      |  to_picklejar(data_to_save, name)
      |      Give whatever object you have to pickle, save it for your next session with given name.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors defined here:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
+
     
     class Process(builtins.object)
      |  Raw query data processed here for target output.
@@ -590,14 +534,6 @@ CLASSES:
      |  
      |  procdict(self, dictionary)
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors defined here:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
     
     class Query(builtins.object)
      |  Create connection to API and run basic queries.
@@ -608,14 +544,6 @@ CLASSES:
      |      Instantiate Infusionsoft object and create connection to
      |      account app.
      |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors defined here:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
 
 FUNCTIONS
     importer()
