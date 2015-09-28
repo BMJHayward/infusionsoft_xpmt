@@ -50,6 +50,56 @@ def datefromcsv(file):
         print('Result: {}'.format(result))
 
 
+class SQLtoPandas:
+    ''' Basic SQL tasks in pandas DataFrames. '''
+
+    self.describe = self.df.describe()
+
+    '''SELECT * FROM <table> LIMIT 10'''
+    self.df[:10]
+    '''SELECT col1, col2, FROM <table> LIMIT 3'''
+    self.df[[col1, col2]][:3]
+    '''SELECT col1, col2, col3 FROM <table> ORDER BY col3 LIMIT 3'''
+    self.df.sort(col3)[[col1, col2, col3]][:3]
+    '''SELECT col1, col2, col3 FROM <table> ORDER BY col3 desc LIMIT 3'''
+    self.df.sort(col3, ascending=False)[[col1, col2, col3]][:3]
+    '''SELECT * FROM <table> WHERE col1='somevalue' or col1='someother'
+       ORDER BY col2 desc LIMIT 5;'''
+    self.df[(df[col1]=='somevalue' | (df[col1]=='someother')].sort(col2, ascending=False)[:5]
+    '''SELECT * FROM <table> WHERE col1 < 9000
+       ORDER BY col3 DESC LIMIT 1;'''
+    self.df[df[col1]<9000].sort(col3, ascending=False)[:1]
+    '''SELECT COUNT(DISTINCT(col1)) FROM <table>;'''
+    len(self.df(col1).unique())
+    '''SELECT DISTINCT(col1) FROM
+       (SELECT * FROM <table> ORDER BY col2 DESC LIMIT 20);'''
+    self.df[:20].sort(col2, ascending=False)[col1].unique()
+    '''SELECT col1, COUNT(col1) AS alt_col1_name FROM
+       (SELECT * FROM col2 ORDER BY col3 LIMIT 100)
+       GROUP BY col1 ORDER BY alt_col1_name DESC;'''
+    self.df[:100][col1].value_counts()
+    '''SELECT col1, AVG(col2), AVG(col3) FROM
+       (SELECT * FROM <table> ORDER BY col3 DESC LIMIT 100)
+       GROUP BY col1;'''
+    self.df.sort(col3)[:100].groupby(col1).mean()[[col2, col3]]
+    '''SELECT col1, COUNT(col1) FROM <table> GROUP BY col1;'''
+    self.df.groupby(col1).count()[table]
+    '''SELECT * FROM <table1> LEFT JOIN <table2>
+       ON <table1>.col1=<table2>.col1 LIMIT 1;'''
+    self.df1 = pd.read_csv('df1.csv')
+    self.df2 = pd.read_csv('df2.csv')
+    self.df1.merge(self.df2, on=col1)[:1]
+
+    def __init__(*csvfiles):
+        import pandas as pd
+        self.df_array = []
+        for csvfile in csvfile:
+            self.df = pd.read_csv(csvfile)
+            self.df.head()
+            self.df_array.append(self.df)
+        return self.df_array
+
+
 if __name__ == "__main__":
     x = linecount()
     print(x)
