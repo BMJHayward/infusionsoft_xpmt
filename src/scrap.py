@@ -10,6 +10,7 @@ from datetime import date, datetime
 import time
 from dateutil import parser
 
+
 def filelinecount(filename):
     if type(filename) != str:
         filename = str(filename)
@@ -19,6 +20,7 @@ def filelinecount(filename):
             pass
 
         return i + 1
+
 
 def linecount():
     numlines = []
@@ -30,6 +32,7 @@ def linecount():
 
     return sum(numlines)
 
+
 def plottest():
     import matplotchart as mpc
     import matplotlib.pyplot as plt
@@ -37,6 +40,7 @@ def plottest():
     qdata = mpc.sqltopandas()
     dates, values = qdata['Order Date'], qdata['Order Total']
     mpc.plotdates(dates, values)
+
 
 def datefromcsv(file):
     reader = csv.DictReader(file, delimiter=';')         #read the csv file
@@ -48,6 +52,40 @@ def datefromcsv(file):
         result = (value / 3927.2) * 100          #Sla calcul with the theoritic number of line
         print('Date: {}'.format(date))        #SLA display
         print('Result: {}'.format(result))
+
+
+monthToNum(date):
+    return{
+        'Jan' : 1,
+        'Feb' : 2,
+        'Mar' : 3,
+        'Apr' : 4,
+        'May' : 5,
+        'Jun' : 6,
+        'Jul' : 7,
+        'Aug' : 8,
+        'Sep' : 9,
+        'Oct' : 10,
+        'Nov' : 11,
+        'Dec' : 12
+    }[date]
+
+
+def numToMonth(num):
+    return{
+        1:'Jan',
+        2:'Feb',
+        3:'Mar',
+        4:'Apr',
+        5:'May',
+        6:'Jun',
+        7:'Jul',
+        8:'Aug',
+        9:'Sep',
+        10:'Oct',
+        11:'Nov',
+        12:'Dec',
+    }[num]
 
 
 class SQLtoPandas:
