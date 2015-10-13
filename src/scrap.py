@@ -55,7 +55,7 @@ def datefromcsv(file):
 
 
 def monthToNum(date):
-    return{
+    return {
         'Jan' : 1,
         'Feb' : 2,
         'Mar' : 3,
@@ -68,11 +68,11 @@ def monthToNum(date):
         'Oct' : 10,
         'Nov' : 11,
         'Dec' : 12
-    }[date]
+        }[date]
 
 
 def numToMonth(num):
-    return{
+    return {
         1 : 'Jan',
         2 : 'Feb',
         3 : 'Mar',
@@ -85,7 +85,7 @@ def numToMonth(num):
         10 : 'Oct',
         11 : 'Nov',
         12 : 'Dec',
-    }[num]
+        }[num]
 
 
 class SQLtoPandas:
