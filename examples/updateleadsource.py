@@ -37,6 +37,18 @@ def check_medium(leadsource):
         set_medium(leadsource['Id'], 'I - Internet')
     elif 'L - ' in leadsource['Name']:
         set_medium(leadsource['Id'], 'L - Lectures')
+    elif 'B - ' in leadsource['Name']:
+        set_medium(leadsource['Id'], 'B - Books')
+    elif 'D - ' in leadsource['Name']:
+        set_medium(leadsource['Id'], 'D - Distributor')
+    elif 'P - ' in leadsource['Name']:
+        set_medium(leadsource['Id'], 'P - Practitioner')
+    elif 'M - ' in leadsource['Name']:
+        set_medium(leadsource['Id'], 'M - Media')
+    elif 'LTR - ' in leadsource['Name']:
+        set_medium(leadsource['Id'], 'LTR - Listen to Read')
+    elif 'F - ' in leadsource['Name']:
+        set_medium(leadsource['Id'], 'F - Festival'
 
 
 def set_medium(id, medium):
