@@ -33,12 +33,17 @@ pivotfile = r'S:\Program Files (x86)\Users\SERVER-MEDIA\Downloads\salespivot.csv
 salespivot.to_csv(path_or_buf=pivotfile)
 
 salespivot.plot(stacked=True,x=salespivot.index,y=salespivot.columns)
+
+# Shows scatter graph with labels. Lots of labels if you have many leadsources.
 plt.figure()
-plt.legend(salespivot.columns.tolist())
 plt.plot_date(salespivot.index, salespivot, '.', xdate=True, ydate=False, aa=True)
+plt.legend(salespivot.columns.tolist())
 plt.show()
 
-
+fig, ax = plt.subplots()
+plt.legend(salespivot.columns.tolist())
+ax.plot(salespivot.index, salespivot, '.')
+plt.show()
 
 monthly_sales.plot('Inv Total')
 salespivot = pd.pivot_table(monthly_sales,index=monthly_sales.index, columns=['Lead Source'],values=['Inv Total'])
