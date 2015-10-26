@@ -27,14 +27,15 @@ monthly_sales.loc[:, 'Inv Total'] = monthly_sales['Inv Total'].astype(float)
 monthly_sales.head()
 
 salespivot = pd.pivot_table(monthly_sales, index=monthly_sales.index, columns=['Lead Source'], values=['Inv Total'])
-salespivot.columns.levels[-1  # shows me leadsources as frozen list of strings
 plt.figure(); plt.plot(salespivot.T); plt.show()
 
 pivotfile = r'S:\Program Files (x86)\Users\SERVER-MEDIA\Downloads\salespivot.csv'
 salespivot.to_csv(path_or_buf=pivotfile)
 
+salespivot.plot(stacked=True,x=salespivot.index,y=salespivot.columns)
 plt.figure()
-plt.plot_date(salespivot.index, salespivot, '.', label='line1', xdate=True, ydate=False, aa=True)
+plt.legend(salespivot.columns.tolist())
+plt.plot_date(salespivot.index, salespivot, '.', xdate=True, ydate=False, aa=True)
 plt.show()
 
 
