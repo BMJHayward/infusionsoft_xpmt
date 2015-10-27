@@ -26,7 +26,8 @@ monthly_sales.loc[:, 'Inv Total'] = monthly_sales['Inv Total'].str.replace(',', 
 monthly_sales.loc[:, 'Inv Total'] = monthly_sales['Inv Total'].astype(float)
 monthly_sales.head()
 
-salespivot = pd.pivot_table(monthly_sales, index=monthly_sales.index, columns=['Lead Source'], values=['Inv Total'])
+salespivot = pd.pivot_table(monthly_sales, index=monthly_sales.index, columns=['Lead Source'], values=['Inv Total'], margins=True)
+pivotcolumns =  [i[1] for i in list(salespivot)]
 plt.figure(); plt.plot(salespivot.T); plt.show()
 
 pivotfile = r'S:\Program Files (x86)\Users\SERVER-MEDIA\Downloads\salespivot.csv'
@@ -40,6 +41,17 @@ plt.plot_date(salespivot.index, salespivot, '.', xdate=True, ydate=False, aa=Tru
 plt.legend(salespivot.columns.tolist())
 plt.show()
 
+# Shows the same scattergraph but with top leadsources, in case you have too many to plot
+srtd = salespivot['Inv Total'].sum()
+srtd.sort()
+topsources = list(srtd[-20:-1].index)
+salespivot['Inv Total'][topsources]
+plt.figure()
+plt.plot_date(salespivot.index, salespivot['Inv Total'][topsources], '.', xdate=True, ydate=False, aa=True)
+plt.legend(salespivot.columns.tolist())
+plt.show()
+
+
 fig, ax = plt.subplots()
 plt.legend(salespivot.columns.tolist())
 ax.plot(salespivot.index, salespivot, '.')
@@ -50,3 +62,6 @@ salespivot = pd.pivot_table(monthly_sales,index=monthly_sales.index, columns=['L
 plt.figure(); plt.plot(salespivot.T); plt.show()
 salespivot = pd.pivot_table(monthly_sales,index=monthly_sales.index, columns=['Lead Source'],values=['Inv Total'])
 plt.figure(); plt.plot(salespivot); plt.show()
+
+for key in salespivot['Inv Total'].keys():
+    print(key, ' : ', np.sum(salespivot['Inv Total'][key])
