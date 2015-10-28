@@ -26,7 +26,7 @@ monthly_sales.loc[:, 'Inv Total'] = monthly_sales['Inv Total'].str.replace(',', 
 monthly_sales.loc[:, 'Inv Total'] = monthly_sales['Inv Total'].astype(float)
 monthly_sales.head()
 
-salespivot = pd.pivot_table(monthly_sales, index=monthly_sales.index, columns=['Lead Source'], values=['Inv Total'], margins=True)
+salespivot = pd.pivot_table(monthly_sales, index=monthly_sales.index, columns=['Lead Source'], values=['Inv Total'])
 pivotcolumns =  [i[1] for i in list(salespivot)]
 plt.figure(); plt.plot(salespivot.T); plt.show()
 
