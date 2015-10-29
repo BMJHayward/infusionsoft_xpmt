@@ -74,3 +74,29 @@ with open('leadsource_description.html','w+') as descfile:
 plt.figure()
 description.T.plot()
 plt.show()
+
+# group leadsources
+In [30]: for i in salespivot['Inv Total']:print(salespivot['Inv Total'][i]
+
+def group_leadsources(dataframe, leadsources):
+    totals = {}
+    totals[leadsource] += salevalue
+    for leadsource in leadsources:
+        if 'A - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'I - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'L - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'B - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'D - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'P - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'M - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'LTR - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
+        elif 'F - ' in leadsource:
+            '''add inv value to running total for this leadsource'''
