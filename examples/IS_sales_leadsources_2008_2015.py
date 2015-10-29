@@ -65,3 +65,12 @@ plt.figure(); plt.plot(salespivot); plt.show()
 
 for key in salespivot['Inv Total'].keys():
     print(key, ' : ', np.sum(salespivot['Inv Total'][key])
+
+# get vital stats and save as html, convenient for sharing with non-pythonistas
+# plus a plot, of course!
+description = salespivot.describe()
+with open('leadsource_description.html','w+') as descfile:
+    descfile.write(description.T.to_html()
+plt.figure()
+description.T.plot()
+plt.show()
