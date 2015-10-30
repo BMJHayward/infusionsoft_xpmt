@@ -76,27 +76,31 @@ description.T.plot()
 plt.show()
 
 # group leadsources
-In [30]: for i in salespivot['Inv Total']:print(salespivot['Inv Total'][i]
+for i in salespivot['Inv Total']:print(salespivot['Inv Total'][i]
 
 def group_leadsources(dataframe, leadsources):
-    totals = {}
-    totals[leadsource] += salevalue
+    grouptotals = {'A':0,'I':0,'L':0,'B':0,'D':0,'P':0,'M':0,'LTR':0,'F':0,}
     for leadsource in leadsources:
         if 'A - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['A'] += dataframe[leadsource].sum()
         elif 'I - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['I'] += dataframe[leadsource].sum()
         elif 'L - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['L'] += dataframe[leadsource].sum()
         elif 'B - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['B'] += dataframe[leadsource].sum()
         elif 'D - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['D'] += dataframe[leadsource].sum()
         elif 'P - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['P'] += dataframe[leadsource].sum()
         elif 'M - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['M'] += dataframe[leadsource].sum()
         elif 'LTR - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['LTR'] += dataframe[leadsource].sum()
         elif 'F - ' in leadsource:
-            '''add inv value to running total for this leadsource'''
+            grouptotals['F'] += dataframe[leadsource].sum()
+
+    return grouptotals
+
+leadsources = salespivot['Inv Total'].columns.tolist()
+grouptotals = group_leadsources(salespivot['Inv Total'], leadsources)
