@@ -104,3 +104,6 @@ def group_leadsources(dataframe, leadsources):
 
 leadsources = salespivot['Inv Total'].columns.tolist()
 grouptotals = group_leadsources(salespivot['Inv Total'], leadsources)
+groupdf = pd.DataFrame.from_dict(grouptotals, orient='index')
+groupdf.plot(kind='bar')
+plt.show()
